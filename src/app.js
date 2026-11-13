@@ -15,10 +15,12 @@ const elements = {
   riverInfo: document.querySelector("#riverInfo"),
   riverInfoName: document.querySelector("#riverInfoName"),
   riverInfoLength: document.querySelector("#riverInfoLength"),
+  riverInfoWikipedia: document.querySelector("#riverInfoWikipedia"),
   mountainInfo: document.querySelector("#mountainInfo"),
   mountainInfoName: document.querySelector("#mountainInfoName"),
   mountainInfoRegion: document.querySelector("#mountainInfoRegion"),
   mountainInfoPeak: document.querySelector("#mountainInfoPeak"),
+  mountainInfoWikipedia: document.querySelector("#mountainInfoWikipedia"),
   quizBanner: document.querySelector("#quizBanner"),
   bannerQuestion: document.querySelector("#bannerQuestion"),
   bannerOptions: document.querySelector("#bannerOptions"),
@@ -58,10 +60,22 @@ function setFeedback(message, tone = "") {
   elements.feedback.className = `feedback ${tone}`;
 }
 
-function showMapToast(message, tone = "") {
+function wikipediaUrl(title) {
+  return `https://de.wikipedia.org/wiki/${encodeURIComponent((title ?? "").replace(/ /g, "_"))}`;
+}
+
+function showMapToast(message, tone = "", wikipediaTitle = "") {
   hideRiverInfo();
   hideMountainInfo();
-  elements.mapToast.textContent = message;
+  elements.mapToast.replaceChildren(document.createTextNode(message));
+  if (wikipediaTitle) {
+    const link = document.createElement("a");
+    link.href = wikipediaUrl(wikipediaTitle);
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    link.textContent = "Mehr auf Wikipedia ↗";
+    elements.mapToast.append(document.createElement("br"), link);
+  }
   elements.mapToast.className = `mapToast ${tone}`;
 }
 
@@ -78,6 +92,7 @@ function showRiverInfo(river) {
   hideMountainInfo();
   elements.riverInfoName.textContent = river.name;
   elements.riverInfoLength.textContent = `Länge in Bayern: ca. ${Math.round(river.lengthKm).toLocaleString("de-DE")} km`;
+  elements.riverInfoWikipedia.href = wikipediaUrl(river.wikipediaTitle ?? river.name);
   elements.riverInfo.classList.remove("hidden");
 }
 
@@ -91,6 +106,7 @@ function showMountainInfo(mountain) {
   elements.mountainInfoName.textContent = mountain.name;
   elements.mountainInfoRegion.textContent = `Lage: ${mountain.region}`;
   elements.mountainInfoPeak.textContent = `Markanter Gipfel: ${mountain.peak} – ca. ${mountain.peakMeters.toLocaleString("de-DE")} m`;
+  elements.mountainInfoWikipedia.href = wikipediaUrl(mountain.wikipediaTitle ?? mountain.name);
   elements.mountainInfo.classList.remove("hidden");
 }
 
@@ -399,7 +415,7 @@ function chooseRegion(path) {
     resetMap();
     highlight(region.code, "selected");
     setFeedback(`${region.name} – Regierungssitz: ${region.seat}.`);
-    showMapToast(elements.feedback.textContent);
+    showMapToast(elements.feedback.textContent, "", region.wikipediaTitle ?? region.name);
   } else if (game?.mode === "map") {
     submit(region.code);
   }
