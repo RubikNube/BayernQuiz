@@ -6,6 +6,8 @@ Im Modus **Flüsse finden** lassen sich vor dem Start und nach dem Spiel die 30 
 
 Im Modus **Gebirge finden** lassen sich vor dem Start und nach dem Spiel 15 Gebirge auf der Karte anklicken. Der Infokasten zeigt ihre Lage und einen markanten Gipfel mit ungefährer Höhe. Im Quiz wird das gesuchte Gebirge auf der Karte gewählt. Es stehen 3, 5, 7, 10 oder 15 Fragen zur Auswahl. Bei einer falschen Antwort werden das gewählte und das richtige Gebirge markiert. Nach einer richtigen Antwort ist automatisches Weitergehen möglich; **Weiter** bleibt nach jeder Antwort verfügbar.
 
+Im Modus **Lernen** können Regierungsbezirke, Flüsse und Gebirge über Checkboxen einzeln ein- und ausgeblendet werden. Alle drei Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen.
+
 ## Lokal starten
 
 Node.js und Python 3 werden benötigt; npm-Abhängigkeiten gibt es nicht.
