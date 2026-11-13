@@ -1,0 +1,13 @@
+{
+  "name": "bayernquiz",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Ein Quiz über die bayerischen Regierungsbezirke",
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test",
+    "serve:dist": "python3 -m http.server 8000 --directory dist"
+  },
+  "license": "GPL-3.0-or-later"
+}

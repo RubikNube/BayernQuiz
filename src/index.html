@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="de">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#0b1220" />
+    <title>BayernQuiz – Regierungsbezirke kennenlernen</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <aside id="quizBanner" class="quizBanner hidden" aria-label="Aktuelle Quizfrage">
+      <div class="quizBanner__line">
+        <div id="bannerQuestion" class="quizBanner__question"></div>
+        <div id="bannerOptions" class="quizBanner__options hidden" aria-label="Antwortmöglichkeiten"></div>
+        <div class="quizBanner__actions">
+          <button id="bannerNext" type="button" class="hidden">Weiter</button>
+          <button id="bannerRestart" type="button" class="secondary">Neustart</button>
+        </div>
+      </div>
+      <div id="bannerFeedback" class="quizBanner__feedback" role="status" aria-live="polite"></div>
+    </aside>
+    <main class="container">
+      <header class="topbar">
+        <div>
+          <h1>BayernQuiz</h1>
+          <p class="subtitle">Entdecke die sieben Regierungsbezirke Bayerns.</p>
+        </div>
+        <div id="stats" class="stats" aria-live="polite">
+          <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
+          <span>Punkte <strong id="score">0</strong></span>
+        </div>
+      </header>
+
+      <section class="prompt" aria-label="Quizsteuerung">
+        <div class="controls">
+          <label for="mode">Modus
+            <select id="mode">
+              <option value="map">Regierungsbezirk finden</option>
+              <option value="seat">Regierungssitz wählen</option>
+              <option value="learn">Lernen</option>
+            </select>
+          </label>
+          <label id="countLabel" for="count">Fragen
+            <select id="count">
+              <option value="3">3</option>
+              <option value="5">5</option>
+              <option value="7" selected>7</option>
+            </select>
+          </label>
+          <label id="autoLabel" class="check" for="autoNext">
+            <input id="autoNext" type="checkbox" checked /> Automatisch weiter
+          </label>
+        </div>
+
+        <div id="question" class="question" aria-live="polite"></div>
+        <div id="options" class="options hidden" aria-label="Antwortmöglichkeiten"></div>
+        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+
+        <div class="actions">
+          <button id="start" type="button">Start</button>
+          <button id="next" type="button" class="secondary hidden">Weiter</button>
+          <button id="restart" type="button" class="secondary hidden">Neustart</button>
+        </div>
+      </section>
+
+      <section class="mapWrap" aria-label="Bayernkarte">
+        <div id="mapHost" class="mapHost" aria-busy="true"></div>
+      </section>
+
+      <div id="mapToast" class="mapToast hidden" role="status" aria-live="polite"></div>
+
+      <section id="result" class="result hidden" aria-live="polite">
+        <h2>Quiz beendet</h2>
+        <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
+      </section>
+
+      <footer class="footer">
+        Kartendaten: <a href="https://geoportal.bayern.de/geoportalbayern/details-suche?1=&amp;resId=baa244c2-42d2-43b2-932e-af30b4cd80cb">Bayerische Vermessungsverwaltung – www.geodaten.bayern.de</a>,
+        <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>.
+        <span>Regierungssitze: <a href="https://www.stmi.bayern.de/staat-und-verfassung/staatsgebiet/">Bayerisches Staatsministerium des Innern</a>.</span>
+      </footer>
+    </main>
+    <script type="module" src="app.js"></script>
+  </body>
+</html>
