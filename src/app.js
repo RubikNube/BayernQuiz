@@ -239,15 +239,21 @@ function chooseRegion(path) {
 }
 
 elements.mapHost.addEventListener("click", (event) => {
-  const path = event.target.closest(".region");
+  const path = event.target.closest(".region, .seat-dot");
+  if (path?.classList.contains("seat-dot")) {
+    chooseRegion(elements.mapHost.querySelector(`#${path.dataset.region}`));
+    return;
+  }
   if (path) chooseRegion(path);
 });
 elements.mapHost.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
-  const path = event.target.closest(".region");
+  const path = event.target.closest(".region, .seat-dot");
   if (!path) return;
   event.preventDefault();
-  chooseRegion(path);
+  chooseRegion(path.classList.contains("seat-dot")
+    ? elements.mapHost.querySelector(`#${path.dataset.region}`)
+    : path);
 });
 
 async function loadMap() {

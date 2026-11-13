@@ -44,7 +44,7 @@ button { border: 1px solid transparent; padding: 10px 16px; color: #071221; back
 button.secondary { color: var(--text); background: #314266; }
 button:hover:not(:disabled) { filter: brightness(1.15); }
 button:disabled { cursor: default; opacity: .75; }
-button:focus-visible, select:focus-visible, .region:focus-visible { outline: 3px solid #ffcf66; outline-offset: 3px; }
+button:focus-visible, select:focus-visible, .region:focus-visible, .seat-dot:focus-visible { outline: 3px solid #ffcf66; outline-offset: 3px; }
 .question { margin: 20px 0 12px; font-size: clamp(1.15rem, 3vw, 1.55rem); font-weight: 700; }
 .options { margin: 8px 0 14px; }
 .option { color: var(--text); background: #314266; border-color: #526489; }
@@ -61,6 +61,10 @@ button:focus-visible, select:focus-visible, .region:focus-visible { outline: 3px
 .region.selected { fill: var(--accent); }
 .region.correct { fill: var(--good); }
 .region.wrong { fill: var(--bad); }
+.seat-dot { fill: #000; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; }
+.seat-dot:hover, .seat-dot:focus-visible { fill: #000; }
+.mapLegend { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 4px 0 0; color: var(--muted); font-size: .85rem; }
+.mapLegend__dot { width: 10px; height: 10px; border-radius: 50%; background: #000; box-shadow: 0 0 0 2px #fff; }
 .result h2 { margin-top: 0; }
 .result p { margin-bottom: 0; }
 .footer { color: var(--muted); font-size: .82rem; line-height: 1.5; }

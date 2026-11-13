@@ -1,0 +1,9 @@
+{
+  "oberbayern": { "name": "München", "lat": 48.137433, "lon": 11.575491 },
+  "niederbayern": { "name": "Landshut", "lat": 48.529612, "lon": 12.161791 },
+  "oberpfalz": { "name": "Regensburg", "lat": 49.015130, "lon": 12.101610 },
+  "oberfranken": { "name": "Bayreuth", "lat": 49.947823, "lon": 11.578935 },
+  "mittelfranken": { "name": "Ansbach", "lat": 49.304808, "lon": 10.593098 },
+  "unterfranken": { "name": "Würzburg", "lat": 49.793912, "lon": 9.951214 },
+  "schwaben": { "name": "Augsburg", "lat": 48.371538, "lon": 10.898514 }
+}

@@ -2,6 +2,7 @@
 """Convert the Bavarian Verwaltungsatlas WFS GML to the quiz's local SVG."""
 
 import argparse
+import json
 import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
@@ -21,6 +22,12 @@ REGIONS = {
     "Unterfranken": "unterfranken",
     "Schwaben": "schwaben",
 }
+SEATS = json.loads((Path(__file__).with_name("seat-locations.json")).read_text(encoding="utf-8"))
+
+
+def mercator(lon, lat):
+    radius = 6378137
+    return radius * math.radians(lon), radius * math.log(math.tan(math.pi / 4 + math.radians(lat) / 2))
 
 
 def distance_to_segment(point, start, end):
@@ -91,6 +98,16 @@ def main():
             points = [(round(20 + (x - min_x) * scale, 1), round(20 + (max_y - y) * scale, 1)) for x, y in ring]
             commands.append("M" + " L".join(f"{x} {y}" for x, y in points) + " Z")
         lines.append(f'  <path id="{code}" class="region" role="button" tabindex="0" aria-label="{name}" fill-rule="evenodd" d="{" ".join(commands)}"/>')
+    if set(SEATS) != set(REGIONS.values()):
+        raise ValueError("Expected one government seat for each region")
+    lines.append('  <g class="seat-locations" aria-label="Regierungssitze">')
+    for code in REGIONS.values():
+        seat = SEATS[code]
+        x, y = mercator(seat["lon"], seat["lat"])
+        cx = round(20 + (x - min_x) * scale, 1)
+        cy = round(20 + (max_y - y) * scale, 1)
+        lines.append(f'    <circle class="seat-dot" data-region="{code}" cx="{cx}" cy="{cy}" r="5" role="button" tabindex="0" aria-label="{seat["name"]}"><title>{seat["name"]}</title></circle>')
+    lines.append("  </g>")
     lines.append("</svg>")
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text("\n".join(lines) + "\n", encoding="utf-8")
