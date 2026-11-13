@@ -42,6 +42,25 @@ export const RIVERS = Object.freeze([
   { code: "schwarze-laber", name: "Schwarze Laber", lengthKm: 77.87 },
 ]);
 
+// Approximate elevations of notable summits in the Bavarian part of each range.
+export const MOUNTAINS = Object.freeze([
+  { code: "allgaeuer-alpen", name: "Allgäuer Alpen", region: "Südwestbayern", peak: "Hochfrottspitze", peakMeters: 2648 },
+  { code: "ammergauer-alpen", name: "Ammergauer Alpen", region: "Südbayern zwischen Füssen und Garmisch-Partenkirchen", peak: "Kreuzspitze", peakMeters: 2185 },
+  { code: "wettersteingebirge", name: "Wettersteingebirge", region: "Südbayern bei Garmisch-Partenkirchen", peak: "Zugspitze", peakMeters: 2962 },
+  { code: "bayerische-voralpen", name: "Bayerische Voralpen", region: "Südbayern zwischen Isar und Inn", peak: "Benediktenwand", peakMeters: 1801 },
+  { code: "chiemgauer-alpen", name: "Chiemgauer Alpen", region: "Südostbayern im Chiemgau", peak: "Sonntagshorn", peakMeters: 1961 },
+  { code: "berchtesgadener-alpen", name: "Berchtesgadener Alpen", region: "Äußerster Südosten Bayerns", peak: "Watzmann", peakMeters: 2713 },
+  { code: "rhoen", name: "Rhön", region: "Nordwestbayern", peak: "Kreuzberg", peakMeters: 928 },
+  { code: "spessart", name: "Spessart", region: "Westliches Unterfranken", peak: "Geiersberg", peakMeters: 586 },
+  { code: "steigerwald", name: "Steigerwald", region: "Zwischen Unterfranken, Mittelfranken und Oberfranken", peak: "Schwanberg", peakMeters: 475 },
+  { code: "hassberge", name: "Haßberge", region: "Nördliches Unterfranken", peak: "Bramberg", peakMeters: 494 },
+  { code: "frankenwald", name: "Frankenwald", region: "Nordostbayern", peak: "Döbraberg", peakMeters: 794 },
+  { code: "fichtelgebirge", name: "Fichtelgebirge", region: "Nordostbayern bei Wunsiedel", peak: "Schneeberg", peakMeters: 1051 },
+  { code: "fraenkische-alb", name: "Fränkische Alb", region: "Zwischen Oberfranken und der Donau", peak: "Poppberg", peakMeters: 652 },
+  { code: "oberpfaelzer-wald", name: "Oberpfälzer Wald", region: "Ostbayern an der tschechischen Grenze", peak: "Entenbühl", peakMeters: 901 },
+  { code: "bayerischer-wald", name: "Bayerischer Wald", region: "Ostbayern an der tschechischen Grenze", peak: "Großer Arber", peakMeters: 1456 },
+]);
+
 // Other Bavarian cities used as plausible answers in the government-seat quiz.
 export const OTHER_CITIES = Object.freeze([
   { code: "ingolstadt", seat: "Ingolstadt", regionCode: "oberbayern" },
@@ -72,13 +91,15 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createGame(mode, count, random = Math.random) {
-  if (mode !== "map" && mode !== "seat" && mode !== "river") throw new Error("Unknown mode");
-  if (!(mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30] : [3, 5, 7]).includes(count)) {
+  if (!["map", "seat", "river", "mountain"].includes(mode)) throw new Error("Unknown mode");
+  const allowedCounts = mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
+    : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
+  if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
   return {
     mode,
-    questions: shuffle(mode === "river" ? RIVERS : REGIONS, random).slice(0, count),
+    questions: shuffle(mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
     index: 0,
     score: 0,
     answered: false,
@@ -108,7 +129,7 @@ export function answer(game, selectedCode) {
   if (!target) return null;
   const valid = game.mode === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : (game.mode === "river" ? RIVERS : REGIONS).some((item) => item.code === selectedCode);
+    : (game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;

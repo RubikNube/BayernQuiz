@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { OTHER_CITIES, REGIONS, RIVERS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "../src/game.js";
+import { MOUNTAINS, OTHER_CITIES, REGIONS, RIVERS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "../src/game.js";
 
 test("each official region has a unique code and government seat", () => {
   assert.equal(REGIONS.length, 7);
@@ -102,4 +102,42 @@ test("river rounds use distinct questions, score once, and finish at the chosen 
     assert.equal(nextQuestion(game), false);
   }
   assert.throws(() => createGame("map", 20), /Invalid question count/);
+});
+
+test("all 15 mountain records have distinct identifiers, summits, and clickable map routes", () => {
+  assert.equal(MOUNTAINS.length, 15);
+  assert.equal(new Set(MOUNTAINS.map((mountain) => mountain.code)).size, 15);
+  assert.equal(new Set(MOUNTAINS.map((mountain) => mountain.name)).size, 15);
+  assert.ok(MOUNTAINS.every((mountain) => mountain.region && mountain.peak && Number.isFinite(mountain.peakMeters) && mountain.peakMeters > 0));
+  const svg = readFileSync(new URL("../src/regions.svg", import.meta.url), "utf8");
+  const groups = [...svg.matchAll(/<g class="mountain"[^>]*data-mountain="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g)];
+  assert.deepEqual(new Set(groups.map((match) => match[1])), new Set(MOUNTAINS.map((mountain) => mountain.code)));
+  assert.equal(groups.length, MOUNTAINS.length);
+  for (const [, code, content] of groups) {
+    const visible = content.match(/class="mountain-line" d="([^"]+)"/);
+    const hit = content.match(/class="mountain-hit" d="([^"]+)"/);
+    assert.ok(visible && hit, `${code} needs a visible route and a click target`);
+    assert.equal(visible[1], hit[1]);
+    assert.ok(visible[1].startsWith("M "));
+  }
+});
+
+test("mountain rounds use distinct questions, score once, and finish at the chosen count", () => {
+  for (const count of [3, 5, 7, 10, 15]) {
+    const game = createGame("mountain", count, () => 0.5);
+    assert.equal(new Set(game.questions.map((mountain) => mountain.code)).size, count);
+    assert.equal(answer(game, "missing-mountain"), null);
+    const wrong = MOUNTAINS.find((mountain) => mountain.code !== currentQuestion(game).code);
+    assert.equal(answer(game, wrong.code), false);
+    assert.equal(answer(game, currentQuestion(game).code), null);
+    assert.equal(nextQuestion(game), true);
+    for (let i = 1; i < count; i += 1) {
+      assert.equal(answer(game, currentQuestion(game).code), true);
+      assert.equal(nextQuestion(game), true);
+    }
+    assert.equal(game.score, count - 1);
+    assert.equal(game.finished, true);
+    assert.equal(nextQuestion(game), false);
+  }
+  assert.throws(() => createGame("mountain", 20), /Invalid question count/);
 });

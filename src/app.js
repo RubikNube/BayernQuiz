@@ -1,4 +1,4 @@
-import { REGIONS, RIVERS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
+import { REGIONS, RIVERS, MOUNTAINS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
 
 const elements = {
   mode: document.querySelector("#mode"),
@@ -14,6 +14,10 @@ const elements = {
   riverInfo: document.querySelector("#riverInfo"),
   riverInfoName: document.querySelector("#riverInfoName"),
   riverInfoLength: document.querySelector("#riverInfoLength"),
+  mountainInfo: document.querySelector("#mountainInfo"),
+  mountainInfoName: document.querySelector("#mountainInfoName"),
+  mountainInfoRegion: document.querySelector("#mountainInfoRegion"),
+  mountainInfoPeak: document.querySelector("#mountainInfoPeak"),
   quizBanner: document.querySelector("#quizBanner"),
   bannerQuestion: document.querySelector("#bannerQuestion"),
   bannerOptions: document.querySelector("#bannerOptions"),
@@ -64,48 +68,68 @@ function showRiverInfo(river) {
   elements.riverInfo.classList.remove("hidden");
 }
 
+function hideMountainInfo() {
+  elements.mountainInfo.classList.add("hidden");
+}
+
+function showMountainInfo(mountain) {
+  elements.mountainInfoName.textContent = mountain.name;
+  elements.mountainInfoRegion.textContent = `Lage: ${mountain.region}`;
+  elements.mountainInfoPeak.textContent = `Markanter Gipfel: ${mountain.peak} – ca. ${mountain.peakMeters.toLocaleString("de-DE")} m`;
+  elements.mountainInfo.classList.remove("hidden");
+}
+
 function updateCountOptions() {
-  const isRiver = elements.mode.value === "river";
-  for (const option of elements.count.querySelectorAll("[data-river-count]")) {
-    option.hidden = !isRiver;
-    option.disabled = !isRiver;
+  const mode = elements.mode.value;
+  for (const option of elements.count.options) {
+    const allowed = Number(option.value) <= (mode === "river" ? RIVERS.length : mode === "mountain" ? MOUNTAINS.length : REGIONS.length);
+    option.hidden = !allowed;
+    option.disabled = !allowed;
   }
-  if (!isRiver && Number(elements.count.value) > 7) elements.count.value = "7";
+  if (elements.count.selectedOptions[0]?.disabled) elements.count.value = "7";
 }
 
 function updateMapMode() {
   const isRiver = elements.mode.value === "river";
+  const isMountain = elements.mode.value === "mountain";
+  const isRoute = isRiver || isMountain;
   const svg = elements.mapHost.querySelector("#bayernMap");
   if (!svg) return;
   svg.classList.toggle("river-mode", isRiver);
+  svg.classList.toggle("mountain-mode", isMountain);
   svg.querySelector("#riversLayer")?.classList.toggle("hidden", !isRiver);
-  svg.querySelector(".seat-locations")?.classList.toggle("hidden", isRiver);
+  svg.querySelector("#mountainsLayer")?.classList.toggle("hidden", !isMountain);
+  svg.querySelector(".seat-locations")?.classList.toggle("hidden", isRoute);
   svg.querySelectorAll(".region, .seat-dot").forEach((node) => {
-    node.setAttribute("tabindex", isRiver ? "-1" : "0");
+    node.setAttribute("tabindex", isRoute ? "-1" : "0");
   });
   svg.querySelectorAll(".river").forEach((node) => {
     node.setAttribute("tabindex", isRiver ? "0" : "-1");
   });
-  elements.mapHost.setAttribute("aria-label", isRiver ? "Bayernkarte mit Flüssen" : "Bayernkarte mit Regierungsbezirken");
-  elements.mapHost.parentElement.querySelector(".mapLegend")?.classList.toggle("hidden", isRiver);
+  svg.querySelectorAll(".mountain").forEach((node) => {
+    node.setAttribute("tabindex", isMountain ? "0" : "-1");
+  });
+  elements.mapHost.setAttribute("aria-label", isRiver ? "Bayernkarte mit Flüssen" : isMountain ? "Bayernkarte mit Gebirgen" : "Bayernkarte mit Regierungsbezirken");
+  elements.mapHost.parentElement.querySelector(".mapLegend")?.classList.toggle("hidden", isRoute);
 }
 
-function nearestRiverAt(clientX, clientY, fallback) {
+function nearestRouteAt(clientX, clientY, fallback, groupSelector, lineSelector) {
   const svg = elements.mapHost.querySelector("#bayernMap");
   const matrix = svg?.getScreenCTM();
   if (!matrix) return fallback;
   const point = new DOMPoint(clientX, clientY).matrixTransform(matrix.inverse());
   let nearest = fallback;
   let best = Infinity;
-  for (const river of svg.querySelectorAll(".river")) {
-    const path = river.querySelector(".river-line");
+  for (const route of svg.querySelectorAll(groupSelector)) {
+    const path = route.querySelector(lineSelector);
     const length = path.getTotalLength();
-    for (let distance = 0; distance <= length; distance += 4) {
-      const sample = path.getPointAtLength(distance);
+    const steps = Math.max(1, Math.ceil(length / 4));
+    for (let step = 0; step <= steps; step += 1) {
+      const sample = path.getPointAtLength((length * step) / steps);
       const squared = (sample.x - point.x) ** 2 + (sample.y - point.y) ** 2;
       if (squared < best) {
         best = squared;
-        nearest = river;
+        nearest = route;
       }
     }
   }
@@ -119,6 +143,9 @@ function resetMap() {
   elements.mapHost.querySelectorAll(".river").forEach((river) => {
     river.classList.remove("correct", "wrong", "learned");
   });
+  elements.mapHost.querySelectorAll(".mountain").forEach((mountain) => {
+    mountain.classList.remove("correct", "wrong", "learned");
+  });
 }
 
 function highlight(code, className) {
@@ -128,6 +155,10 @@ function highlight(code, className) {
 
 function highlightRiver(code, className) {
   elements.mapHost.querySelector(`.river[data-river="${code}"]`)?.classList.add(className);
+}
+
+function highlightMountain(code, className) {
+  elements.mapHost.querySelector(`.mountain[data-mountain="${code}"]`)?.classList.add(className);
 }
 
 function renderOptions() {
@@ -163,7 +194,9 @@ function renderBanner() {
   elements.quizBanner.classList.toggle("hidden", !active);
   if (!active) return;
   const target = currentQuestion(game);
-  elements.bannerQuestion.textContent = game.mode === "river"
+  elements.bannerQuestion.textContent = game.mode === "mountain"
+    ? `Finde ${target.name} auf der Karte.`
+    : game.mode === "river"
     ? `Wo fließt ${target.name}?`
     : game.mode === "map" ? `Wo liegt ${target.name}?`
       : `Wo ist der Sitz der Regierung von ${target.name}?`;
@@ -201,13 +234,15 @@ function render() {
     return;
   }
   if (!game) {
-    elements.question.textContent = mode === "river"
+    elements.question.textContent = mode === "mountain"
+      ? "Wähle ein Gebirge auf der Karte, um seine Lage und einen markanten Gipfel zu sehen, oder drücke Start."
+      : mode === "river"
       ? "Wähle einen Fluss auf der Karte, um seinen Namen und seine Länge zu sehen, oder drücke Start."
       : mode === "map" ? "Finde die Regierungsbezirke auf der Karte."
         : "Ordne jedem Regierungsbezirk seinen Regierungssitz zu.";
     elements.options.classList.add("hidden");
     elements.bannerOptions.classList.add("hidden");
-    setFeedback(mode === "river" ? "" : "Drücke Start, um das Quiz zu beginnen.");
+    setFeedback(mode === "river" || mode === "mountain" ? "" : "Drücke Start, um das Quiz zu beginnen.");
     return;
   }
   if (game.finished) {
@@ -216,12 +251,16 @@ function render() {
     elements.finalTotal.textContent = String(game.questions.length);
     elements.options.classList.add("hidden");
     elements.bannerOptions.classList.add("hidden");
-    setFeedback(mode === "river" ? "Wähle einen Fluss, um seine Länge zu sehen, oder starte eine neue Runde." : "Wähle Start für eine neue Runde.");
+    setFeedback(mode === "mountain" ? "Wähle ein Gebirge, um mehr darüber zu erfahren, oder starte eine neue Runde."
+      : mode === "river" ? "Wähle einen Fluss, um seine Länge zu sehen, oder starte eine neue Runde."
+        : "Wähle Start für eine neue Runde.");
     return;
   }
 
   const target = currentQuestion(game);
-  elements.question.textContent = mode === "river"
+  elements.question.textContent = mode === "mountain"
+    ? `Finde ${target.name} auf der Karte.`
+    : mode === "river"
     ? `Wo fließt ${target.name}?`
     : mode === "map" ? `Wo liegt ${target.name}?`
       : `Wo ist der Sitz der Regierung von ${target.name}?`;
@@ -234,6 +273,10 @@ function render() {
     highlightRiver(target.code, "correct");
     if (game.selectedCode !== target.code) highlightRiver(game.selectedCode, "wrong");
   }
+  if (game.answered && mode === "mountain") {
+    highlightMountain(target.code, "correct");
+    if (game.selectedCode !== target.code) highlightMountain(game.selectedCode, "wrong");
+  }
   renderOptions();
 }
 
@@ -241,6 +284,7 @@ function resetMode() {
   cancelAdvance();
   hideMapToast();
   hideRiverInfo();
+  hideMountainInfo();
   game = null;
   elements.result.classList.add("hidden");
   setFeedback(elements.mode.value === "learn" ? "Tippe auf einen Bezirk, um seinen Regierungssitz zu sehen." : "");
@@ -251,13 +295,18 @@ function startGame() {
   cancelAdvance();
   hideMapToast();
   hideRiverInfo();
+  hideMountainInfo();
   if (elements.mode.value === "river" && elements.mapHost.querySelectorAll(".river").length !== RIVERS.length) {
     setFeedback("Die Flusskarte konnte nicht geladen werden.", "bad");
     return;
   }
+  if (elements.mode.value === "mountain" && elements.mapHost.querySelectorAll(".mountain").length !== MOUNTAINS.length) {
+    setFeedback("Die Gebirgskarte konnte nicht geladen werden.", "bad");
+    return;
+  }
   game = createGame(elements.mode.value, Number(elements.count.value));
   if (game.mode === "seat") makeSeatOptions(game);
-  setFeedback(game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
+  setFeedback(game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
 }
 
@@ -265,9 +314,10 @@ function advance() {
   cancelAdvance();
   hideMapToast();
   hideRiverInfo();
+  hideMountainInfo();
   if (!game || !nextQuestion(game)) return;
   if (!game.finished && game.mode === "seat") makeSeatOptions(game);
-  setFeedback(game.finished ? "" : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
+  setFeedback(game.finished ? "" : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
 }
 
@@ -276,10 +326,10 @@ function submit(code) {
   const correct = answer(game, code);
   if (correct === null) return;
   const target = currentQuestion(game);
-  const selected = (game.mode === "river" ? RIVERS : REGIONS).find((item) => item.code === code);
+  const selected = (game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).find((item) => item.code === code);
   if (correct) {
     setFeedback("Richtig!", "good");
-  } else if (game.mode === "river") {
+  } else if (game.mode === "mountain" || game.mode === "river") {
     setFeedback(`Leider falsch: Das war ${selected.name}. ${target.name} ist grün markiert.`, "bad");
   } else if (game.mode === "map") {
     setFeedback(`Leider falsch: Das war ${selected.name}. ${target.name} ist grün markiert.`, "bad");
@@ -312,7 +362,7 @@ elements.options.addEventListener("click", handleSeatOptionClick);
 elements.bannerOptions.addEventListener("click", handleSeatOptionClick);
 
 function chooseRegion(path) {
-  if (!path || elements.mode.value === "river") return;
+  if (!path || elements.mode.value === "river" || elements.mode.value === "mountain") return;
   const region = REGIONS.find((item) => item.code === path.id);
   if (!region) return;
   if (elements.mode.value === "learn") {
@@ -338,10 +388,28 @@ function chooseRiver(node) {
   submit(river.code);
 }
 
+function chooseMountain(node) {
+  if (elements.mode.value !== "mountain") return;
+  const mountain = MOUNTAINS.find((item) => item.code === node?.dataset.mountain);
+  if (!mountain) return;
+  if (!game || game.finished) {
+    resetMap();
+    highlightMountain(mountain.code, "learned");
+    showMountainInfo(mountain);
+    return;
+  }
+  submit(mountain.code);
+}
+
 elements.mapHost.addEventListener("click", (event) => {
+  if (elements.mode.value === "mountain") {
+    const mountain = event.target.closest(".mountain");
+    if (mountain) chooseMountain(nearestRouteAt(event.clientX, event.clientY, mountain, ".mountain", ".mountain-line"));
+    return;
+  }
   if (elements.mode.value === "river") {
     const river = event.target.closest(".river");
-    if (river) chooseRiver(nearestRiverAt(event.clientX, event.clientY, river));
+    if (river) chooseRiver(nearestRouteAt(event.clientX, event.clientY, river, ".river", ".river-line"));
     return;
   }
   const path = event.target.closest(".region, .seat-dot");
@@ -353,6 +421,13 @@ elements.mapHost.addEventListener("click", (event) => {
 });
 elements.mapHost.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
+  if (elements.mode.value === "mountain") {
+    const mountain = event.target.closest(".mountain");
+    if (!mountain) return;
+    event.preventDefault();
+    chooseMountain(mountain);
+    return;
+  }
   if (elements.mode.value === "river") {
     const river = event.target.closest(".river");
     if (!river) return;

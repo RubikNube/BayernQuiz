@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b1220" />
-    <title>BayernQuiz – Regierungsbezirke und Flüsse kennenlernen</title>
+    <title>BayernQuiz – Regierungsbezirke, Flüsse und Gebirge kennenlernen</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -23,7 +23,7 @@
       <header class="topbar">
         <div>
           <h1>BayernQuiz</h1>
-          <p class="subtitle">Entdecke Bayerns Regierungsbezirke und Flüsse.</p>
+          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Flüsse und Gebirge.</p>
         </div>
         <div id="stats" class="stats" aria-live="polite">
           <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
@@ -38,6 +38,7 @@
               <option value="map">Regierungsbezirk finden</option>
               <option value="seat">Regierungssitz wählen</option>
               <option value="river">Flüsse finden</option>
+              <option value="mountain">Gebirge finden</option>
               <option value="learn">Lernen</option>
             </select>
           </label>
@@ -46,11 +47,11 @@
               <option value="3">3</option>
               <option value="5">5</option>
               <option value="7" selected>7</option>
-              <option value="10" data-river-count>10</option>
-              <option value="15" data-river-count>15</option>
-              <option value="20" data-river-count>20</option>
-              <option value="25" data-river-count>25</option>
-              <option value="30" data-river-count>30</option>
+              <option value="10">10</option>
+              <option value="15">15</option>
+              <option value="20">20</option>
+              <option value="25">25</option>
+              <option value="30">30</option>
             </select>
           </label>
           <label id="autoLabel" class="check" for="autoNext">
@@ -79,6 +80,11 @@
         <strong id="riverInfoName"></strong>
         <span id="riverInfoLength"></span>
       </div>
+      <div id="mountainInfo" class="mapToast riverInfo hidden" role="status" aria-live="polite">
+        <strong id="mountainInfoName"></strong>
+        <span id="mountainInfoRegion"></span>
+        <span id="mountainInfoPeak"></span>
+      </div>
 
       <section id="result" class="result hidden" aria-live="polite">
         <h2>Quiz beendet</h2>
@@ -90,6 +96,7 @@
         <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>.
         <span>Regierungssitze: <a href="https://www.stmi.bayern.de/staat-und-verfassung/staatsgebiet/">Bayerisches Staatsministerium des Innern</a>.</span>
         <span>Flussläufe: <a href="https://geodatenonline.bayern.de/geodatenonline/seiten/wfs_atkis">Bayerische Vermessungsverwaltung, ATKIS Basis-DLM</a>, CC BY 4.0. Flusslängen: <a href="https://www.lfu.bayern.de/wasser/gewaesserverzeichnisse/doc/tab_gew_name_100_laeng.pdf">Bayerisches Landesamt für Umwelt</a>.</span>
+        <span>Gebirgslagen: <a href="https://www.lfu.bayern.de/natur/naturraeume/index.htm">Bayerisches Landesamt für Umwelt</a>; vereinfachte Darstellung.</span>
       </footer>
     </main>
     <script type="module" src="app.js"></script>
