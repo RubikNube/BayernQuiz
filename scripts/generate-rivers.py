@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Add the 20 longest Bavarian rivers to regions.svg from the public ATKIS WFS.
+"""Add the 30 longest Bavarian rivers to regions.svg from the public ATKIS WFS.
 
 Run this script after generate-map.py when refreshing the base map.
 """
@@ -34,10 +34,24 @@ RIVERS = [
     ("loisach", "Loisach", "162"), ("naab", "Naab", "14"),
     ("zusam", "Zusam", "1192"), ("schmutter", "Schmutter", "1194"),
     ("grosse-laber", "Große Laber", "156"),
+    ("vils-naab", "Vils (Naab)", "148"),
+    ("schwarzach", "Schwarzach", "146"),
+    ("aisch", "Aisch", "2428"),
+    ("ilm", "Ilm", "1368"),
+    ("vils-donau", "Vils (Donau)", "174"),
+    ("isen", "Isen", "1838"),
+    ("mindel", "Mindel", "116"),
+    ("fraenkische-rezat", "Fränkische Rezat", "24211"),
+    ("wiesent", "Wiesent", "2426"),
+    ("schwarze-laber", "Schwarze Laber", "1398"),
 ]
+# Two different rivers share the official name Vils; the suffix only disambiguates the quiz prompt.
+SOURCE_NAMES = {"vils-naab": "Vils", "vils-donau": "Vils"}
 NARROW_RIVERS = {
     "altmuehl", "fraenkische-saale", "paar", "woernitz", "pegnitz",
     "rott", "zusam", "schmutter", "grosse-laber",
+    "vils-naab", "schwarzach", "aisch", "ilm", "vils-donau",
+    "isen", "mindel", "fraenkische-rezat", "wiesent", "schwarze-laber",
 }
 
 
@@ -130,12 +144,13 @@ def simplify(points, tolerance=0.7):
 
 
 def river_paths(name, code, key, project):
-    axes = fetch("AX_Gewaesserstationierungsachse", filter_xml([comparison("adv:name", name)]))
+    source_name = SOURCE_NAMES.get(code, name)
+    axes = fetch("AX_Gewaesserstationierungsachse", filter_xml([comparison("adv:name", source_name)]))
     paths = []
     matching = [axis for axis in axes.findall(".//adv:AX_Gewaesserstationierungsachse", NS)
                 if axis.findtext("adv:gewaesserkennzahl", "", NS) == key.ljust(19, "0")]
     if code in NARROW_RIVERS:
-        watercourses = fetch("AX_Wasserlauf", filter_xml([comparison("adv:name", name)]))
+        watercourses = fetch("AX_Wasserlauf", filter_xml([comparison("adv:name", source_name)]))
         ids = []
         for watercourse in watercourses.findall(".//adv:AX_Wasserlauf", NS):
             if watercourse.findtext("adv:gewaesserkennzahl", "", NS) != key.ljust(19, "0"):

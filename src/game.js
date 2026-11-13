@@ -8,7 +8,7 @@ export const REGIONS = Object.freeze([
   { code: "schwaben", name: "Schwaben", seat: "Augsburg" },
 ]);
 
-// Bayerisches Landesamt für Umwelt: 20 längste Fließgewässer, Länge in Bayern (km), Stand 2016.
+// Bayerisches Landesamt für Umwelt: 30 längste Fließgewässer, Länge in Bayern (km), Stand 2016.
 export const RIVERS = Object.freeze([
   { code: "main", name: "Main", lengthKm: 407.52 },
   { code: "donau", name: "Donau", lengthKm: 380.84 },
@@ -30,6 +30,16 @@ export const RIVERS = Object.freeze([
   { code: "zusam", name: "Zusam", lengthKm: 97.46 },
   { code: "schmutter", name: "Schmutter", lengthKm: 95.77 },
   { code: "grosse-laber", name: "Große Laber", lengthKm: 88.19 },
+  { code: "vils-naab", name: "Vils (Naab)", lengthKm: 87.64 },
+  { code: "schwarzach", name: "Schwarzach", lengthKm: 85.98 },
+  { code: "aisch", name: "Aisch", lengthKm: 84.18 },
+  { code: "ilm", name: "Ilm", lengthKm: 83.31 },
+  { code: "vils-donau", name: "Vils (Donau)", lengthKm: 82.63 },
+  { code: "isen", name: "Isen", lengthKm: 81.02 },
+  { code: "mindel", name: "Mindel", lengthKm: 80.82 },
+  { code: "fraenkische-rezat", name: "Fränkische Rezat", lengthKm: 78.84 },
+  { code: "wiesent", name: "Wiesent", lengthKm: 78.48 },
+  { code: "schwarze-laber", name: "Schwarze Laber", lengthKm: 77.87 },
 ]);
 
 // Other Bavarian cities used as plausible answers in the government-seat quiz.
@@ -63,7 +73,7 @@ export function shuffle(items, random = Math.random) {
 
 export function createGame(mode, count, random = Math.random) {
   if (mode !== "map" && mode !== "seat" && mode !== "river") throw new Error("Unknown mode");
-  if (!(mode === "river" ? [3, 5, 7, 10, 15, 20] : [3, 5, 7]).includes(count)) {
+  if (!(mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30] : [3, 5, 7]).includes(count)) {
     throw new Error("Invalid question count");
   }
   return {

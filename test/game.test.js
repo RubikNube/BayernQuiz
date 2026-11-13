@@ -67,9 +67,10 @@ test("a non-seat city is a valid wrong answer and cannot be scored twice", () =>
   assert.equal(answer(game, currentQuestion(game).code), null);
 });
 
-test("all 20 river records have distinct identifiers, lengths, and map paths", () => {
-  assert.equal(RIVERS.length, 20);
-  assert.equal(new Set(RIVERS.map((river) => river.code)).size, 20);
+test("all 30 river records have distinct identifiers, lengths, and map paths", () => {
+  assert.equal(RIVERS.length, 30);
+  assert.equal(new Set(RIVERS.map((river) => river.code)).size, 30);
+  assert.equal(new Set(RIVERS.map((river) => river.name)).size, 30);
   assert.ok(RIVERS.every((river) => river.name && Number.isFinite(river.lengthKm) && river.lengthKm > 0));
   const svg = readFileSync(new URL("../src/regions.svg", import.meta.url), "utf8");
   const groups = [...svg.matchAll(/<g class="river"[^>]*data-river="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g)];
@@ -86,7 +87,7 @@ test("all 20 river records have distinct identifiers, lengths, and map paths", (
 });
 
 test("river rounds use distinct questions, score once, and finish at the chosen count", () => {
-  for (const count of [3, 5, 7, 10, 15, 20]) {
+  for (const count of [3, 5, 7, 10, 15, 20, 25, 30]) {
     const game = createGame("river", count, () => 0.5);
     assert.equal(new Set(game.questions.map((river) => river.code)).size, count);
     assert.equal(answer(game, "missing-river"), null);
