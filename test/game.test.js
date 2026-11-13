@@ -67,10 +67,10 @@ test("a non-seat city is a valid wrong answer and cannot be scored twice", () =>
   assert.equal(answer(game, currentQuestion(game).code), null);
 });
 
-test("all 30 river records have distinct identifiers, lengths, and map paths", () => {
-  assert.equal(RIVERS.length, 30);
-  assert.equal(new Set(RIVERS.map((river) => river.code)).size, 30);
-  assert.equal(new Set(RIVERS.map((river) => river.name)).size, 30);
+test("all 32 river records have distinct identifiers, lengths, and map paths", () => {
+  assert.equal(RIVERS.length, 32);
+  assert.equal(new Set(RIVERS.map((river) => river.code)).size, 32);
+  assert.equal(new Set(RIVERS.map((river) => river.name)).size, 32);
   assert.ok(RIVERS.every((river) => river.name && Number.isFinite(river.lengthKm) && river.lengthKm > 0));
   const svg = readFileSync(new URL("../src/regions.svg", import.meta.url), "utf8");
   const groups = [...svg.matchAll(/<g class="river"[^>]*data-river="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g)];

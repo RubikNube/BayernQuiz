@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Add the 30 longest Bavarian rivers to regions.svg from the public ATKIS WFS.
+"""Add the quiz rivers to regions.svg from the public ATKIS WFS.
 
 Run this script after generate-map.py when refreshing the base map.
 """
@@ -43,6 +43,8 @@ RIVERS = [
     ("fraenkische-rezat", "Fränkische Rezat", "24211"),
     ("wiesent", "Wiesent", "2426"),
     ("schwarze-laber", "Schwarze Laber", "1398"),
+    ("regnitz", "Regnitz", "242"),
+    ("rednitz", "Rednitz", "2421"),
 ]
 # Two different rivers share the official name Vils; the suffix only disambiguates the quiz prompt.
 SOURCE_NAMES = {"vils-naab": "Vils", "vils-donau": "Vils"}
@@ -51,6 +53,7 @@ NARROW_RIVERS = {
     "rott", "zusam", "schmutter", "grosse-laber",
     "vils-naab", "schwarzach", "aisch", "ilm", "vils-donau",
     "isen", "mindel", "fraenkische-rezat", "wiesent", "schwarze-laber",
+    "regnitz", "rednitz",
 }
 
 
