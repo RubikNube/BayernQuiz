@@ -8,6 +8,30 @@ export const REGIONS = Object.freeze([
   { code: "schwaben", name: "Schwaben", seat: "Augsburg" },
 ]);
 
+// Bayerisches Landesamt für Umwelt: 20 längste Fließgewässer, Länge in Bayern (km), Stand 2016.
+export const RIVERS = Object.freeze([
+  { code: "main", name: "Main", lengthKm: 407.52 },
+  { code: "donau", name: "Donau", lengthKm: 380.84 },
+  { code: "isar", name: "Isar", lengthKm: 270.53 },
+  { code: "inn", name: "Inn", lengthKm: 218.76 },
+  { code: "altmuehl", name: "Altmühl", lengthKm: 196.19 },
+  { code: "lech", name: "Lech", lengthKm: 166.46 },
+  { code: "fraenkische-saale", name: "Fränkische Saale", lengthKm: 140.18 },
+  { code: "iller", name: "Iller", lengthKm: 139.47 },
+  { code: "wertach", name: "Wertach", lengthKm: 137.44 },
+  { code: "paar", name: "Paar", lengthKm: 134.42 },
+  { code: "woernitz", name: "Wörnitz", lengthKm: 131.81 },
+  { code: "pegnitz", name: "Pegnitz", lengthKm: 113.46 },
+  { code: "rott", name: "Rott", lengthKm: 112.16 },
+  { code: "regen", name: "Regen", lengthKm: 107.55 },
+  { code: "amper", name: "Amper", lengthKm: 105.49 },
+  { code: "loisach", name: "Loisach", lengthKm: 98.70 },
+  { code: "naab", name: "Naab", lengthKm: 97.77 },
+  { code: "zusam", name: "Zusam", lengthKm: 97.46 },
+  { code: "schmutter", name: "Schmutter", lengthKm: 95.77 },
+  { code: "grosse-laber", name: "Große Laber", lengthKm: 88.19 },
+]);
+
 // Other Bavarian cities used as plausible answers in the government-seat quiz.
 export const OTHER_CITIES = Object.freeze([
   { code: "ingolstadt", seat: "Ingolstadt", regionCode: "oberbayern" },
@@ -38,11 +62,13 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createGame(mode, count, random = Math.random) {
-  if (mode !== "map" && mode !== "seat") throw new Error("Unknown mode");
-  if (![3, 5, 7].includes(count)) throw new Error("Invalid question count");
+  if (mode !== "map" && mode !== "seat" && mode !== "river") throw new Error("Unknown mode");
+  if (!(mode === "river" ? [3, 5, 7, 10, 15, 20] : [3, 5, 7]).includes(count)) {
+    throw new Error("Invalid question count");
+  }
   return {
     mode,
-    questions: shuffle(REGIONS, random).slice(0, count),
+    questions: shuffle(mode === "river" ? RIVERS : REGIONS, random).slice(0, count),
     index: 0,
     score: 0,
     answered: false,
@@ -72,7 +98,7 @@ export function answer(game, selectedCode) {
   if (!target) return null;
   const valid = game.mode === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : REGIONS.some((region) => region.code === selectedCode);
+    : (game.mode === "river" ? RIVERS : REGIONS).some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;

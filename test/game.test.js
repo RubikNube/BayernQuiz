@@ -1,6 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { OTHER_CITIES, REGIONS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "../src/game.js";
+import { readFileSync } from "node:fs";
+import { OTHER_CITIES, REGIONS, RIVERS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "../src/game.js";
 
 test("each official region has a unique code and government seat", () => {
   assert.equal(REGIONS.length, 7);
@@ -64,4 +65,40 @@ test("a non-seat city is a valid wrong answer and cannot be scored twice", () =>
   assert.equal(answer(game, city.code), false);
   assert.equal(game.score, 0);
   assert.equal(answer(game, currentQuestion(game).code), null);
+});
+
+test("all 20 river records have distinct identifiers, lengths, and map paths", () => {
+  assert.equal(RIVERS.length, 20);
+  assert.equal(new Set(RIVERS.map((river) => river.code)).size, 20);
+  assert.ok(RIVERS.every((river) => river.name && Number.isFinite(river.lengthKm) && river.lengthKm > 0));
+  const svg = readFileSync(new URL("../src/regions.svg", import.meta.url), "utf8");
+  const groups = [...svg.matchAll(/<g class="river"[^>]*data-river="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g)];
+  const mapCodes = groups.map((match) => match[1]);
+  assert.deepEqual(new Set(mapCodes), new Set(RIVERS.map((river) => river.code)));
+  assert.equal(mapCodes.length, RIVERS.length);
+  for (const [, code, content] of groups) {
+    const visible = content.match(/class="river-line" d="([^"]+)"/);
+    const hit = content.match(/class="river-hit" d="([^"]+)"/);
+    assert.ok(visible && hit, `${code} needs a visible route and a click target`);
+    assert.equal(visible[1], hit[1]);
+    assert.ok(visible[1].startsWith("M "));
+  }
+});
+
+test("river rounds use distinct questions, score once, and finish at the chosen count", () => {
+  for (const count of [3, 5, 7, 10, 15, 20]) {
+    const game = createGame("river", count, () => 0.5);
+    assert.equal(new Set(game.questions.map((river) => river.code)).size, count);
+    assert.equal(answer(game, "missing-river"), null);
+    for (let i = 0; i < count; i += 1) {
+      const target = currentQuestion(game);
+      assert.equal(answer(game, target.code), true);
+      assert.equal(answer(game, target.code), null);
+      assert.equal(nextQuestion(game), true);
+    }
+    assert.equal(game.score, count);
+    assert.equal(game.finished, true);
+    assert.equal(nextQuestion(game), false);
+  }
+  assert.throws(() => createGame("map", 20), /Invalid question count/);
 });
