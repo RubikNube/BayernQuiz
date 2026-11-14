@@ -63,6 +63,230 @@ export const MOUNTAINS = Object.freeze([
   { code: "bayerischer-wald", name: "Bayerischer Wald", region: "Ostbayern an der tschechischen Grenze", peak: "Großer Arber", peakMeters: 1456 },
 ]);
 
+// Curated sights: WGS84 marker coordinates and official information sources.
+export const SIGHTS = Object.freeze([
+  {
+    "code": "linderhof",
+    "name": "Schloss Linderhof",
+    "regionCode": "oberbayern",
+    "location": "Ettal",
+    "fact": "Das Schloss Ludwigs II. liegt in einem Park in den Ammergauer Alpen.",
+    "wikipediaTitle": "Schloss Linderhof",
+    "sourceUrl": "https://www.schlosslinderhof.de/",
+    "lat": 47.57033,
+    "lon": 10.95817611
+  },
+  {
+    "code": "herrenchiemsee",
+    "name": "Schloss Herrenchiemsee",
+    "regionCode": "oberbayern",
+    "location": "Herreninsel im Chiemsee",
+    "fact": "Ludwig II. ließ das Neue Schloss nach dem Vorbild von Versailles errichten.",
+    "wikipediaTitle": "Neues Schloss Herrenchiemsee",
+    "sourceUrl": "https://www.herrenchiemsee.de/deutsch/n_schloss/index.htm",
+    "lat": 47.86020833,
+    "lon": 12.40031111
+  },
+  {
+    "code": "koenigssee",
+    "name": "Königssee",
+    "regionCode": "oberbayern",
+    "location": "Schönau am Königssee",
+    "fact": "Der See liegt zwischen steilen Bergen. Der Kartenpunkt zeigt die Wallfahrtskirche St. Bartholomä am Westufer.",
+    "wikipediaTitle": "Königssee",
+    "sourceUrl": "https://www.berchtesgaden.de/koenigssee",
+    "lat": 47.54424,
+    "lon": 12.9721
+  },
+  {
+    "code": "zugspitze",
+    "name": "Zugspitze",
+    "regionCode": "oberbayern",
+    "location": "Bei Garmisch-Partenkirchen",
+    "fact": "Deutschlands höchster Berg liegt an der Grenze zu Österreich. Der Punkt markiert den Gipfel.",
+    "wikipediaTitle": "Zugspitze",
+    "sourceUrl": "https://zugspitze.de/de/Unsere-Bergwelten/Die-Gebiete/Zugspitze",
+    "lat": 47.42122,
+    "lon": 10.9863
+  },
+  {
+    "code": "befreiungshalle",
+    "name": "Befreiungshalle",
+    "regionCode": "niederbayern",
+    "location": "Kelheim",
+    "fact": "Der Rundbau auf dem Michelsberg erinnert an die Befreiungskriege gegen Napoleon.",
+    "wikipediaTitle": "Befreiungshalle",
+    "sourceUrl": "https://www.schloesser.bayern.de/deutsch/schloss/objekte/kelheim.htm",
+    "lat": 48.91833333,
+    "lon": 11.86055556
+  },
+  {
+    "code": "weltenburg",
+    "name": "Kloster Weltenburg",
+    "regionCode": "niederbayern",
+    "location": "Bei Kelheim",
+    "fact": "Das Benediktinerkloster liegt an einer Donauschleife beim Donaudurchbruch.",
+    "wikipediaTitle": "Kloster Weltenburg",
+    "sourceUrl": "https://www.kloster-weltenburg.de/",
+    "lat": 48.89922222,
+    "lon": 11.82038889
+  },
+  {
+    "code": "veste-oberhaus",
+    "name": "Veste Oberhaus",
+    "regionCode": "niederbayern",
+    "location": "Passau",
+    "fact": "Die Burganlage über der Donau war eine Festung der Passauer Fürstbischöfe.",
+    "wikipediaTitle": "Veste Oberhaus",
+    "sourceUrl": "https://tourismus.passau.de/passau-sehen-erleben/baugestalten/die-14-objekte/veste-oberhaus/",
+    "lat": 48.5775,
+    "lon": 13.47027778
+  },
+  {
+    "code": "walhalla",
+    "name": "Walhalla",
+    "regionCode": "oberpfalz",
+    "location": "Donaustauf",
+    "fact": "Der tempelartige Bau über der Donau beherbergt Büsten und Gedenktafeln bedeutender Persönlichkeiten.",
+    "wikipediaTitle": "Walhalla",
+    "sourceUrl": "https://www.schloesser.bayern.de/deutsch/schloss/objekte/walhalla.htm",
+    "lat": 49.03148611,
+    "lon": 12.22408889
+  },
+  {
+    "code": "steinerne-bruecke",
+    "name": "Steinerne Brücke",
+    "regionCode": "oberpfalz",
+    "location": "Regensburg",
+    "fact": "Die mittelalterliche Steinbrücke führt über die Donau und verbindet die Altstadt mit Stadtamhof.",
+    "wikipediaTitle": "Steinerne Brücke",
+    "sourceUrl": "https://tourismus.regensburg.de/",
+    "lat": 49.02269444,
+    "lon": 12.09726667
+  },
+  {
+    "code": "burg-falkenberg",
+    "name": "Burg Falkenberg",
+    "regionCode": "oberpfalz",
+    "location": "Falkenberg in der Oberpfalz",
+    "fact": "Die Burg thront auf einem markanten Granitfelsen über dem Ort an der Waldnaab.",
+    "wikipediaTitle": "Burg Falkenberg",
+    "sourceUrl": "https://www.burg-falkenberg.bayern/",
+    "lat": 49.8593,
+    "lon": 12.2249
+  },
+  {
+    "code": "bamberger-dom",
+    "name": "Bamberger Dom",
+    "regionCode": "oberfranken",
+    "location": "Bamberg",
+    "fact": "Der Dom mit seinen vier Türmen ist unter anderem für den Bamberger Reiter bekannt.",
+    "wikipediaTitle": "Bamberger Dom",
+    "sourceUrl": "https://www.domberg-bamberg.de/highlights/dom-st-peter-und-st-georg/",
+    "lat": 49.89083333,
+    "lon": 10.8825
+  },
+  {
+    "code": "opernhaus",
+    "name": "Markgräfliches Opernhaus",
+    "regionCode": "oberfranken",
+    "location": "Bayreuth",
+    "fact": "Das barocke Hoftheater ist für seinen reich geschmückten Zuschauerraum aus Holz bekannt.",
+    "wikipediaTitle": "Markgräfliches Opernhaus",
+    "sourceUrl": "https://www.bayreuth-wilhelmine.de/deutsch/opernh/index.htm",
+    "lat": 49.94442222,
+    "lon": 11.57847222
+  },
+  {
+    "code": "veste-coburg",
+    "name": "Veste Coburg",
+    "regionCode": "oberfranken",
+    "location": "Coburg",
+    "fact": "Die große Burganlage über der Stadt wird auch Fränkische Krone genannt.",
+    "wikipediaTitle": "Veste Coburg",
+    "sourceUrl": "https://www.kunstsammlungen-coburg.de/",
+    "lat": 50.26388889,
+    "lon": 10.98138889
+  },
+  {
+    "code": "kaiserburg",
+    "name": "Nürnberger Kaiserburg",
+    "regionCode": "mittelfranken",
+    "location": "Nürnberg",
+    "fact": "Die Kaiserburg auf dem Sandsteinfelsen prägt die Silhouette der Nürnberger Altstadt.",
+    "wikipediaTitle": "Nürnberger Burg",
+    "sourceUrl": "https://www.kaiserburg-nuernberg.de/deutsch/burg/index.htm",
+    "lat": 49.45786667,
+    "lon": 11.07592222
+  },
+  {
+    "code": "ploenlein",
+    "name": "Plönlein",
+    "regionCode": "mittelfranken",
+    "location": "Rothenburg ob der Tauber",
+    "fact": "Das bekannte Altstadtmotiv zeigt ein Fachwerkhaus zwischen zwei Straßen mit Stadttoren.",
+    "wikipediaTitle": "Plönlein",
+    "sourceUrl": "https://www.rothenburg-tourismus.de/highlights/sehenswuerdigkeiten",
+    "lat": 49.37378,
+    "lon": 10.17956
+  },
+  {
+    "code": "residenz-wuerzburg",
+    "name": "Würzburger Residenz",
+    "regionCode": "unterfranken",
+    "location": "Würzburg",
+    "fact": "Der barocke Fürstbischofspalast ist für sein Treppenhaus mit einem Deckenfresko von Tiepolo bekannt.",
+    "wikipediaTitle": "Würzburger Residenz",
+    "sourceUrl": "https://www.residenz-wuerzburg.de/deutsch/residenz/index.htm",
+    "lat": 49.79265,
+    "lon": 9.93862
+  },
+  {
+    "code": "mespelbrunn",
+    "name": "Schloss Mespelbrunn",
+    "regionCode": "unterfranken",
+    "location": "Mespelbrunn im Spessart",
+    "fact": "Das Wasserschloss liegt in einem Seitental des Spessarts und ist von einem Teich umgeben.",
+    "wikipediaTitle": "Schloss Mespelbrunn",
+    "sourceUrl": "https://www.schloss-mespelbrunn.de/",
+    "lat": 49.90541944,
+    "lon": 9.30734444
+  },
+  {
+    "code": "johannisburg",
+    "name": "Schloss Johannisburg",
+    "regionCode": "unterfranken",
+    "location": "Aschaffenburg",
+    "fact": "Das Schloss aus rotem Sandstein steht unmittelbar über dem Main.",
+    "wikipediaTitle": "Schloss Johannisburg",
+    "sourceUrl": "https://www.schloesser.bayern.de/deutsch/schloss/objekte/as_joh.htm",
+    "lat": 49.97642,
+    "lon": 9.14102
+  },
+  {
+    "code": "neuschwanstein",
+    "name": "Schloss Neuschwanstein",
+    "regionCode": "schwaben",
+    "location": "Schwangau bei Füssen",
+    "fact": "Ludwig II. ließ das Schloss im Stil einer mittelalterlichen Ritterburg errichten.",
+    "wikipediaTitle": "Schloss Neuschwanstein",
+    "sourceUrl": "https://www.neuschwanstein.de/",
+    "lat": 47.55758,
+    "lon": 10.7498
+  },
+  {
+    "code": "lindau",
+    "name": "Lindauer Hafeneinfahrt",
+    "regionCode": "schwaben",
+    "location": "Lindau am Bodensee",
+    "fact": "Bayerischer Löwe und Neuer Leuchtturm flankieren die Hafeneinfahrt. Der Punkt liegt zwischen beiden.",
+    "wikipediaTitle": "Lindau (Bodensee)",
+    "sourceUrl": "https://www.lindau.de/addresses/lindauer-hafeneinfahrt/",
+    "lat": 47.54394,
+    "lon": 9.68324
+  }
+]);
+
 // Other Bavarian cities used as plausible answers in the government-seat quiz.
 export const OTHER_CITIES = Object.freeze([
   { code: "ingolstadt", seat: "Ingolstadt", regionCode: "oberbayern" },
@@ -93,15 +317,15 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createGame(mode, count, random = Math.random) {
-  if (!["map", "seat", "river", "mountain"].includes(mode)) throw new Error("Unknown mode");
+  if (!["map", "seat", "river", "mountain", "sight"].includes(mode)) throw new Error("Unknown mode");
   const allowedCounts = mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
-    : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
+    : mode === "sight" ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
   return {
     mode,
-    questions: shuffle(mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
+    questions: shuffle(mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
     index: 0,
     score: 0,
     answered: false,
@@ -131,7 +355,7 @@ export function answer(game, selectedCode) {
   if (!target) return null;
   const valid = game.mode === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : (game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
+    : (game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;

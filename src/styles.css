@@ -105,3 +105,18 @@ a { color: #9dd4ff; }
   .mapWrap { padding: 4px; }
   .option { flex: 1 1 42%; }
 }
+
+.sight { cursor: pointer; }
+.sight-dot { fill: #e3a7ff; stroke: #18223c; stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
+.sight-hit { fill: transparent; pointer-events: all; }
+.sight:hover .sight-dot, .sight:focus-visible .sight-dot, .sight.learned .sight-dot { fill: #ffe4ff; stroke: #fff; }
+.sight:focus-visible { outline: 3px solid #ffcf66; outline-offset: 3px; }
+.sight.correct .sight-dot { fill: var(--good); stroke: #fff; }
+.sight.wrong .sight-dot { fill: var(--bad); stroke: #fff; }
+.sight-mode .region { cursor: default; }
+.sightInfo { display: grid; gap: 6px; max-height: calc(100dvh - 100px); overflow-y: auto; text-align: left; padding-top: 44px; }
+.sightInfo img { display: block; width: 100%; height: auto; max-height: 180px; object-fit: contain; border-radius: 6px; }
+.sightInfoClose { position: absolute; right: 8px; top: 6px; padding: 4px 12px; font-size: 1.2rem; }
+@media (max-width: 700px) {
+  .sightInfo { position: relative; left: auto; bottom: auto; transform: none; width: 100%; max-height: none; }
+}

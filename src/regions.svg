@@ -207,4 +207,86 @@
       <path class="mountain-hit" d="M 535.5 319.9 L 557.8 332.7 L 585.7 341.2 L 612.2 360.4 L 640.2 379.5 L 662.5 400.7"/>
     </g>
   </g>
+  <g xmlns="http://www.w3.org/2000/svg" id="sightsLayer" class="hidden" aria-label="Sehenswürdigkeiten">
+    <g class="sight" data-sight="linderhof" role="button" tabindex="-1" aria-label="Schloss Linderhof">
+      <circle class="sight-hit" cx="296.6" cy="658.1" r="10"/>
+      <circle class="sight-dot" cx="296.6" cy="658.1" r="5"/>
+    </g>
+    <g class="sight" data-sight="herrenchiemsee" role="button" tabindex="-1" aria-label="Schloss Herrenchiemsee">
+      <circle class="sight-hit" cx="497.8" cy="598.0" r="10"/>
+      <circle class="sight-dot" cx="497.8" cy="598.0" r="5"/>
+    </g>
+    <g class="sight" data-sight="koenigssee" role="button" tabindex="-1" aria-label="Königssee">
+      <circle class="sight-hit" cx="577.6" cy="663.5" r="10"/>
+      <circle class="sight-dot" cx="577.6" cy="663.5" r="5"/>
+    </g>
+    <g class="sight" data-sight="zugspitze" role="button" tabindex="-1" aria-label="Zugspitze">
+      <circle class="sight-hit" cx="300.5" cy="688.9" r="10"/>
+      <circle class="sight-dot" cx="300.5" cy="688.9" r="5"/>
+    </g>
+    <g class="sight" data-sight="befreiungshalle" role="button" tabindex="-1" aria-label="Befreiungshalle">
+      <circle class="sight-hit" cx="422.5" cy="375.6" r="10"/>
+      <circle class="sight-dot" cx="422.5" cy="375.6" r="5"/>
+    </g>
+    <g class="sight" data-sight="weltenburg" role="button" tabindex="-1" aria-label="Kloster Weltenburg">
+      <circle class="sight-hit" cx="416.9" cy="379.7" r="10"/>
+      <circle class="sight-dot" cx="416.9" cy="379.7" r="5"/>
+    </g>
+    <g class="sight" data-sight="veste-oberhaus" role="button" tabindex="-1" aria-label="Veste Oberhaus">
+      <circle class="sight-hit" cx="647.2" cy="447.7" r="10"/>
+      <circle class="sight-dot" cx="647.2" cy="447.7" r="5"/>
+    </g>
+    <g class="sight" data-sight="walhalla" role="button" tabindex="-1" aria-label="Walhalla">
+      <circle class="sight-hit" cx="473.2" cy="351.5" r="10"/>
+      <circle class="sight-dot" cx="473.2" cy="351.5" r="5"/>
+    </g>
+    <g class="sight" data-sight="steinerne-bruecke" role="button" tabindex="-1" aria-label="Steinerne Brücke">
+      <circle class="sight-hit" cx="455.5" cy="353.4" r="10"/>
+      <circle class="sight-dot" cx="455.5" cy="353.4" r="5"/>
+    </g>
+    <g class="sight" data-sight="burg-falkenberg" role="button" tabindex="-1" aria-label="Burg Falkenberg">
+      <circle class="sight-hit" cx="473.4" cy="173.8" r="10"/>
+      <circle class="sight-dot" cx="473.4" cy="173.8" r="5"/>
+    </g>
+    <g class="sight" data-sight="bamberger-dom" role="button" tabindex="-1" aria-label="Bamberger Dom">
+      <circle class="sight-hit" cx="286.0" cy="167.0" r="10"/>
+      <circle class="sight-dot" cx="286.0" cy="167.0" r="5"/>
+    </g>
+    <g class="sight" data-sight="opernhaus" role="button" tabindex="-1" aria-label="Markgräfliches Opernhaus">
+      <circle class="sight-hit" cx="383.1" cy="155.4" r="10"/>
+      <circle class="sight-dot" cx="383.1" cy="155.4" r="5"/>
+    </g>
+    <g class="sight" data-sight="veste-coburg" role="button" tabindex="-1" aria-label="Veste Coburg">
+      <circle class="sight-hit" cx="299.8" cy="85.9" r="10"/>
+      <circle class="sight-dot" cx="299.8" cy="85.9" r="5"/>
+    </g>
+    <g class="sight" data-sight="kaiserburg" role="button" tabindex="-1" aria-label="Nürnberger Kaiserburg">
+      <circle class="sight-hit" cx="313.0" cy="260.4" r="10"/>
+      <circle class="sight-dot" cx="313.0" cy="260.4" r="5"/>
+    </g>
+    <g class="sight" data-sight="ploenlein" role="button" tabindex="-1" aria-label="Plönlein">
+      <circle class="sight-hit" cx="187.9" cy="278.4" r="10"/>
+      <circle class="sight-dot" cx="187.9" cy="278.4" r="5"/>
+    </g>
+    <g class="sight" data-sight="residenz-wuerzburg" role="button" tabindex="-1" aria-label="Würzburger Residenz">
+      <circle class="sight-hit" cx="154.3" cy="188.3" r="10"/>
+      <circle class="sight-dot" cx="154.3" cy="188.3" r="5"/>
+    </g>
+    <g class="sight" data-sight="mespelbrunn" role="button" tabindex="-1" aria-label="Schloss Mespelbrunn">
+      <circle class="sight-hit" cx="66.2" cy="163.8" r="10"/>
+      <circle class="sight-dot" cx="66.2" cy="163.8" r="5"/>
+    </g>
+    <g class="sight" data-sight="johannisburg" role="button" tabindex="-1" aria-label="Schloss Johannisburg">
+      <circle class="sight-hit" cx="42.9" cy="148.4" r="10"/>
+      <circle class="sight-dot" cx="42.9" cy="148.4" r="5"/>
+    </g>
+    <g class="sight" data-sight="neuschwanstein" role="button" tabindex="-1" aria-label="Schloss Neuschwanstein">
+      <circle class="sight-hit" cx="267.5" cy="660.8" r="10"/>
+      <circle class="sight-dot" cx="267.5" cy="660.8" r="5"/>
+    </g>
+    <g class="sight" data-sight="lindau" role="button" tabindex="-1" aria-label="Lindauer Hafeneinfahrt">
+      <circle class="sight-hit" cx="118.6" cy="663.6" r="10"/>
+      <circle class="sight-dot" cx="118.6" cy="663.6" r="5"/>
+    </g>
+  </g>
 </svg>

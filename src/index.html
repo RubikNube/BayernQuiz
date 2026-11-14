@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b1220" />
-    <title>BayernQuiz – Regierungsbezirke, Flüsse und Gebirge kennenlernen</title>
+    <title>BayernQuiz – Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten kennenlernen</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -23,7 +23,7 @@
       <header class="topbar">
         <div>
           <h1>BayernQuiz</h1>
-          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Flüsse und Gebirge.</p>
+          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten.</p>
         </div>
         <div id="stats" class="stats" aria-live="polite">
           <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
@@ -40,6 +40,7 @@
               <option value="seat">Regierungssitz wählen</option>
               <option value="river">Flüsse finden</option>
               <option value="mountain">Gebirge finden</option>
+              <option value="sight">Sehenswürdigkeiten finden</option>
             </select>
           </label>
           <label id="countLabel" for="count">Fragen
@@ -64,6 +65,7 @@
           <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
           <label><input type="checkbox" data-learn-topic="rivers" checked /> Flüsse</label>
           <label><input type="checkbox" data-learn-topic="mountains" checked /> Gebirge</label>
+          <label><input type="checkbox" data-learn-topic="sights" checked /> Sehenswürdigkeiten</label>
         </fieldset>
 
         <div id="question" class="question" aria-live="polite"></div>
@@ -95,6 +97,15 @@
         <a id="mountainInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
       </div>
 
+      <div id="sightInfo" class="mapToast sightInfo hidden" role="status" aria-live="polite">
+        <button id="sightInfoClose" class="sightInfoClose secondary" type="button" aria-label="Informationen zur Sehenswürdigkeit schließen">×</button>
+        <img id="sightInfoImage" alt="" width="360" height="220" />
+        <strong id="sightInfoName"></strong>
+        <span id="sightInfoLocation"></span>
+        <span id="sightInfoFact"></span>
+        <a id="sightInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
+      </div>
+
       <section id="result" class="result hidden" aria-live="polite">
         <h2>Quiz beendet</h2>
         <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
@@ -106,6 +117,7 @@
         <span>Regierungssitze: <a href="https://www.stmi.bayern.de/staat-und-verfassung/staatsgebiet/">Bayerisches Staatsministerium des Innern</a>.</span>
         <span>Flussläufe: <a href="https://geodatenonline.bayern.de/geodatenonline/seiten/wfs_atkis">Bayerische Vermessungsverwaltung, ATKIS Basis-DLM</a>, CC BY 4.0. Flusslängen: <a href="https://www.lfu.bayern.de/wasser/gewaesserverzeichnisse/doc/tab_gew_name_100_laeng.pdf">Bayerisches Landesamt für Umwelt</a>.</span>
         <span>Gebirgslagen: <a href="https://www.lfu.bayern.de/natur/naturraeume/index.htm">Bayerisches Landesamt für Umwelt</a>; vereinfachte Darstellung.</span>
+        <span>Sehenswürdigkeiten: <a href="assets/sights/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
       </footer>
     </main>
     <script type="module" src="app.js"></script>

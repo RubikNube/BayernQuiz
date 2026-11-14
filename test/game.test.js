@@ -1,7 +1,7 @@
 import test from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { MOUNTAINS, OTHER_CITIES, REGIONS, RIVERS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "../src/game.js";
+import { MOUNTAINS, OTHER_CITIES, REGIONS, RIVERS, SIGHTS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "../src/game.js";
 
 test("each official region has a unique code and government seat", () => {
   assert.equal(REGIONS.length, 7);
@@ -140,4 +140,57 @@ test("mountain rounds use distinct questions, score once, and finish at the chos
     assert.equal(nextQuestion(game), false);
   }
   assert.throws(() => createGame("mountain", 20), /Invalid question count/);
+});
+
+test("sight rounds validate counts, reject foreign codes, score once, and finish", () => {
+  for (const count of [3, 5, 7, 10, 15, 20]) {
+    const game = createGame("sight", count, () => 0.5);
+    assert.equal(game.questions.length, count);
+    assert.equal(new Set(game.questions.map(({ code }) => code)).size, count);
+    assert.equal(nextQuestion(game), false);
+    assert.equal(answer(game, "missing"), null);
+    assert.equal(answer(game, REGIONS[0].code), null);
+    const wrong = SIGHTS.find(({ code }) => code !== currentQuestion(game).code);
+    assert.equal(answer(game, wrong.code), false);
+    assert.equal(answer(game, currentQuestion(game).code), null);
+    nextQuestion(game);
+    while (!game.finished) {
+      assert.equal(answer(game, currentQuestion(game).code), true);
+      assert.equal(answer(game, currentQuestion(game).code), null);
+      nextQuestion(game);
+    }
+    assert.equal(game.score, count - 1);
+    assert.equal(answer(game, SIGHTS[0].code), null);
+    assert.equal(nextQuestion(game), false);
+  }
+  for (const count of [0, 4, 25, 30]) assert.throws(() => createGame("sight", count), /Invalid question count/);
+});
+
+test("20 sights cover all regions and have matching accessible markers and credited photos", () => {
+  assert.equal(SIGHTS.length, 20);
+  assert.equal(new Set(SIGHTS.map(({ code }) => code)).size, 20);
+  assert.deepEqual(new Set(SIGHTS.map(({ regionCode }) => regionCode)), new Set(REGIONS.map(({ code }) => code)));
+  const svg = readFileSync(new URL("../src/regions.svg", import.meta.url), "utf8");
+  const metadata = JSON.parse(readFileSync(new URL("../assets/sights/metadata.json", import.meta.url), "utf8"));
+  const credits = readFileSync(new URL("../assets/sights/ATTRIBUTION.md", import.meta.url), "utf8");
+  const groups = [...svg.matchAll(/<g class="sight"[^>]*data-sight="([^"]+)"[^>]*>([\s\S]*?)<\/g>/g)];
+  assert.equal(groups.length, 20);
+  assert.equal(metadata.length, 20);
+  for (const sight of SIGHTS) {
+    assert.ok(sight.name && sight.location && sight.fact && sight.wikipediaTitle);
+    assert.ok(sight.sourceUrl.startsWith("https://"));
+    assert.ok(sight.lat > 47 && sight.lat < 51 && sight.lon > 8 && sight.lon < 14);
+    const marker = groups.find((group) => group[1] === sight.code);
+    assert.ok(marker, sight.code);
+    assert.match(marker[0], /role="button"/);
+    assert.match(marker[0], /aria-label="[^"]+"/);
+    assert.match(marker[2], /class="sight-hit"/);
+    assert.match(marker[2], /class="sight-dot"/);
+    const image = metadata.find(({ slug }) => slug === sight.code);
+    assert.ok(image.artist && image.license && image.page_url);
+    assert.ok(credits.includes(image.page_url));
+    const photo = readFileSync(new URL(`../assets/sights/${sight.code}.jpg`, import.meta.url));
+    assert.equal(photo[0], 0xff);
+    assert.equal(photo[1], 0xd8);
+  }
 });
