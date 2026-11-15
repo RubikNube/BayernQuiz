@@ -52,6 +52,14 @@
               </label>
             </div>
 
+            <div id="highscores" class="highscores hidden">
+              <p id="personalBest" tabindex="-1" aria-live="polite"></p>
+              <p id="highscoreStorage" class="highscoreStorage"></p>
+              <button id="resetRecords" class="secondary" type="button" aria-haspopup="dialog" aria-controls="resetRecordsDialog" aria-describedby="resetRecordsHint" disabled>Rekorde zurücksetzen…</button>
+              <p id="resetRecordsHint" class="highscoreStorage hidden">Nach der Runde verfügbar.</p>
+              <p id="resetRecordsStatus" role="status"></p>
+            </div>
+
             <fieldset id="learnTopics" class="learnTopics hidden">
               <legend>Themen in Lernen</legend>
               <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
@@ -133,6 +141,7 @@
           <section id="result" class="result hidden" aria-live="polite">
             <h2>Quiz beendet</h2>
             <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
+            <p id="highscoreResult"></p>
           </section>
         </div>
 
@@ -170,6 +179,23 @@
         <span>Naturschutzgebiete: <a href="https://www.lfu.bayern.de/natur/schutzgebiete/schutzgebietslisten/index.htm" target="_blank" rel="noopener noreferrer">LfU Bayern</a>. Orientierungspunkte nach <a href="https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Bayern" target="_blank" rel="noopener noreferrer">Wikipedia</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. Fotos: <a href="assets/nature-reserves/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
       </footer>
     </main>
+    <dialog id="resetRecordsDialog" class="resetRecordsDialog" aria-labelledby="resetRecordsTitle" aria-describedby="resetRecordsDescription">
+      <form id="resetRecordsForm">
+        <h2 id="resetRecordsTitle">Rekorde zurücksetzen?</h2>
+        <fieldset>
+          <legend>Welche Rekorde möchtest du zurücksetzen?</legend>
+          <label><input id="resetSelectedRecord" type="radio" name="resetScope" value="selected" checked /> <span id="resetSelectedLabel"></span></label>
+          <label><input id="resetAllRecords" type="radio" name="resetScope" value="all" /> Alle Rekorde</label>
+        </fieldset>
+        <p id="resetRecordsDescription"></p>
+        <p>Das Zurücksetzen kann nicht rückgängig gemacht werden.</p>
+        <p id="resetRecordsError" role="alert"></p>
+        <div class="actions">
+          <button id="cancelResetRecords" class="secondary" type="button" autofocus>Abbrechen</button>
+          <button type="submit">Zurücksetzen</button>
+        </div>
+      </form>
+    </dialog>
     <script type="module" src="app.js"></script>
   </body>
 </html>

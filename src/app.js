@@ -1,5 +1,6 @@
 import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
 import { createMapZoom } from "./map-zoom.js";
+import { createHighscores, highscoreMessage } from "./highscores.js";
 
 const elements = {
   lakeInfo: document.querySelector("#lakeInfo"),
@@ -55,8 +56,26 @@ const elements = {
   round: document.querySelector("#round"),
   totalRounds: document.querySelector("#totalRounds"),
   score: document.querySelector("#score"),
+  highscores: document.querySelector("#highscores"),
+  personalBest: document.querySelector("#personalBest"),
+  highscoreStorage: document.querySelector("#highscoreStorage"),
+  highscoreResult: document.querySelector("#highscoreResult"),
+  resetRecords: document.querySelector("#resetRecords"),
+  resetRecordsHint: document.querySelector("#resetRecordsHint"),
+  resetRecordsStatus: document.querySelector("#resetRecordsStatus"),
+  resetRecordsDialog: document.querySelector("#resetRecordsDialog"),
+  resetRecordsForm: document.querySelector("#resetRecordsForm"),
+  resetSelectedRecord: document.querySelector("#resetSelectedRecord"),
+  resetAllRecords: document.querySelector("#resetAllRecords"),
+  resetSelectedLabel: document.querySelector("#resetSelectedLabel"),
+  resetRecordsDescription: document.querySelector("#resetRecordsDescription"),
+  resetRecordsError: document.querySelector("#resetRecordsError"),
+  cancelResetRecords: document.querySelector("#cancelResetRecords"),
 };
 
+const highscores = createHighscores();
+let roundRecord = null;
+let resetTarget = null;
 let game = null;
 let mapZoom = null;
 let advanceTimer = null;
@@ -421,6 +440,15 @@ function render() {
   const isLearn = mode === "learn";
   updateCountOptions();
   updateMapMode();
+  elements.highscores.classList.toggle("hidden", isLearn);
+  const best = highscores.getBest(mode, Number(elements.count.value));
+  elements.personalBest.textContent = best === null ? "Dein Rekord: noch keiner" : `Dein Rekord: ${best}/${elements.count.value}`;
+  elements.highscoreStorage.textContent = highscores.persistent
+    ? "Rekorde werden nur in diesem Browser gespeichert."
+    : "Rekorde bleiben für diese Sitzung erhalten; dauerhaftes Speichern ist nicht verfügbar.";
+  const roundActive = Boolean(game && !game.finished);
+  elements.resetRecords.disabled = roundActive || !highscores.hasRecords;
+  elements.resetRecordsHint.classList.toggle("hidden", !roundActive);
   elements.countLabel.classList.toggle("hidden", isLearn);
   elements.learnTopics.classList.toggle("hidden", !isLearn);
   elements.autoLabel.classList.toggle("hidden", isLearn);
@@ -468,6 +496,7 @@ function render() {
     elements.question.textContent = "Geschafft!";
     elements.finalScore.textContent = String(game.score);
     elements.finalTotal.textContent = String(game.questions.length);
+    elements.highscoreResult.textContent = highscoreMessage(roundRecord);
     elements.options.classList.add("hidden");
     setFeedback(mode === "lake" ? "Wähle einen See, um mehr zu erfahren, oder starte eine neue Runde." : mode === "nature" ? "Wähle ein Naturschutzgebiet, um mehr zu erfahren, oder starte eine neue Runde." : mode === "city" ? "Wähle eine Stadt, um mehr zu erfahren, oder starte eine neue Runde." : mode === "sight" ? "Wähle eine Sehenswürdigkeit, um mehr zu erfahren, oder starte eine neue Runde." : mode === "mountain" ? "Wähle ein Gebirge, um mehr darüber zu erfahren, oder starte eine neue Runde."
       : mode === "river" ? "Wähle einen Fluss, um seine Länge zu sehen, oder starte eine neue Runde."
@@ -517,6 +546,7 @@ function render() {
 }
 
 function resetMode() {
+  elements.resetRecordsStatus.textContent = "";
   hideNatureInfo();
   hideLakeInfo();
   mapZoom?.reset();
@@ -526,6 +556,7 @@ function resetMode() {
   hideMountainInfo();
   hideSightInfo();
   game = null;
+  roundRecord = null;
   elements.result.classList.add("hidden");
   elements.settings.open = true;
   setFeedback("");
@@ -533,6 +564,7 @@ function resetMode() {
 }
 
 function startGame() {
+  elements.resetRecordsStatus.textContent = "";
   hideNatureInfo();
   hideLakeInfo();
   cancelAdvance();
@@ -565,6 +597,7 @@ function startGame() {
     return;
   }
   game = createGame(elements.mode.value, Number(elements.count.value));
+  roundRecord = null;
   elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
   mapZoom?.reset();
   if (game.mode === "seat") makeSeatOptions(game);
@@ -581,6 +614,7 @@ function advance() {
   hideMountainInfo();
   hideSightInfo();
   if (!game || !nextQuestion(game)) return;
+  if (game.finished) roundRecord = highscores.recordCompletedRound(game);
   if (!game.finished && game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.finished ? "" : game.mode === "lake" ? "Wähle den gesuchten See auf der Karte." : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
@@ -611,6 +645,51 @@ function submit(code) {
   }
 }
 
+function updateResetDescription() {
+  elements.resetRecordsDescription.textContent = elements.resetAllRecords.checked
+    ? "Alle Rekorde für alle Modi und Fragenanzahlen in diesem Browser werden gelöscht."
+    : `Nur der Rekord für ${resetTarget.label} mit ${resetTarget.count} Fragen wird gelöscht. Andere Rekorde bleiben erhalten.`;
+}
+
+elements.resetRecords.addEventListener("click", () => {
+  if ((game && !game.finished) || !highscores.hasRecords) return;
+  resetTarget = { mode: elements.mode.value, count: Number(elements.count.value), label: elements.mode.selectedOptions[0].textContent };
+  const hasSelectedRecord = highscores.getBest(resetTarget.mode, resetTarget.count) !== null;
+  elements.resetSelectedLabel.textContent = `Diesen Rekord: ${resetTarget.label}, ${resetTarget.count} Fragen`;
+  elements.resetSelectedRecord.disabled = !hasSelectedRecord;
+  elements.resetSelectedRecord.checked = hasSelectedRecord;
+  elements.resetAllRecords.checked = !hasSelectedRecord;
+  elements.resetRecordsError.textContent = "";
+  elements.resetRecordsStatus.textContent = "";
+  updateResetDescription();
+  elements.resetRecordsDialog.showModal();
+  elements.cancelResetRecords.focus();
+});
+for (const input of [elements.resetSelectedRecord, elements.resetAllRecords]) {
+  input.addEventListener("change", updateResetDescription);
+}
+elements.cancelResetRecords.addEventListener("click", () => elements.resetRecordsDialog.close());
+elements.resetRecordsDialog.addEventListener("close", () => {
+  // A queued close event may arrive after the dialog has already been reopened.
+  if (elements.resetRecordsDialog.open) return;
+  resetTarget = null;
+  (elements.resetRecords.disabled ? elements.personalBest : elements.resetRecords).focus();
+});
+elements.resetRecordsForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  if (!resetTarget || !elements.resetRecordsDialog.open) return;
+  const all = elements.resetAllRecords.checked;
+  const success = all ? highscores.resetAll() : highscores.resetRecord(resetTarget.mode, resetTarget.count);
+  if (!success) {
+    elements.resetRecordsError.textContent = "Die Rekorde konnten nicht zurückgesetzt werden. Bitte versuche es erneut.";
+    return;
+  }
+  if (game?.finished && (all || (game.mode === resetTarget.mode && game.questions.length === resetTarget.count))) roundRecord = null;
+  render();
+  elements.resetRecordsStatus.textContent = all ? "Alle Rekorde zurückgesetzt." : "Rekord zurückgesetzt.";
+  elements.resetRecordsDialog.close();
+});
+
 elements.mode.addEventListener("change", resetMode);
 for (const checkbox of Object.values(learnTopics)) checkbox.addEventListener("change", () => {
   hideNatureInfo();
@@ -624,6 +703,7 @@ for (const checkbox of Object.values(learnTopics)) checkbox.addEventListener("ch
   render();
 });
 elements.count.addEventListener("change", () => {
+  elements.resetRecordsStatus.textContent = "";
   if (!game || game.finished) render();
 });
 elements.start.addEventListener("click", startGame);

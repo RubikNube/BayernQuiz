@@ -16,6 +16,14 @@ Im Modus **Naturschutzgebiete finden** können 20 ausgewählte Schutzgebiete aus
 
 Im Modus **Lernen** können Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete über Checkboxen einzeln ein- und ausgeblendet werden. Alle sieben Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Bereits gespeicherte Einstellungen bleiben erhalten; neue Themen wie Seen sind zunächst eingeschaltet. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
 
+## Persönliche Rekorde
+
+Alle acht Quizmodi speichern einen persönlichen Rekord getrennt nach Modus und Fragenanzahl. In den Einstellungen steht der bisherige Bestwert, etwa **Dein Rekord: 6/7**. Nach einer abgeschlossenen Runde zeigt das Ergebnis einen ersten, verbesserten oder eingestellten Rekord an. Gewertet werden ausschließlich richtige Antworten; es gibt keine Zeitwertung. Eine Runde zählt erst nach dem Weitergehen nach der letzten Antwort. Abgebrochene und neu gestartete Runden sowie **Lernen** erhalten keinen Rekord.
+
+Rekorde werden ausschließlich in diesem Browser gespeichert, ohne Konto oder Übertragung an einen Server. Das Löschen der Browserdaten entfernt sie. Ist dauerhafte Speicherung nicht verfügbar, bleiben Rekorde für die aktuelle Sitzung erhalten; ein Hinweis erscheint in den Einstellungen.
+
+Über **Rekorde zurücksetzen…** lässt sich nach einer Bestätigung entweder **dieser Rekord** (ausgewählter Modus und Fragenanzahl) oder **alle Rekorde** löschen. Andere Einstellungen bleiben erhalten. Das Zurücksetzen kann nicht rückgängig gemacht werden und ist während einer laufenden Runde nicht verfügbar. **Abbrechen** oder Escape schließt den Dialog ohne Änderungen.
+
 ## Oberfläche und Bildschirmgrößen
 
 Ab 1.100 Pixeln stehen Einstellungen, Quizfrage und Ortsinformationen in einer Seitenleiste neben der Karte. Die Karte nutzt die gesamte Breite ihres Bereichs und passt ihre Höhe an das Fenster an. Die Seitenleiste lässt sich unabhängig scrollen; ausgewählte Ortsinformationen werden automatisch in ihren sichtbaren Bereich gebracht. Auf kleineren Bildschirmen sind die Bereiche untereinander angeordnet. Beim Quizstart werden dort die **Einstellungen** eingeklappt; sie lassen sich jederzeit wieder öffnen. Frage und Fortschritt bleiben beim Scrollen sichtbar, außer bei sehr geringer Bildschirmhöhe. Informationen zu allen Kartenthemen erscheinen unter der Karte, werden beim Auswählen automatisch in den sichtbaren Bereich gescrollt und lassen sich über **×** schließen. Die **Kartenhilfe** enthält Hinweise zur Maus- und Touchbedienung.

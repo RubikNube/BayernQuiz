@@ -598,10 +598,15 @@ export function shuffle(items, random = Math.random) {
   return result;
 }
 
-export function createGame(mode, count, random = Math.random) {
-  if (!["map", "seat", "river", "mountain", "sight", "city", "nature", "lake"].includes(mode)) throw new Error("Unknown mode");
-  const allowedCounts = mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
+export function getAllowedQuestionCounts(mode) {
+  if (!["map", "seat", "river", "mountain", "sight", "city", "nature", "lake"].includes(mode)) return [];
+  return mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
     : (mode === "sight" || mode === "nature" || mode === "lake") ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
+}
+
+export function createGame(mode, count, random = Math.random) {
+  const allowedCounts = getAllowedQuestionCounts(mode);
+  if (!allowedCounts.length) throw new Error("Unknown mode");
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
