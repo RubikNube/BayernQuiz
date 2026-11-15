@@ -1,0 +1,382 @@
+[
+  {
+    "slug": "chiemsee",
+    "title": "Chiemsee",
+    "file": "Aerial_image_of_the_Chiemsee_(view_from_the_southwest).jpg",
+    "coordinates": [
+      {
+        "lat": 47.86194444,
+        "lon": 12.40111111,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7f/Aerial_image_of_the_Chiemsee_%28view_from_the_southwest%29.jpg/330px-Aerial_image_of_the_Chiemsee_%28view_from_the_southwest%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Chiemsee_(view_from_the_southwest).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/chiemsee.jpg"
+  },
+  {
+    "slug": "starnberger-see",
+    "title": "Starnberger See",
+    "file": "Aerial_image_of_Lake_Starnberg_(view_from_the_south).jpg",
+    "coordinates": [
+      {
+        "lat": 47.91666667,
+        "lon": 11.31666667,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/6f/Aerial_image_of_Lake_Starnberg_%28view_from_the_south%29.jpg/330px-Aerial_image_of_Lake_Starnberg_%28view_from_the_south%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Lake_Starnberg_(view_from_the_south).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/starnberger-see.jpg"
+  },
+  {
+    "slug": "ammersee",
+    "title": "Ammersee",
+    "file": "Aerial_image_of_the_Ammersee_(view_from_the_south).jpg",
+    "coordinates": [
+      {
+        "lat": 48,
+        "lon": 11.11666667,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/b3/Aerial_image_of_the_Ammersee_%28view_from_the_south%29.jpg/330px-Aerial_image_of_the_Ammersee_%28view_from_the_south%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Ammersee_(view_from_the_south).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/ammersee.jpg"
+  },
+  {
+    "slug": "tegernsee",
+    "title": "Tegernsee",
+    "file": "Aerial_image_of_the_Tegernsee_(view_from_the_southeast).jpg",
+    "coordinates": [
+      {
+        "lat": 47.72833333,
+        "lon": 11.7325,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Aerial_image_of_the_Tegernsee_%28view_from_the_southeast%29.jpg/330px-Aerial_image_of_the_Tegernsee_%28view_from_the_southeast%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Tegernsee_(view_from_the_southeast).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/tegernsee.jpg"
+  },
+  {
+    "slug": "schliersee",
+    "title": "Schliersee",
+    "file": "Aerial_image_of_the_Schliersee_(view_from_the_south).jpg",
+    "coordinates": [
+      {
+        "lat": 47.72472222,
+        "lon": 11.86222222,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3e/Aerial_image_of_the_Schliersee_%28view_from_the_south%29.jpg/330px-Aerial_image_of_the_Schliersee_%28view_from_the_south%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Schliersee_(view_from_the_south).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/schliersee.jpg"
+  },
+  {
+    "slug": "walchensee",
+    "title": "Walchensee",
+    "file": "Aerial_image_of_the_Walchensee_(view_from_the_southwest).jpg",
+    "coordinates": [
+      {
+        "lat": 47.6,
+        "lon": 11.35,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8f/Aerial_image_of_the_Walchensee_%28view_from_the_southwest%29.jpg/330px-Aerial_image_of_the_Walchensee_%28view_from_the_southwest%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Walchensee_(view_from_the_southwest).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/walchensee.jpg"
+  },
+  {
+    "slug": "kochelsee",
+    "title": "Kochelsee",
+    "file": "Aerial_image_of_the_Kochelsee_(view_from_the_south).jpg",
+    "coordinates": [
+      {
+        "lat": 47.64611111,
+        "lon": 11.33722222,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5a/Aerial_image_of_the_Kochelsee_%28view_from_the_south%29.jpg/330px-Aerial_image_of_the_Kochelsee_%28view_from_the_south%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Kochelsee_(view_from_the_south).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/kochelsee.jpg"
+  },
+  {
+    "slug": "koenigssee",
+    "title": "Königssee",
+    "file": "Königsee_in_Bayern.jpg",
+    "coordinates": [
+      {
+        "lat": 47.55388889,
+        "lon": 12.97777778,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/59/K%C3%B6nigsee_in_Bayern.jpg/330px-K%C3%B6nigsee_in_Bayern.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:K%C3%B6nigsee_in_Bayern.jpg",
+    "artist": "Mtt1734",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/koenigssee.jpg"
+  },
+  {
+    "slug": "eibsee",
+    "title": "Eibsee",
+    "file": "Eibsee_und_Ammergauer_Alpen.jpg",
+    "coordinates": [
+      {
+        "lat": 47.45777778,
+        "lon": 10.97305556,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Eibsee_und_Ammergauer_Alpen.jpg/330px-Eibsee_und_Ammergauer_Alpen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Eibsee_und_Ammergauer_Alpen.jpg",
+    "artist": "Octagon",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "path": "assets/lakes/eibsee.jpg"
+  },
+  {
+    "slug": "staffelsee",
+    "title": "Staffelsee",
+    "file": "Aerial_image_of_the_Staffelsee_(view_from_the_southeast).jpg",
+    "coordinates": [
+      {
+        "lat": 47.69083333,
+        "lon": 11.16083333,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/b/bc/Aerial_image_of_the_Staffelsee_%28view_from_the_southeast%29.jpg/330px-Aerial_image_of_the_Staffelsee_%28view_from_the_southeast%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Staffelsee_(view_from_the_southeast).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/staffelsee.jpg"
+  },
+  {
+    "slug": "forggensee",
+    "title": "Forggensee",
+    "file": "Aerial_image_of_the_Forggensee_(view_from_the_southwest).jpg",
+    "coordinates": [
+      {
+        "lat": 47.6166,
+        "lon": 10.7425,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/69/Aerial_image_of_the_Forggensee_%28view_from_the_southwest%29.jpg/330px-Aerial_image_of_the_Forggensee_%28view_from_the_southwest%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_the_Forggensee_(view_from_the_southwest).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/forggensee.jpg"
+  },
+  {
+    "slug": "grosser-alpsee",
+    "title": "Großer Alpsee",
+    "file": "Aerial_image_of_Großer_Alpsee_(view_from_the_northeast).jpg",
+    "coordinates": [
+      {
+        "lat": 47.57222222,
+        "lon": 10.175,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/2/25/Aerial_image_of_Gro%C3%9Fer_Alpsee_%28view_from_the_northeast%29.jpg/330px-Aerial_image_of_Gro%C3%9Fer_Alpsee_%28view_from_the_northeast%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Gro%C3%9Fer_Alpsee_(view_from_the_northeast).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/grosser-alpsee.jpg"
+  },
+  {
+    "slug": "bodensee",
+    "title": "Bodensee",
+    "file": "Blick vom Pfänder auf den Bodensee.jpg",
+    "coordinates": [
+      {
+        "lat": 47.63333333,
+        "lon": 9.36666667,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a2/Blick_vom_Pf%C3%A4nder_auf_den_Bodensee.jpg/330px-Blick_vom_Pf%C3%A4nder_auf_den_Bodensee.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Blick_vom_Pf%C3%A4nder_auf_den_Bodensee.jpg",
+    "artist": "Rebecca Beiter",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/bodensee.jpg"
+  },
+  {
+    "slug": "grosser-brombachsee",
+    "title": "Großer Brombachsee",
+    "file": "Aerial_image_of_Großer_Brombachsee_(view_from_the_southeast).jpg",
+    "coordinates": [
+      {
+        "lat": 49.130847,
+        "lon": 10.935173,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/58/Aerial_image_of_Gro%C3%9Fer_Brombachsee_%28view_from_the_southeast%29.jpg/330px-Aerial_image_of_Gro%C3%9Fer_Brombachsee_%28view_from_the_southeast%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Gro%C3%9Fer_Brombachsee_(view_from_the_southeast).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/grosser-brombachsee.jpg"
+  },
+  {
+    "slug": "kleiner-brombachsee",
+    "title": "Kleiner Brombachsee",
+    "file": "Aerial_image_of_Kleiner_Brombachsee_(view_from_the_west).jpg",
+    "coordinates": [
+      {
+        "lat": 49.134553,
+        "lon": 10.877151,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/00/Aerial_image_of_Kleiner_Brombachsee_%28view_from_the_west%29.jpg/330px-Aerial_image_of_Kleiner_Brombachsee_%28view_from_the_west%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Kleiner_Brombachsee_(view_from_the_west).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/kleiner-brombachsee.jpg"
+  },
+  {
+    "slug": "altmuehlsee",
+    "title": "Altmühlsee",
+    "file": "Altmühlsee16.JPG",
+    "coordinates": [
+      {
+        "lat": 49.133037,
+        "lon": 10.72463,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a9/Altm%C3%BChlsee16.JPG/330px-Altm%C3%BChlsee16.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Altm%C3%BChlsee16.JPG",
+    "artist": "Mkummerer",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/lakes/altmuehlsee.jpg"
+  },
+  {
+    "slug": "rothsee",
+    "title": "Rothsee",
+    "file": "Rothsee_(2022).jpg",
+    "coordinates": [
+      {
+        "lat": 49.22021,
+        "lon": 11.184053,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/6/67/Rothsee_%282022%29.jpg/330px-Rothsee_%282022%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Rothsee_(2022).jpg",
+    "artist": "MrToga",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/lakes/rothsee.jpg"
+  },
+  {
+    "slug": "steinberger-see",
+    "title": "Steinberger See",
+    "file": "Steinbergersee_2012_01.jpg",
+    "coordinates": [
+      {
+        "lat": 49.27972222,
+        "lon": 12.1625,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c7/Steinbergersee_2012_01.jpg/330px-Steinbergersee_2012_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Steinbergersee_2012_01.jpg",
+    "artist": "Alois Köppl, Gleiritsch",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/lakes/steinberger-see.jpg"
+  },
+  {
+    "slug": "drachensee",
+    "title": "Drachensee (Chamb)",
+    "file": "Drachensee_(Furth).JPG",
+    "coordinates": [
+      {
+        "lat": 49.31194444,
+        "lon": 12.8775,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/5c/Drachensee_%28Furth%29.JPG/330px-Drachensee_%28Furth%29.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Drachensee_(Furth).JPG",
+    "artist": "Schmid Marco, Thanried - Stamsried",
+    "license": "CC BY-SA 3.0 de",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0/de/deed.en",
+    "path": "assets/lakes/drachensee.jpg"
+  },
+  {
+    "slug": "weissenstaedter-see",
+    "title": "Weißenstädter See",
+    "file": "GELO_weissenstadt.jpg",
+    "coordinates": [
+      {
+        "lat": 50.10222222,
+        "lon": 11.87777778,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a8/GELO_weissenstadt.jpg/330px-GELO_weissenstadt.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:GELO_weissenstadt.jpg",
+    "artist": "4cmedia",
+    "license": "Public domain",
+    "license_url": "",
+    "path": "assets/lakes/weissenstaedter-see.jpg"
+  }
+]

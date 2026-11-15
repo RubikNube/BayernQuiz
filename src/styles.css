@@ -183,3 +183,15 @@ a { color: #9dd4ff; }
 .nature-mode .region { cursor: default; }
 .natureInfo { display: grid; gap: 6px; }
 .natureInfo img { width: 100%; max-width: 240px; height: 140px; object-fit: contain; border-radius: 6px; }
+
+/* Lake outlines keep their geographic shape; transparent strokes aid selection. */
+.lake { cursor: pointer; }
+.lake-shape { fill: #469de0; stroke: #163f69; stroke-width: 1; vector-effect: non-scaling-stroke; pointer-events: none; fill-rule: evenodd; }
+.lake-hit { fill: transparent; stroke: transparent; stroke-width: 12; vector-effect: non-scaling-stroke; pointer-events: all; fill-rule: evenodd; }
+.lake:hover .lake-shape, .lake:focus-visible .lake-shape, .lake.learned .lake-shape { fill: #b2e5ff; stroke: #fff; }
+.lake:focus-visible { outline: 3px solid #ffcf66; outline-offset: 3px; }
+.lake.correct .lake-shape { fill: var(--good); stroke: #fff; }
+.lake.wrong .lake-shape { fill: var(--bad); stroke: #fff; }
+.lake-mode .region { cursor: default; }
+.lakeInfo { display: grid; gap: 6px; }
+.lakeInfo img { width: 100%; max-width: 240px; height: 140px; object-fit: contain; border-radius: 6px; }

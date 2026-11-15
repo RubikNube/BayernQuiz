@@ -1,7 +1,14 @@
-import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
+import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
 import { createMapZoom } from "./map-zoom.js";
 
 const elements = {
+  lakeInfo: document.querySelector("#lakeInfo"),
+  lakeInfoImage: document.querySelector("#lakeInfoImage"),
+  lakeInfoName: document.querySelector("#lakeInfoName"),
+  lakeInfoLocation: document.querySelector("#lakeInfoLocation"),
+  lakeInfoFact: document.querySelector("#lakeInfoFact"),
+  lakeInfoWikipedia: document.querySelector("#lakeInfoWikipedia"),
+  lakeInfoArea: document.querySelector("#lakeInfoArea"),
   natureInfo: document.querySelector("#natureInfo"),
   natureInfoImage: document.querySelector("#natureInfoImage"),
   natureInfoName: document.querySelector("#natureInfoName"),
@@ -53,7 +60,7 @@ const elements = {
 let game = null;
 let mapZoom = null;
 let advanceTimer = null;
-const learnTopics = Object.fromEntries(["regions", "rivers", "mountains", "sights", "cities", "nature"].map((topic) => {
+const learnTopics = Object.fromEntries(["regions", "rivers", "mountains", "sights", "cities", "nature", "lakes"].map((topic) => {
   const checkbox = elements.learnTopics.querySelector(`[data-learn-topic="${topic}"]`);
   try {
     const saved = JSON.parse(localStorage.getItem("bayernQuizLearnTopics"));
@@ -116,6 +123,7 @@ function wikipediaUrl(title) {
 
 function showMapToast(message, tone = "", wikipediaTitle = "") {
   hideNatureInfo();
+  hideLakeInfo();
   hideRiverInfo();
   hideMountainInfo();
   hideSightInfo();
@@ -143,6 +151,7 @@ function hideRiverInfo() {
 
 function showRiverInfo(river) {
   hideNatureInfo();
+  hideLakeInfo();
   hideMapToast();
   hideMountainInfo();
   hideSightInfo();
@@ -159,6 +168,7 @@ function hideMountainInfo() {
 
 function showMountainInfo(mountain) {
   hideNatureInfo();
+  hideLakeInfo();
   hideMapToast();
   hideRiverInfo();
   hideSightInfo();
@@ -177,6 +187,7 @@ function hideSightInfo() {
 
 function showSightInfo(sight) {
   hideNatureInfo();
+  hideLakeInfo();
   hideMapToast();
   hideRiverInfo();
   hideMountainInfo();
@@ -198,6 +209,7 @@ function hideNatureInfo() {
 }
 
 function showNatureInfo(reserve) {
+  hideLakeInfo();
   hideMapToast();
   hideRiverInfo();
   hideMountainInfo();
@@ -212,6 +224,30 @@ function showNatureInfo(reserve) {
   elements.natureInfoImage.src = `assets/nature-reserves/${reserve.code}.jpg`;
   elements.natureInfo.classList.remove("hidden");
   revealInfo(elements.natureInfo);
+}
+
+function hideLakeInfo() {
+  elements.lakeInfo.classList.add("hidden");
+  elements.lakeInfoImage.removeAttribute("src");
+  elements.lakeInfoImage.hidden = true;
+}
+
+function showLakeInfo(lake) {
+  hideNatureInfo();
+  hideMapToast();
+  hideRiverInfo();
+  hideMountainInfo();
+  hideSightInfo();
+  elements.lakeInfoName.textContent = lake.name;
+  elements.lakeInfoLocation.textContent = `${lake.location} – ${lake.kind === "natürlich" ? "Natürlicher See" : lake.kind}`;
+  elements.lakeInfoArea.textContent = `Fläche${lake.code === "bodensee" ? " des gesamten Sees" : ""}: ca. ${lake.areaKm2.toLocaleString("de-DE")} km²${lake.code === "bodensee" ? "; Karte: bayerischer Uferbereich" : ""}`;
+  elements.lakeInfoFact.textContent = lake.fact;
+  elements.lakeInfoWikipedia.href = wikipediaUrl(lake.wikipediaTitle);
+  elements.lakeInfoImage.hidden = true;
+  elements.lakeInfoImage.alt = `Foto: ${lake.name}`;
+  elements.lakeInfoImage.src = `assets/lakes/${lake.code}.jpg`;
+  elements.lakeInfo.classList.remove("hidden");
+  revealInfo(elements.lakeInfo);
 }
 
 elements.sightInfoClose.addEventListener("click", () => {
@@ -241,10 +277,18 @@ elements.natureInfoImage.addEventListener("load", () => {
   revealInfo(elements.natureInfo);
 });
 
+elements.lakeInfoImage.addEventListener("error", () => {
+  elements.lakeInfoImage.hidden = true;
+});
+elements.lakeInfoImage.addEventListener("load", () => {
+  elements.lakeInfoImage.hidden = false;
+  revealInfo(elements.lakeInfo);
+});
+
 function updateCountOptions() {
   const mode = elements.mode.value;
   for (const option of elements.count.options) {
-    const allowed = Number(option.value) <= (mode === "nature" ? NATURE_RESERVES.length : mode === "city" ? CITIES.length : mode === "sight" ? SIGHTS.length : mode === "river" ? RIVERS.length : mode === "mountain" ? MOUNTAINS.length : REGIONS.length);
+    const allowed = Number(option.value) <= (mode === "lake" ? LAKES.length : mode === "nature" ? NATURE_RESERVES.length : mode === "city" ? CITIES.length : mode === "sight" ? SIGHTS.length : mode === "river" ? RIVERS.length : mode === "mountain" ? MOUNTAINS.length : REGIONS.length);
     option.hidden = !allowed;
     option.disabled = !allowed;
   }
@@ -256,8 +300,9 @@ function updateMapMode() {
   const isMountain = elements.mode.value === "mountain";
   const isSight = elements.mode.value === "sight";
   const isCity = elements.mode.value === "city";
+  const isLake = elements.mode.value === "lake";
   const isNature = elements.mode.value === "nature";
-  const isMapQuiz = isRiver || isMountain || isSight || isCity || isNature;
+  const isMapQuiz = isRiver || isMountain || isSight || isCity || isNature || isLake;
   const svg = elements.mapHost.querySelector("#bayernMap");
   if (!svg) return;
   const learning = elements.mode.value === "learn";
@@ -267,6 +312,10 @@ function updateMapMode() {
   const showSights = isSight || (learning && learnTopics.sights.checked);
   const showCities = isCity || (learning && learnTopics.cities.checked);
   const showNature = isNature || (learning && learnTopics.nature.checked);
+  const showLakes = isLake || (learning && learnTopics.lakes.checked);
+  svg.classList.toggle("lake-mode", isLake);
+  svg.querySelector("#lakesLayer")?.classList.toggle("hidden", !showLakes);
+  svg.querySelectorAll(".lake").forEach((node) => node.setAttribute("tabindex", showLakes ? "0" : "-1"));
   svg.classList.toggle("nature-mode", isNature);
   svg.querySelector("#natureReservesLayer")?.classList.toggle("hidden", !showNature);
   svg.querySelectorAll(".nature").forEach((node) => node.setAttribute("tabindex", showNature ? "0" : "-1"));
@@ -290,7 +339,7 @@ function updateMapMode() {
   svg.querySelectorAll(".mountain").forEach((node) => {
     node.setAttribute("tabindex", isMountain || (learning && showMountains) ? "0" : "-1");
   });
-  elements.mapHost.setAttribute("aria-label", learning ? "Bayernkarte mit ausgewählten Lernthemen" : isNature ? "Bayernkarte mit Naturschutzgebieten" : isCity ? "Bayernkarte mit Städten" : isSight ? "Bayernkarte mit Sehenswürdigkeiten" : isRiver ? "Bayernkarte mit Flüssen" : isMountain ? "Bayernkarte mit Gebirgen" : "Bayernkarte mit Regierungsbezirken");
+  elements.mapHost.setAttribute("aria-label", learning ? "Bayernkarte mit ausgewählten Lernthemen" : isLake ? "Bayernkarte mit Seen" : isNature ? "Bayernkarte mit Naturschutzgebieten" : isCity ? "Bayernkarte mit Städten" : isSight ? "Bayernkarte mit Sehenswürdigkeiten" : isRiver ? "Bayernkarte mit Flüssen" : isMountain ? "Bayernkarte mit Gebirgen" : "Bayernkarte mit Regierungsbezirken");
   elements.mapHost.parentElement.querySelector(".mapLegend")?.classList.toggle("hidden", isMapQuiz || showCities || (learning && !showRegions));
 }
 
@@ -324,7 +373,7 @@ function resetMap() {
   elements.mapHost.querySelectorAll(".river").forEach((river) => {
     river.classList.remove("correct", "wrong", "learned");
   });
-  elements.mapHost.querySelectorAll(".sight, .city, .nature").forEach((node) => node.classList.remove("correct", "wrong", "learned"));
+  elements.mapHost.querySelectorAll(".sight, .city, .nature, .lake").forEach((node) => node.classList.remove("correct", "wrong", "learned"));
   elements.mapHost.querySelectorAll(".mountain").forEach((mountain) => {
     mountain.classList.remove("correct", "wrong", "learned");
   });
@@ -396,7 +445,9 @@ function render() {
     return;
   }
   if (!game) {
-    elements.question.textContent = mode === "nature"
+    elements.question.textContent = mode === "lake"
+      ? "Wähle einen See, um ein Foto und Informationen zu sehen, oder drücke Start."
+      : mode === "nature"
       ? "Wähle ein Naturschutzgebiet, um mehr darüber zu erfahren, oder drücke Start."
       : mode === "city"
       ? "Wähle eine Stadt, um ihren Namen und Regierungsbezirk zu sehen, oder drücke Start."
@@ -409,7 +460,7 @@ function render() {
       : mode === "map" ? "Finde die Regierungsbezirke auf der Karte."
         : "Ordne jedem Regierungsbezirk seinen Regierungssitz zu.";
     elements.options.classList.add("hidden");
-    setFeedback(mode === "nature" || mode === "city" || mode === "river" || mode === "mountain" || mode === "sight" ? "" : "Drücke Start, um das Quiz zu beginnen.");
+    setFeedback(mode === "lake" || mode === "nature" || mode === "city" || mode === "river" || mode === "mountain" || mode === "sight" ? "" : "Drücke Start, um das Quiz zu beginnen.");
     return;
   }
   if (game.finished) {
@@ -418,7 +469,7 @@ function render() {
     elements.finalScore.textContent = String(game.score);
     elements.finalTotal.textContent = String(game.questions.length);
     elements.options.classList.add("hidden");
-    setFeedback(mode === "nature" ? "Wähle ein Naturschutzgebiet, um mehr zu erfahren, oder starte eine neue Runde." : mode === "city" ? "Wähle eine Stadt, um mehr zu erfahren, oder starte eine neue Runde." : mode === "sight" ? "Wähle eine Sehenswürdigkeit, um mehr zu erfahren, oder starte eine neue Runde." : mode === "mountain" ? "Wähle ein Gebirge, um mehr darüber zu erfahren, oder starte eine neue Runde."
+    setFeedback(mode === "lake" ? "Wähle einen See, um mehr zu erfahren, oder starte eine neue Runde." : mode === "nature" ? "Wähle ein Naturschutzgebiet, um mehr zu erfahren, oder starte eine neue Runde." : mode === "city" ? "Wähle eine Stadt, um mehr zu erfahren, oder starte eine neue Runde." : mode === "sight" ? "Wähle eine Sehenswürdigkeit, um mehr zu erfahren, oder starte eine neue Runde." : mode === "mountain" ? "Wähle ein Gebirge, um mehr darüber zu erfahren, oder starte eine neue Runde."
       : mode === "river" ? "Wähle einen Fluss, um seine Länge zu sehen, oder starte eine neue Runde."
         : "Wähle Start für eine neue Runde.");
     return;
@@ -431,7 +482,7 @@ function render() {
     ? `Finde ${target.name} auf der Karte.`
     : mode === "river"
     ? `Wo fließt ${target.name}?`
-    : (mode === "map" || mode === "city") ? `Wo liegt ${target.name}?`
+    : (mode === "map" || mode === "city" || mode === "lake") ? `Wo liegt ${target.name}?`
       : `Wo ist der Sitz der Regierung von ${target.name}?`;
   if (mode === "seat") highlight(target.code, "selected");
   if (game.answered && mode === "map") {
@@ -458,11 +509,16 @@ function render() {
     highlightNature(target.code, "correct");
     if (game.selectedCode !== target.code) highlightNature(game.selectedCode, "wrong");
   }
+  if (game.answered && mode === "lake") {
+    highlightLake(target.code, "correct");
+    if (game.selectedCode !== target.code) highlightLake(game.selectedCode, "wrong");
+  }
   renderOptions();
 }
 
 function resetMode() {
   hideNatureInfo();
+  hideLakeInfo();
   mapZoom?.reset();
   cancelAdvance();
   hideMapToast();
@@ -478,6 +534,7 @@ function resetMode() {
 
 function startGame() {
   hideNatureInfo();
+  hideLakeInfo();
   cancelAdvance();
   hideMapToast();
   hideRiverInfo();
@@ -503,16 +560,21 @@ function startGame() {
     setFeedback("Die Naturschutzgebietskarte konnte nicht geladen werden.", "bad");
     return;
   }
+  if (elements.mode.value === "lake" && elements.mapHost.querySelectorAll(".lake").length !== LAKES.length) {
+    setFeedback("Die Seenkarte konnte nicht geladen werden.", "bad");
+    return;
+  }
   game = createGame(elements.mode.value, Number(elements.count.value));
   elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
   mapZoom?.reset();
   if (game.mode === "seat") makeSeatOptions(game);
-  setFeedback(game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
+  setFeedback(game.mode === "lake" ? "Wähle den gesuchten See auf der Karte." : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
 }
 
 function advance() {
   hideNatureInfo();
+  hideLakeInfo();
   cancelAdvance();
   hideMapToast();
   hideRiverInfo();
@@ -520,7 +582,7 @@ function advance() {
   hideSightInfo();
   if (!game || !nextQuestion(game)) return;
   if (!game.finished && game.mode === "seat") makeSeatOptions(game);
-  setFeedback(game.finished ? "" : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
+  setFeedback(game.finished ? "" : game.mode === "lake" ? "Wähle den gesuchten See auf der Karte." : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
 }
 
@@ -529,10 +591,10 @@ function submit(code) {
   const correct = answer(game, code);
   if (correct === null) return;
   const target = currentQuestion(game);
-  const selected = (game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).find((item) => item.code === code);
+  const selected = (game.mode === "lake" ? LAKES : game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).find((item) => item.code === code);
   if (correct) {
     setFeedback("Richtig!", "good");
-  } else if (game.mode === "nature" || game.mode === "city" || game.mode === "sight" || game.mode === "mountain" || game.mode === "river") {
+  } else if (game.mode === "lake" || game.mode === "nature" || game.mode === "city" || game.mode === "sight" || game.mode === "mountain" || game.mode === "river") {
     setFeedback(`Leider falsch: Das war ${selected.name}. ${target.name} ist grün markiert.`, "bad");
   } else if (game.mode === "map") {
     setFeedback(`Leider falsch: Das war ${selected.name}. ${target.name} ist grün markiert.`, "bad");
@@ -543,14 +605,16 @@ function submit(code) {
   if (game.mode === "sight") showSightInfo(selected);
   if (game.mode === "city") showCityInfo(selected);
   if (game.mode === "nature") showNatureInfo(selected);
+  if (game.mode === "lake") showLakeInfo(selected);
   if (correct && elements.autoNext.checked) {
-    advanceTimer = window.setTimeout(advance, game.mode === "sight" || game.mode === "nature" ? 5000 : 1600);
+    advanceTimer = window.setTimeout(advance, game.mode === "sight" || game.mode === "nature" || game.mode === "lake" ? 5000 : 1600);
   }
 }
 
 elements.mode.addEventListener("change", resetMode);
 for (const checkbox of Object.values(learnTopics)) checkbox.addEventListener("change", () => {
   hideNatureInfo();
+  hideLakeInfo();
   try { localStorage.setItem("bayernQuizLearnTopics", JSON.stringify(Object.fromEntries(Object.entries(learnTopics).map(([topic, input]) => [topic, input.checked])))); } catch { /* In-memory selection remains active. */ }
   resetMap();
   hideMapToast();
@@ -575,7 +639,7 @@ function handleSeatOptionClick(event) {
 elements.options.addEventListener("click", handleSeatOptionClick);
 
 function chooseRegion(path) {
-  if (!path || elements.mode.value === "nature" || elements.mode.value === "river" || elements.mode.value === "mountain" || elements.mode.value === "sight" || elements.mode.value === "city") return;
+  if (!path || elements.mode.value === "lake" || elements.mode.value === "nature" || elements.mode.value === "river" || elements.mode.value === "mountain" || elements.mode.value === "sight" || elements.mode.value === "city") return;
   if (elements.mode.value === "learn" && !learnTopics.regions.checked) return;
   const region = REGIONS.find((item) => item.code === path.id);
   if (!region) return;
@@ -635,6 +699,38 @@ function chooseNature(node) {
   } else {
     submit(reserve.code);
   }
+}
+
+function highlightLake(code, className) {
+  elements.mapHost.querySelector(`.lake[data-lake="${code}"]`)?.classList.add(className);
+}
+
+function chooseLake(node) {
+  if (elements.mode.value !== "lake" && !(elements.mode.value === "learn" && learnTopics.lakes.checked)) return;
+  const lake = LAKES.find((item) => item.code === node?.dataset.lake);
+  if (!lake) return;
+  if (!game || game.finished) {
+    resetMap();
+    highlightLake(lake.code, "learned");
+    showLakeInfo(lake);
+  } else if (game.answered) {
+    showLakeInfo(lake);
+  } else {
+    submit(lake.code);
+  }
+}
+
+// Prefer the visible water surface when enlarged selection strokes overlap.
+function lakeAt(event, fallback) {
+  if (!event.detail) return fallback;
+  const svg = elements.mapHost.querySelector("#bayernMap");
+  const matrix = svg?.getScreenCTM();
+  if (!matrix) return fallback;
+  const point = new DOMPoint(event.clientX, event.clientY).matrixTransform(matrix.inverse());
+  for (const lake of svg.querySelectorAll(".lake")) {
+    if (lake.querySelector(".lake-shape").isPointInFill(point)) return lake;
+  }
+  return nearestRouteAt(event.clientX, event.clientY, fallback, ".lake", ".lake-shape");
 }
 
 function nearestMarkerAt(event, fallback, markerSelector, dotSelector) {
@@ -710,6 +806,11 @@ function chooseSight(node) {
 
 elements.mapHost.addEventListener("click", (event) => {
   const learning = elements.mode.value === "learn";
+  const lake = event.target.closest(".lake");
+  if (lake) {
+    chooseLake(lakeAt(event, lake));
+    return;
+  }
   const nature = event.target.closest(".nature");
   if (nature) {
     chooseNature(nearestMarkerAt(event, nature, ".nature", ".nature-dot"));
@@ -745,6 +846,12 @@ elements.mapHost.addEventListener("click", (event) => {
 elements.mapHost.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
   const learning = elements.mode.value === "learn";
+  const lake = event.target.closest(".lake");
+  if (lake) {
+    event.preventDefault();
+    chooseLake(lake);
+    return;
+  }
   const nature = event.target.closest(".nature");
   if (nature) {
     event.preventDefault();

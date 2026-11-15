@@ -1,8 +1,10 @@
 # BayernQuiz
 
-Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Städte, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Städtequiz, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz, ein Naturschutzgebiete-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
+Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Städtequiz, ein Seenquiz, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz, ein Naturschutzgebiete-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
 
 Im Modus **Städte finden** werden die 25 kreisfreien Städte Bayerns auf der Karte gesucht. Vor dem Start und nach Spielende zeigt ein Klick auf einen gelben Punkt ein kleines Stadtwappen, den Stadtnamen, den Regierungsbezirk und einen Wikipedia-Link. Eine Runde enthält 3, 5, 7, 10, 15, 20 oder 25 unterschiedliche Fragen (Standard: 7). Bei einer falschen Antwort werden die gewählte Stadt rot und die gesuchte Stadt grün markiert. Nach jeder Antwort erscheinen Informationen zur gewählten Stadt und **Weiter** ist verfügbar. **Automatisch weiter** wechselt nach einer richtigen Antwort nach 1,6 Sekunden zur nächsten Frage. Die Marker sind mit Tab und Enter/Leertaste bedienbar; bei nahe beieinanderliegenden Städten helfen die Zoomfunktionen.
+
+Im Modus **Seen finden** werden 20 natürliche Seen, Stauseen und ein Tagebausee auf der Karte gesucht. Blaue, vereinfachte Seeumrisse zeigen die Wasserflächen; vergrößerte unsichtbare Auswahlbereiche erleichtern das Anklicken kleiner Seen. Vor dem Start und nach Spielende zeigt ein Klick ein lokal gespeichertes Foto, Lage, Entstehungstyp, ungefähre Fläche, einen kurzen Informationstext und einen Wikipedia-Link. Runden enthalten 3, 5, 7, 10, 15 oder 20 unterschiedliche Fragen (Standard: 7). Bei Fehlern werden der gewählte See rot und der gesuchte grün markiert. Nach jeder Antwort erscheinen Informationen zum gewählten See; weitere Seen können bis **Weiter** ohne zusätzliche Wertung erkundet werden. **Automatisch weiter** wechselt nach einer richtigen Antwort nach fünf Sekunden zur nächsten Frage. Seeumrisse sind mit Tab und Enter/Leertaste bedienbar; für kleine Seen hilft der Kartenzoom.
 
 Im Modus **Flüsse finden** lassen sich vor dem Start und nach dem Spiel die 32 Flüsse auf der Karte anklicken: Name und ungefähre Länge in Bayern erscheinen in einem Infokasten. Im Quiz wird der gesuchte Fluss auf der Karte gewählt. Es stehen 3, 5, 7, 10, 15, 20, 25 oder 30 Fragen zur Auswahl. Richtige Antworten können automatisch zur nächsten Frage führen; nach jeder Antwort ist auch **Weiter** verfügbar.
 
@@ -12,7 +14,7 @@ Im Modus **Sehenswürdigkeiten finden** können 20 Bauwerke und Naturziele aus a
 
 Im Modus **Naturschutzgebiete finden** können 20 ausgewählte Schutzgebiete aus allen sieben Regierungsbezirken über türkisfarbene Kartenpunkte erkundet werden. Eine schließbare Infokarte zeigt ein kleines Foto, Name, Lage, Regierungsbezirk, einen kurzen Text und einen deutschen Wikipedia-Link. **Start** beginnt das Kartenquiz mit 3, 5, 7, 10, 15 oder 20 unterschiedlichen Fragen (Standard: 7). Bei einer falschen Antwort wird der gewählte Punkt rot und der gesuchte grün markiert. Nach jeder Antwort erscheinen die Informationen zum gewählten Gebiet; weitere Punkte lassen sich bis **Weiter** ohne zusätzliche Wertung erkunden. **Automatisch weiter** wechselt nach einer richtigen Antwort nach fünf Sekunden zur nächsten Frage. Vor dem Start und nach Spielende können alle Gebiete erkundet werden. Die Punkte sind mit Tab und Enter/Leertaste bedienbar; bei nahe gelegenen Gebieten hilft der Kartenzoom.
 
-Im Modus **Lernen** können Regierungsbezirke, Städte, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete über Checkboxen einzeln ein- und ausgeblendet werden. Alle sechs Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Bereits gespeicherte Einstellungen bleiben erhalten; das neue Thema Naturschutzgebiete ist zunächst eingeschaltet. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
+Im Modus **Lernen** können Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete über Checkboxen einzeln ein- und ausgeblendet werden. Alle sieben Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Bereits gespeicherte Einstellungen bleiben erhalten; neue Themen wie Seen sind zunächst eingeschaltet. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
 
 ## Oberfläche und Bildschirmgrößen
 
@@ -63,6 +65,25 @@ Die Stadtinformationen zeigen in Quiz und Lernen ein kleines Wappen. Die verklei
 python3 scripts/fetch-city-coats.py --refresh
 ```
 
+### Seen und Fotos
+
+Die 20 Seen in `LAKES` in `src/game.js` umfassen Chiemsee, Starnberger See, Ammersee, Tegernsee, Schliersee, Walchensee, Kochelsee, Königssee, Eibsee, Staffelsee, Forggensee, Großer Alpsee, Bodensee, Großer und Kleiner Brombachsee, Altmühlsee, Rothsee, Steinberger See, Drachensee und Weißenstädter See. Im Lernmodus lassen sie sich über **Seen** ein- und ausblenden. Gespeicherte Einstellungen anderer Themen bleiben erhalten; Seen sind zunächst eingeschaltet.
+
+Die Seeumrisse stammen aus `AX_StehendesGewaesser` des [ATKIS Basis-DLM WFS](https://geodatenonline.bayern.de/geodatenonline/seiten/wfs_atkis), abgerufen am 15. November 2026. Quelle: **Bayerische Vermessungsverwaltung – www.geodaten.bayern.de**, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.de). Die EPSG:3857-Polygone sind in `scripts/lake-geometry.json` gebündelt; bei Königssee und Rothsee werden gleichnamige Gewässer anderer Orte über geografische Auswahlfenster ausgeschlossen. Das Skript vereinfacht die Konturen und lässt Fragmente unterhalb der Kartenauflösung weg. Die Karte dient der Orientierung, nicht der Navigation. Beim Bodensee zeigt die Karte den im bayerischen Datenbestand enthaltenen Uferbereich; **536 km² beziehen sich auf den gesamten Bodensee einschließlich Untersee**, nicht nur den dargestellten Bereich.
+
+Flächen und Kurztexte wurden anhand der verlinkten deutschen Wikipedia-Artikel abgeglichen; genaue Artikelrevisionen stehen in [`assets/lakes/data-sources.json`](assets/lakes/data-sources.json). Texte wurden eigenständig formuliert. Wikipedia-Inhalte: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de), siehe die jeweiligen Versionsgeschichten. Flächen sind gerundete Orientierungswerte und können mit dem Wasserstand schwanken. Der Rothsee hat einschließlich Vorsperre ca. 2,1 km² ([Landratsamt Roth](https://www.landratsamt-roth.de/rothsee)); beim Drachensee werden ca. 0,88 km² bei Normalstau verwendet ([Betriebsdaten nach WWA Regensburg](https://www.furth-drachensee.de/index.php/de/der-drachensee/betrieb-und-sicherheit)). Stauseen und der aus einem Braunkohletagebau entstandene Steinberger See werden als solche gekennzeichnet.
+
+Die lokalen JPEG-Vorschaubilder aus Wikimedia Commons werden mit 320 Pixel Breite angefordert und mit höchstens 240 × 140 Pixeln angezeigt. Bildausfälle lassen die Textinformationen verfügbar. Urheber, Originaldateien und Lizenzen stehen in [`assets/lakes/ATTRIBUTION.md`](assets/lakes/ATTRIBUTION.md) und `assets/lakes/metadata.json`. Im Browser sind keine Wikimedia- oder Geodaten-Abfragen nötig.
+
+```sh
+# Offline: erzeugt ausschließlich die Seenebene, unter den bestehenden Kartenmarkern.
+python3 scripts/generate-lakes.py src/regions.svg
+# Optional: amtliche Quelldaten neu laden und anschließend die Ebene erzeugen.
+python3 scripts/generate-lakes.py src/regions.svg --refresh
+# Fotos und Bildnachweise aktualisieren.
+python3 scripts/fetch-lake-images.py --refresh
+```
+
 ### Sehenswürdigkeiten und Fotos
 
 Die kuratierte Auswahl enthält Schloss Linderhof, Schloss Herrenchiemsee, Königssee, Zugspitze, Befreiungshalle, Kloster Weltenburg, Veste Oberhaus, Walhalla, Steinerne Brücke, Burg Falkenberg, Bamberger Dom, Markgräfliches Opernhaus, Veste Coburg, Nürnberger Kaiserburg, Plönlein, Würzburger Residenz, Schloss Mespelbrunn, Schloss Johannisburg, Schloss Neuschwanstein und Lindauer Hafeneinfahrt. Die deutschen Kurztexte und offiziellen Betreiber- beziehungsweise Tourismusquellen stehen zusammen mit den WGS84-Koordinaten in `SIGHTS` in `src/game.js`.
@@ -97,6 +118,7 @@ Zur Aktualisierung der Karte die WFS-GetFeature-Antwort für `vergr:BezirkeFlaec
 
 ```sh
 python3 scripts/generate-map.py /pfad/zur/antwort.gml src/regions.svg
+python3 scripts/generate-lakes.py src/regions.svg
 python3 scripts/generate-rivers.py src/regions.svg
 python3 scripts/generate-mountains.py src/regions.svg
 python3 scripts/generate-cities.py src/regions.svg

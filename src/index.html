@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b1220" />
-    <title>Bayern Quiz – Regierungsbezirke, Städte, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete kennenlernen</title>
+    <title>Bayern Quiz – Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete kennenlernen</title>
     <link rel="icon" type="image/svg+xml" href="bavarian-landessymbol.svg" />
     <link rel="stylesheet" href="styles.css" />
   </head>
@@ -13,7 +13,7 @@
       <header class="topbar">
         <div>
           <h1 class="siteTitle"><img class="siteTitle__symbol" src="bavarian-landessymbol.svg" alt="" width="120" height="120" />Bayern Quiz</h1>
-          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Städte, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete.</p>
+          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete.</p>
         </div>
       </header>
 
@@ -28,6 +28,7 @@
                   <option value="map">Regierungsbezirk finden</option>
                   <option value="seat">Regierungssitz wählen</option>
                   <option value="city">Städte finden</option>
+                  <option value="lake">Seen finden</option>
                   <option value="river">Flüsse finden</option>
                   <option value="mountain">Gebirge finden</option>
                   <option value="sight">Sehenswürdigkeiten finden</option>
@@ -55,6 +56,7 @@
               <legend>Themen in Lernen</legend>
               <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
               <label><input type="checkbox" data-learn-topic="cities" checked /> Städte</label>
+              <label><input type="checkbox" data-learn-topic="lakes" checked /> Seen</label>
               <label><input type="checkbox" data-learn-topic="rivers" checked /> Flüsse</label>
               <label><input type="checkbox" data-learn-topic="mountains" checked /> Gebirge</label>
               <label><input type="checkbox" data-learn-topic="sights" checked /> Sehenswürdigkeiten</label>
@@ -83,6 +85,15 @@
           </section>
 
           <div id="infoPanel" class="infoPanel" aria-label="Informationen zum Kartenort">
+            <div id="lakeInfo" class="mapToast lakeInfo hidden" role="status" aria-live="polite">
+              <button type="button" class="infoClose secondary" data-close-info="lakeInfo" aria-label="Informationen zum See schließen">×</button>
+              <img id="lakeInfoImage" alt="" width="240" height="140" hidden />
+              <strong id="lakeInfoName"></strong>
+              <span id="lakeInfoLocation"></span>
+              <span id="lakeInfoArea"></span>
+              <span id="lakeInfoFact"></span>
+              <a id="lakeInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
+            </div>
             <div id="natureInfo" class="mapToast natureInfo hidden" role="status" aria-live="polite">
               <button type="button" class="infoClose secondary" data-close-info="natureInfo" aria-label="Informationen zum Naturschutzgebiet schließen">×</button>
               <img id="natureInfoImage" alt="" width="240" height="140" hidden />
@@ -152,6 +163,7 @@
         <span>Regierungssitze: <a href="https://www.stmi.bayern.de/staat-und-verfassung/staatsgebiet/">Bayerisches Staatsministerium des Innern</a>.</span>
         <span>Stadtkoordinaten: <a href="https://www.geonames.org/">GeoNames</a>, <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>.</span>
         <span>Flussläufe: <a href="https://geodatenonline.bayern.de/geodatenonline/seiten/wfs_atkis">Bayerische Vermessungsverwaltung, ATKIS Basis-DLM</a>, CC BY 4.0. Flusslängen: <a href="https://www.lfu.bayern.de/wasser/gewaesserverzeichnisse/doc/tab_gew_name_100_laeng.pdf">Bayerisches Landesamt für Umwelt</a>.</span>
+        <span>Seeumrisse: <a href="https://geodatenonline.bayern.de/geodatenonline/seiten/wfs_atkis">Bayerische Vermessungsverwaltung – www.geodaten.bayern.de, ATKIS Basis-DLM</a>, CC BY 4.0; vereinfacht. Seeninformationen: <a href="assets/lakes/data-sources.json">Quellennachweise</a>, Wikipedia CC BY-SA 4.0. Fotos: <a href="assets/lakes/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
         <span>Gebirgslagen: <a href="https://www.lfu.bayern.de/natur/naturraeume/index.htm">Bayerisches Landesamt für Umwelt</a>; vereinfachte Darstellung.</span>
         <span>Stadtwappen: <a href="assets/cities/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
         <span>Sehenswürdigkeiten: <a href="assets/sights/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>

@@ -1,3 +1,206 @@
+export const LAKES = Object.freeze([
+  {
+    "code": "chiemsee",
+    "name": "Chiemsee",
+    "areaKm2": 79.9,
+    "kind": "natürlich",
+    "location": "Im Chiemgau",
+    "fact": "Die Herreninsel und die Fraueninsel liegen im See.",
+    "wikipediaTitle": "Chiemsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Chiemsee"
+  },
+  {
+    "code": "starnberger-see",
+    "name": "Starnberger See",
+    "areaKm2": 56.4,
+    "kind": "natürlich",
+    "location": "Südlich von München",
+    "fact": "Die Roseninsel liegt nahe dem Westufer.",
+    "wikipediaTitle": "Starnberger See",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Starnberger_See"
+  },
+  {
+    "code": "ammersee",
+    "name": "Ammersee",
+    "areaKm2": 46.6,
+    "kind": "natürlich",
+    "location": "Westlich des Starnberger Sees",
+    "fact": "Die Ammer mündet im Süden in den See.",
+    "wikipediaTitle": "Ammersee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Ammersee"
+  },
+  {
+    "code": "tegernsee",
+    "name": "Tegernsee",
+    "areaKm2": 8.9,
+    "kind": "natürlich",
+    "location": "Am nördlichen Alpenrand",
+    "fact": "Die Mangfall verlässt den See im Norden.",
+    "wikipediaTitle": "Tegernsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Tegernsee"
+  },
+  {
+    "code": "schliersee",
+    "name": "Schliersee",
+    "areaKm2": 2.2,
+    "kind": "natürlich",
+    "location": "Östlich des Tegernsees",
+    "fact": "Die kleine Insel Wörth liegt im See.",
+    "wikipediaTitle": "Schliersee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Schliersee"
+  },
+  {
+    "code": "walchensee",
+    "name": "Walchensee",
+    "areaKm2": 16.3,
+    "kind": "natürlich",
+    "location": "Südlich des Kochelsees",
+    "fact": "Das Wasser wird auch zur Stromerzeugung genutzt.",
+    "wikipediaTitle": "Walchensee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Walchensee"
+  },
+  {
+    "code": "kochelsee",
+    "name": "Kochelsee",
+    "areaKm2": 5.9,
+    "kind": "natürlich",
+    "location": "Am Rand der Bayerischen Alpen",
+    "fact": "Die Loisach fließt durch den See.",
+    "wikipediaTitle": "Kochelsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Kochelsee"
+  },
+  {
+    "code": "koenigssee",
+    "name": "Königssee",
+    "areaKm2": 5.2,
+    "kind": "natürlich",
+    "location": "Bei Schönau am Königssee",
+    "fact": "Steile Berghänge umgeben den lang gestreckten See.",
+    "wikipediaTitle": "Königssee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Königssee"
+  },
+  {
+    "code": "eibsee",
+    "name": "Eibsee",
+    "areaKm2": 1.8,
+    "kind": "natürlich",
+    "location": "Bei Grainau unterhalb der Zugspitze",
+    "fact": "Mehrere kleine Inseln liegen im See.",
+    "wikipediaTitle": "Eibsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Eibsee"
+  },
+  {
+    "code": "staffelsee",
+    "name": "Staffelsee",
+    "areaKm2": 7.7,
+    "kind": "natürlich",
+    "location": "Bei Murnau am Staffelsee",
+    "fact": "Sieben Inseln prägen den See.",
+    "wikipediaTitle": "Staffelsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Staffelsee"
+  },
+  {
+    "code": "forggensee",
+    "name": "Forggensee",
+    "areaKm2": 15.2,
+    "kind": "Stausee",
+    "location": "Bei Füssen im Allgäu",
+    "fact": "Der Lech wird hier zur Stromerzeugung und zum Hochwasserschutz aufgestaut.",
+    "wikipediaTitle": "Forggensee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Forggensee"
+  },
+  {
+    "code": "grosser-alpsee",
+    "name": "Großer Alpsee",
+    "areaKm2": 2.5,
+    "kind": "natürlich",
+    "location": "Bei Immenstadt im Allgäu",
+    "fact": "Der See liegt zwischen bewaldeten Höhenzügen im Allgäu.",
+    "wikipediaTitle": "Großer Alpsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Großer_Alpsee"
+  },
+  {
+    "code": "bodensee",
+    "name": "Bodensee",
+    "areaKm2": 536,
+    "kind": "natürlich",
+    "location": "Bei Lindau an der Grenze zu Österreich und der Schweiz",
+    "fact": "Bayern besitzt bei Lindau einen kurzen Abschnitt des Bodenseeufers.",
+    "wikipediaTitle": "Bodensee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Bodensee"
+  },
+  {
+    "code": "grosser-brombachsee",
+    "name": "Großer Brombachsee",
+    "areaKm2": 8.7,
+    "kind": "Stausee",
+    "location": "Im Fränkischen Seenland",
+    "fact": "Er ist Teil der Wasserüberleitung vom Donau- ins Maingebiet.",
+    "wikipediaTitle": "Großer Brombachsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Großer_Brombachsee"
+  },
+  {
+    "code": "kleiner-brombachsee",
+    "name": "Kleiner Brombachsee",
+    "areaKm2": 2.5,
+    "kind": "Stausee",
+    "location": "Westlich des Großen Brombachsees",
+    "fact": "Ein Damm trennt ihn vom Großen Brombachsee.",
+    "wikipediaTitle": "Kleiner Brombachsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Kleiner_Brombachsee"
+  },
+  {
+    "code": "altmuehlsee",
+    "name": "Altmühlsee",
+    "areaKm2": 4.5,
+    "kind": "Stausee",
+    "location": "Bei Gunzenhausen",
+    "fact": "Eine Inselzone im Norden bietet Vögeln Lebensraum.",
+    "wikipediaTitle": "Altmühlsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Altmühlsee"
+  },
+  {
+    "code": "rothsee",
+    "name": "Rothsee",
+    "areaKm2": 2.1,
+    "kind": "Stausee",
+    "location": "Bei Hilpoltstein",
+    "fact": "Der See besteht aus einer Hauptsperre und einer Vorsperre.",
+    "wikipediaTitle": "Rothsee",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Rothsee_(Landkreis_Roth)"
+  },
+  {
+    "code": "steinberger-see",
+    "name": "Steinberger See",
+    "areaKm2": 1.8,
+    "kind": "Tagebausee",
+    "location": "Bei Schwandorf in der Oberpfalz",
+    "fact": "Der See entstand durch die Flutung eines Braunkohletagebaus.",
+    "wikipediaTitle": "Steinberger See",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Steinberger_See"
+  },
+  {
+    "code": "drachensee",
+    "name": "Drachensee",
+    "areaKm2": 0.88,
+    "kind": "Stausee",
+    "location": "Bei Furth im Wald",
+    "fact": "Der aufgestaute Chamb dient dem Hochwasserschutz.",
+    "wikipediaTitle": "Drachensee (Chamb)",
+    "sourceUrl": "https://www.furth-drachensee.de/index.php/de/der-drachensee/betrieb-und-sicherheit"
+  },
+  {
+    "code": "weissenstaedter-see",
+    "name": "Weißenstädter See",
+    "areaKm2": 0.48,
+    "kind": "Stausee",
+    "location": "Bei Weißenstadt im Fichtelgebirge",
+    "fact": "Die Eger fließt durch den aufgestauten See.",
+    "wikipediaTitle": "Weißenstädter See",
+    "sourceUrl": "https://de.wikipedia.org/wiki/Weißenstädter_See"
+  }
+]);
+
 export const REGIONS = Object.freeze([
   { code: "oberbayern", name: "Oberbayern", seat: "München" },
   { code: "niederbayern", name: "Niederbayern", seat: "Landshut" },
@@ -396,15 +599,15 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createGame(mode, count, random = Math.random) {
-  if (!["map", "seat", "river", "mountain", "sight", "city", "nature"].includes(mode)) throw new Error("Unknown mode");
+  if (!["map", "seat", "river", "mountain", "sight", "city", "nature", "lake"].includes(mode)) throw new Error("Unknown mode");
   const allowedCounts = mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
-    : (mode === "sight" || mode === "nature") ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
+    : (mode === "sight" || mode === "nature" || mode === "lake") ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
   return {
     mode,
-    questions: shuffle(mode === "nature" ? NATURE_RESERVES : mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
+    questions: shuffle(mode === "lake" ? LAKES : mode === "nature" ? NATURE_RESERVES : mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
     index: 0,
     score: 0,
     answered: false,
@@ -434,7 +637,7 @@ export function answer(game, selectedCode) {
   if (!target) return null;
   const valid = game.mode === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : (game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
+    : (game.mode === "lake" ? LAKES : game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;
