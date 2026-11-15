@@ -231,8 +231,8 @@ a { color: #9dd4ff; }
 .nature.correct .nature-dot { fill: var(--good); stroke: #fff; }
 .nature.wrong .nature-dot { fill: var(--bad); stroke: #fff; }
 .nature-mode .region { cursor: default; }
-.natureInfo { display: grid; gap: 6px; }
-.natureInfo img { width: 100%; max-width: 240px; height: 140px; object-fit: contain; border-radius: 6px; }
+.natureInfo, .mountainInfo { display: grid; gap: 6px; }
+.natureInfo img, .mountainInfo img { width: 100%; max-width: 240px; height: 140px; object-fit: contain; border-radius: 6px; }
 
 /* Lake outlines keep their geographic shape; transparent strokes aid selection. */
 .lake { cursor: pointer; }

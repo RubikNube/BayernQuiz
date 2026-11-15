@@ -49,6 +49,7 @@ const elements = {
   riverInfoLength: document.querySelector("#riverInfoLength"),
   riverInfoWikipedia: document.querySelector("#riverInfoWikipedia"),
   mountainInfo: document.querySelector("#mountainInfo"),
+  mountainInfoImage: document.querySelector("#mountainInfoImage"),
   mountainInfoName: document.querySelector("#mountainInfoName"),
   mountainInfoRegion: document.querySelector("#mountainInfoRegion"),
   mountainInfoPeak: document.querySelector("#mountainInfoPeak"),
@@ -206,6 +207,8 @@ function showRiverInfo(river) {
 
 function hideMountainInfo() {
   elements.mountainInfo.classList.add("hidden");
+  elements.mountainInfoImage.removeAttribute("src");
+  elements.mountainInfoImage.hidden = true;
 }
 
 function showMountainInfo(mountain) {
@@ -218,6 +221,9 @@ function showMountainInfo(mountain) {
   elements.mountainInfoRegion.textContent = `Lage: ${mountain.region}`;
   elements.mountainInfoPeak.textContent = `Markanter Gipfel: ${mountain.peak} – ca. ${mountain.peakMeters.toLocaleString("de-DE")} m`;
   elements.mountainInfoWikipedia.href = wikipediaUrl(mountain.wikipediaTitle ?? mountain.name);
+  elements.mountainInfoImage.hidden = true;
+  elements.mountainInfoImage.alt = `Foto: ${mountain.name}`;
+  elements.mountainInfoImage.src = `assets/mountains/${mountain.code}.jpg`;
   elements.mountainInfo.classList.remove("hidden");
   revealInfo(elements.mountainInfo);
 }
@@ -298,9 +304,19 @@ elements.sightInfoClose.addEventListener("click", () => {
 });
 document.querySelectorAll("[data-close-info]").forEach((button) => {
   button.addEventListener("click", () => {
-    document.getElementById(button.dataset.closeInfo).classList.add("hidden");
+    if (button.dataset.closeInfo === "mountainInfo") hideMountainInfo();
+    else document.getElementById(button.dataset.closeInfo).classList.add("hidden");
     elements.mapHost.focus({ preventScroll: true });
   });
+});
+
+elements.mountainInfoImage.addEventListener("error", () => {
+  elements.mountainInfoImage.hidden = true;
+});
+elements.mountainInfoImage.addEventListener("load", () => {
+  if (!elements.mountainInfoImage.hasAttribute("src")) return;
+  elements.mountainInfoImage.hidden = false;
+  revealInfo(elements.mountainInfo);
 });
 
 elements.sightInfoImage.addEventListener("error", () => {
