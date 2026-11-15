@@ -7,6 +7,8 @@ import math
 import xml.etree.ElementTree as ET
 from pathlib import Path
 
+from neighbor_context import add_neighbor_context
+
 
 NAMESPACES = {
     "wfs": "http://www.opengis.net/wfs/2.0",
@@ -110,7 +112,7 @@ def main():
     lines.append("  </g>")
     lines.append("</svg>")
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text("\n".join(lines) + "\n", encoding="utf-8")
+    args.output.write_text(add_neighbor_context("\n".join(lines) + "\n"), encoding="utf-8")
 
 
 if __name__ == "__main__":

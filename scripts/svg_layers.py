@@ -5,7 +5,7 @@ import xml.etree.ElementTree as ET
 from xml.dom import minidom
 
 
-def replace_layer(svg_text, layer, layer_id):
+def replace_layer(svg_text, layer, layer_id, *, prepend=False):
     ET.register_namespace("", "http://www.w3.org/2000/svg")
     opening = re.search(r'\s*<g\b[^>]*\bid="' + re.escape(layer_id) + r'"[^>]*>', svg_text)
     if opening:
@@ -24,4 +24,7 @@ def replace_layer(svg_text, layer, layer_id):
     if "</svg>" not in svg_text:
         raise ValueError("Could not locate closing SVG tag")
     svg_text = re.sub(r'\s*</svg>\s*$', "\n</svg>\n", svg_text)
+    if prepend:
+        return re.sub(r'(<svg\b[^>]*>)', lambda match: match[1] + "\n" + layer_xml,
+                      svg_text, count=1)
     return svg_text.replace("</svg>", layer_xml + "\n</svg>")

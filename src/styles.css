@@ -126,6 +126,11 @@ button:focus-visible, select:focus-visible, .region:focus-visible, .seat-dot:foc
   .mapZoomHint__mouse { display: none; }
   .mapZoomHint__touch { display: inline; }
 }
+.neighbor-context { pointer-events: none; user-select: none; }
+.neighbor-context text { fill: var(--muted); font-size: 23px; font-weight: 500; text-anchor: middle; }
+.neighbor-context .neighbor-note { font-size: 17px; }
+.neighbor-borders { fill: none; stroke: #526489; stroke-width: 1; }
+.neighbor-borders path { vector-effect: non-scaling-stroke; }
 .region { fill: var(--region); stroke: #8090ad; stroke-width: 1.1; vector-effect: non-scaling-stroke; cursor: pointer; transition: fill .15s ease; }
 .region:hover, .region:focus-visible { fill: var(--region-hover); }
 .region.selected { fill: var(--accent); }
