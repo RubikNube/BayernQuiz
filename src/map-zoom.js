@@ -4,6 +4,19 @@ const DRAG_THRESHOLD = 8;
 
 const clamp = (value, min, max) => Math.min(max, Math.max(min, value));
 
+// Fit the entire square source map into any viewport without stretching it.
+export function fitMapBounds(source, aspectRatio) {
+  if (!Number.isFinite(aspectRatio) || aspectRatio <= 0) return { ...source };
+  const width = Math.max(source.width, source.height * aspectRatio);
+  const height = Math.max(source.height, source.width / aspectRatio);
+  return {
+    x: source.x - (width - source.width) / 2,
+    y: source.y - (height - source.height) / 2,
+    width,
+    height,
+  };
+}
+
 export function constrainView(view, bounds) {
   const width = clamp(view.width, bounds.width / MAX_ZOOM, bounds.width);
   const height = width * bounds.height / bounds.width;
@@ -60,7 +73,9 @@ const distance = (a, b) => Math.hypot(a.x - b.x, a.y - b.y);
 
 export function createMapZoom({ svg, host, zoomIn, zoomOut, resetButton, percentage }) {
   const original = svg.viewBox.baseVal;
-  const bounds = { x: original.x, y: original.y, width: original.width, height: original.height };
+  const sourceBounds = { x: original.x, y: original.y, width: original.width, height: original.height };
+  const viewport = svg.getBoundingClientRect();
+  let bounds = fitMapBounds(sourceBounds, viewport.width / viewport.height);
   let view = { ...bounds };
   let gesture = null;
   let pointerId = null;
@@ -250,10 +265,25 @@ export function createMapZoom({ svg, host, zoomIn, zoomOut, resetButton, percent
     touchActive = false;
     touchOwned = false;
   }
+  const resizeObserver = new ResizeObserver(() => {
+    const rect = svg.getBoundingClientRect();
+    const nextBounds = fitMapBounds(sourceBounds, rect.width / rect.height);
+    if (nextBounds.width === bounds.width && nextBounds.height === bounds.height) return;
+    cancel();
+    const zoom = bounds.width / view.width;
+    const center = { x: view.x + view.width / 2, y: view.y + view.height / 2 };
+    bounds = nextBounds;
+    render(zoom <= 1 ? bounds : {
+      x: center.x - bounds.width / zoom / 2,
+      y: center.y - bounds.height / zoom / 2,
+      width: bounds.width / zoom,
+    });
+  });
+  resizeObserver.observe(svg);
   on(window, "blur", cancel);
   on(window, "resize", cancel);
   on(svg, "dragstart", (event) => event.preventDefault());
   render(view);
 
-  return { reset, destroy() { cancel(); listeners.abort(); } };
+  return { reset, destroy() { resizeObserver.disconnect(); cancel(); listeners.abort(); } };
 }

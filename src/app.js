@@ -29,12 +29,9 @@ const elements = {
   mountainInfoRegion: document.querySelector("#mountainInfoRegion"),
   mountainInfoPeak: document.querySelector("#mountainInfoPeak"),
   mountainInfoWikipedia: document.querySelector("#mountainInfoWikipedia"),
-  quizBanner: document.querySelector("#quizBanner"),
-  bannerQuestion: document.querySelector("#bannerQuestion"),
-  bannerOptions: document.querySelector("#bannerOptions"),
-  bannerFeedback: document.querySelector("#bannerFeedback"),
-  bannerNext: document.querySelector("#bannerNext"),
-  bannerRestart: document.querySelector("#bannerRestart"),
+  settings: document.querySelector("#settings"),
+  quizControls: document.querySelector("#quizControls"),
+  mapToastContent: document.querySelector("#mapToastContent"),
   start: document.querySelector("#start"),
   next: document.querySelector("#next"),
   restart: document.querySelector("#restart"),
@@ -69,6 +66,26 @@ function setFeedback(message, tone = "") {
   elements.feedback.className = `feedback ${tone}`;
 }
 
+function revealInfo(card) {
+  requestAnimationFrame(() => {
+    if (!window.matchMedia("(min-width: 1100px)").matches) return;
+    const sidebar = document.querySelector(".sidebar");
+    const panel = sidebar.getBoundingClientRect();
+    const detail = card.getBoundingClientRect();
+    // Scroll only the sidebar, leaving the map and the page in place.
+    if (detail.height > sidebar.clientHeight) sidebar.scrollTop += detail.top - panel.top;
+    else if (detail.bottom > panel.bottom) sidebar.scrollTop += detail.bottom - panel.bottom;
+  });
+}
+
+const workspace = document.querySelector(".workspace");
+function updateWorkspaceTop() {
+  workspace.style.setProperty("--workspace-top", `${Math.max(16, workspace.getBoundingClientRect().top)}px`);
+}
+new ResizeObserver(updateWorkspaceTop).observe(document.querySelector(".topbar"));
+window.addEventListener("resize", updateWorkspaceTop);
+updateWorkspaceTop();
+
 function wikipediaUrl(title) {
   return `https://de.wikipedia.org/wiki/${encodeURIComponent((title ?? "").replace(/ /g, "_"))}`;
 }
@@ -77,16 +94,17 @@ function showMapToast(message, tone = "", wikipediaTitle = "") {
   hideRiverInfo();
   hideMountainInfo();
   hideSightInfo();
-  elements.mapToast.replaceChildren(document.createTextNode(message));
+  elements.mapToastContent.replaceChildren(document.createTextNode(message));
   if (wikipediaTitle) {
     const link = document.createElement("a");
     link.href = wikipediaUrl(wikipediaTitle);
     link.target = "_blank";
     link.rel = "noopener noreferrer";
     link.textContent = "Mehr auf Wikipedia ↗";
-    elements.mapToast.append(document.createElement("br"), link);
+    elements.mapToastContent.append(document.createElement("br"), link);
   }
   elements.mapToast.className = `mapToast ${tone}`;
+  revealInfo(elements.mapToast);
 }
 
 function hideMapToast() {
@@ -105,6 +123,7 @@ function showRiverInfo(river) {
   elements.riverInfoLength.textContent = `Länge in Bayern: ca. ${Math.round(river.lengthKm).toLocaleString("de-DE")} km`;
   elements.riverInfoWikipedia.href = wikipediaUrl(river.wikipediaTitle ?? river.name);
   elements.riverInfo.classList.remove("hidden");
+  revealInfo(elements.riverInfo);
 }
 
 function hideMountainInfo() {
@@ -120,6 +139,7 @@ function showMountainInfo(mountain) {
   elements.mountainInfoPeak.textContent = `Markanter Gipfel: ${mountain.peak} – ca. ${mountain.peakMeters.toLocaleString("de-DE")} m`;
   elements.mountainInfoWikipedia.href = wikipediaUrl(mountain.wikipediaTitle ?? mountain.name);
   elements.mountainInfo.classList.remove("hidden");
+  revealInfo(elements.mountainInfo);
 }
 
 function hideSightInfo() {
@@ -139,12 +159,20 @@ function showSightInfo(sight) {
   elements.sightInfoImage.src = `assets/sights/${sight.code}.jpg`;
   elements.sightInfoImage.alt = `Foto: ${sight.name}`;
   elements.sightInfo.classList.remove("hidden");
+  revealInfo(elements.sightInfo);
 }
 
 elements.sightInfoClose.addEventListener("click", () => {
   hideSightInfo();
   elements.mapHost.querySelector(".sight.learned, .sight.wrong, .sight.correct")?.focus();
 });
+document.querySelectorAll("[data-close-info]").forEach((button) => {
+  button.addEventListener("click", () => {
+    document.getElementById(button.dataset.closeInfo).classList.add("hidden");
+    elements.mapHost.focus({ preventScroll: true });
+  });
+});
+
 elements.sightInfoImage.addEventListener("error", () => {
   elements.sightInfoImage.hidden = true;
 });
@@ -246,48 +274,26 @@ function highlightMountain(code, className) {
 
 function renderOptions() {
   elements.options.replaceChildren();
-  elements.bannerOptions.replaceChildren();
   if (!game || game.mode !== "seat" || game.finished) {
     elements.options.classList.add("hidden");
-    elements.bannerOptions.classList.add("hidden");
     return;
   }
   if (!game.options.length) makeSeatOptions(game);
   const target = currentQuestion(game);
-  for (const container of [elements.options, elements.bannerOptions]) {
-    for (const region of game.options) {
-      const button = document.createElement("button");
-      button.type = "button";
-      button.className = "option";
-      button.dataset.code = region.code;
-      button.textContent = region.seat;
-      if (game.answered) {
-        button.disabled = true;
-        if (region.code === target.code) button.classList.add("correct");
-        if (region.code === game.selectedCode && region.code !== target.code) button.classList.add("wrong");
-      }
-      container.append(button);
+  for (const region of game.options) {
+    const button = document.createElement("button");
+    button.type = "button";
+    button.className = "option";
+    button.dataset.code = region.code;
+    button.textContent = region.seat;
+    if (game.answered) {
+      button.disabled = true;
+      if (region.code === target.code) button.classList.add("correct");
+      if (region.code === game.selectedCode && region.code !== target.code) button.classList.add("wrong");
     }
-    container.classList.remove("hidden");
+    elements.options.append(button);
   }
-}
-
-function renderBanner() {
-  const active = Boolean(game && !game.finished && elements.mode.value !== "learn");
-  elements.quizBanner.classList.toggle("hidden", !active);
-  if (!active) return;
-  const target = currentQuestion(game);
-  elements.bannerQuestion.textContent = (game.mode === "sight" || game.mode === "mountain")
-    ? `Finde ${target.name} auf der Karte.`
-    : game.mode === "river"
-    ? `Wo fließt ${target.name}?`
-    : game.mode === "map" ? `Wo liegt ${target.name}?`
-      : `Wo ist der Sitz der Regierung von ${target.name}?`;
-  elements.bannerFeedback.textContent = game.answered ? elements.feedback.textContent : "";
-  const tone = game.answered ? (elements.feedback.classList.contains("good") ? "good" : "bad") : "";
-  elements.bannerFeedback.className = `quizBanner__feedback ${tone}`;
-  elements.bannerNext.classList.toggle("hidden", !game.answered);
-  elements.bannerNext.disabled = !game.answered;
+  elements.options.classList.remove("hidden");
 }
 
 function render() {
@@ -309,13 +315,13 @@ function render() {
   elements.round.textContent = game && !game.finished ? String(game.index + 1) : "–";
   elements.score.textContent = String(game?.score ?? 0);
   resetMap();
-  renderBanner();
+  document.body.classList.toggle("quizActive", Boolean(game && !game.finished));
+  elements.quizControls.classList.toggle("hidden", isLearn);
 
   if (isLearn) {
     elements.question.textContent = Object.values(learnTopics).some((checkbox) => checkbox.checked)
       ? "Wähle ein markiertes Thema auf der Karte." : "Wähle mindestens ein Thema aus.";
     elements.options.classList.add("hidden");
-    elements.bannerOptions.classList.add("hidden");
     return;
   }
   if (!game) {
@@ -328,16 +334,15 @@ function render() {
       : mode === "map" ? "Finde die Regierungsbezirke auf der Karte."
         : "Ordne jedem Regierungsbezirk seinen Regierungssitz zu.";
     elements.options.classList.add("hidden");
-    elements.bannerOptions.classList.add("hidden");
     setFeedback(mode === "river" || mode === "mountain" || mode === "sight" ? "" : "Drücke Start, um das Quiz zu beginnen.");
     return;
   }
   if (game.finished) {
+    elements.settings.open = true;
     elements.question.textContent = "Geschafft!";
     elements.finalScore.textContent = String(game.score);
     elements.finalTotal.textContent = String(game.questions.length);
     elements.options.classList.add("hidden");
-    elements.bannerOptions.classList.add("hidden");
     setFeedback(mode === "sight" ? "Wähle eine Sehenswürdigkeit, um mehr zu erfahren, oder starte eine neue Runde." : mode === "mountain" ? "Wähle ein Gebirge, um mehr darüber zu erfahren, oder starte eine neue Runde."
       : mode === "river" ? "Wähle einen Fluss, um seine Länge zu sehen, oder starte eine neue Runde."
         : "Wähle Start für eine neue Runde.");
@@ -380,7 +385,8 @@ function resetMode() {
   hideSightInfo();
   game = null;
   elements.result.classList.add("hidden");
-  setFeedback(elements.mode.value === "learn" ? "Tippe auf ein Kartenelement, um mehr darüber zu erfahren." : "");
+  elements.settings.open = true;
+  setFeedback("");
   render();
 }
 
@@ -403,6 +409,7 @@ function startGame() {
     return;
   }
   game = createGame(elements.mode.value, Number(elements.count.value));
+  elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
   mapZoom?.reset();
   if (game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
@@ -459,8 +466,6 @@ elements.count.addEventListener("change", () => {
 elements.start.addEventListener("click", startGame);
 elements.restart.addEventListener("click", startGame);
 elements.next.addEventListener("click", advance);
-elements.bannerRestart.addEventListener("click", startGame);
-elements.bannerNext.addEventListener("click", advance);
 elements.autoNext.addEventListener("change", () => {
   if (!elements.autoNext.checked) cancelAdvance();
 });
@@ -469,7 +474,6 @@ function handleSeatOptionClick(event) {
   if (button && game?.mode === "seat") submit(button.dataset.code);
 }
 elements.options.addEventListener("click", handleSeatOptionClick);
-elements.bannerOptions.addEventListener("click", handleSeatOptionClick);
 
 function chooseRegion(path) {
   if (!path || elements.mode.value === "river" || elements.mode.value === "mountain" || elements.mode.value === "sight") return;
@@ -479,8 +483,7 @@ function chooseRegion(path) {
   if (elements.mode.value === "learn") {
     resetMap();
     highlight(region.code, "selected");
-    setFeedback(`${region.name} – Regierungssitz: ${region.seat}.`);
-    showMapToast(elements.feedback.textContent, "", region.wikipediaTitle ?? region.name);
+    showMapToast(`${region.name} – Regierungssitz: ${region.seat}.`, "", region.wikipediaTitle ?? region.name);
   } else if (game?.mode === "map") {
     submit(region.code);
   }

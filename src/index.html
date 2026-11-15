@@ -8,119 +8,130 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <aside id="quizBanner" class="quizBanner hidden" aria-label="Aktuelle Quizfrage">
-      <div class="quizBanner__line">
-        <div id="bannerQuestion" class="quizBanner__question"></div>
-        <div id="bannerOptions" class="quizBanner__options hidden" aria-label="Antwortmöglichkeiten"></div>
-        <div class="quizBanner__actions">
-          <button id="bannerNext" type="button" class="hidden">Weiter</button>
-          <button id="bannerRestart" type="button" class="secondary">Neustart</button>
-        </div>
-      </div>
-      <div id="bannerFeedback" class="quizBanner__feedback" role="status" aria-live="polite"></div>
-    </aside>
     <main class="container">
       <header class="topbar">
         <div>
           <h1>BayernQuiz</h1>
           <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten.</p>
         </div>
-        <div id="stats" class="stats" aria-live="polite">
-          <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
-          <span>Punkte <strong id="score">0</strong></span>
-        </div>
       </header>
 
-      <section class="prompt" aria-label="Quizsteuerung">
-        <div class="controls">
-          <label for="mode">Modus
-            <select id="mode">
-              <option value="learn">Lernen</option>
-              <option value="map">Regierungsbezirk finden</option>
-              <option value="seat">Regierungssitz wählen</option>
-              <option value="river">Flüsse finden</option>
-              <option value="mountain">Gebirge finden</option>
-              <option value="sight">Sehenswürdigkeiten finden</option>
-            </select>
-          </label>
-          <label id="countLabel" for="count">Fragen
-            <select id="count">
-              <option value="3">3</option>
-              <option value="5">5</option>
-              <option value="7" selected>7</option>
-              <option value="10">10</option>
-              <option value="15">15</option>
-              <option value="20">20</option>
-              <option value="25">25</option>
-              <option value="30">30</option>
-            </select>
-          </label>
-          <label id="autoLabel" class="check" for="autoNext">
-            <input id="autoNext" type="checkbox" checked /> Automatisch weiter
-          </label>
+      <div class="workspace">
+        <div class="sidebar">
+          <details id="settings" class="prompt settings" open>
+            <summary>Einstellungen</summary>
+            <div class="controls">
+              <label for="mode">Modus
+                <select id="mode">
+                  <option value="learn">Lernen</option>
+                  <option value="map">Regierungsbezirk finden</option>
+                  <option value="seat">Regierungssitz wählen</option>
+                  <option value="river">Flüsse finden</option>
+                  <option value="mountain">Gebirge finden</option>
+                  <option value="sight">Sehenswürdigkeiten finden</option>
+                </select>
+              </label>
+              <label id="countLabel" for="count">Fragen
+                <select id="count">
+                  <option value="3">3</option>
+                  <option value="5">5</option>
+                  <option value="7" selected>7</option>
+                  <option value="10">10</option>
+                  <option value="15">15</option>
+                  <option value="20">20</option>
+                  <option value="25">25</option>
+                  <option value="30">30</option>
+                </select>
+              </label>
+              <label id="autoLabel" class="check" for="autoNext">
+                <input id="autoNext" type="checkbox" checked /> Automatisch weiter
+              </label>
+            </div>
+
+            <fieldset id="learnTopics" class="learnTopics hidden">
+              <legend>Themen in Lernen</legend>
+              <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
+              <label><input type="checkbox" data-learn-topic="rivers" checked /> Flüsse</label>
+              <label><input type="checkbox" data-learn-topic="mountains" checked /> Gebirge</label>
+              <label><input type="checkbox" data-learn-topic="sights" checked /> Sehenswürdigkeiten</label>
+            </fieldset>
+
+          </details>
+
+          <section class="questionBar" aria-label="Aufgabe und Fortschritt">
+            <div id="question" class="question" aria-live="polite"></div>
+            <div id="stats" class="stats" aria-live="polite">
+              <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
+              <span>Punkte <strong id="score">0</strong></span>
+            </div>
+          </section>
+
+          <section id="quizControls" class="prompt quizControls" aria-label="Quizantwort und Aktionen">
+            <div id="options" class="options hidden" aria-label="Antwortmöglichkeiten"></div>
+            <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+
+            <div class="actions">
+              <button id="start" type="button">Start</button>
+              <button id="next" type="button" class="secondary hidden">Weiter</button>
+              <button id="restart" type="button" class="secondary hidden">Neustart</button>
+            </div>
+          </section>
+
+          <div id="infoPanel" class="infoPanel" aria-label="Informationen zum Kartenort">
+            <div id="mapToast" class="mapToast hidden" role="status" aria-live="polite">
+              <button type="button" class="infoClose secondary" data-close-info="mapToast" aria-label="Informationen schließen">×</button>
+              <div id="mapToastContent"></div>
+            </div>
+            <div id="riverInfo" class="mapToast riverInfo hidden" role="status" aria-live="polite">
+              <button type="button" class="infoClose secondary" data-close-info="riverInfo" aria-label="Informationen schließen">×</button>
+              <strong id="riverInfoName"></strong>
+              <span id="riverInfoLength"></span>
+              <a id="riverInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
+            </div>
+            <div id="mountainInfo" class="mapToast riverInfo hidden" role="status" aria-live="polite">
+              <button type="button" class="infoClose secondary" data-close-info="mountainInfo" aria-label="Informationen schließen">×</button>
+              <strong id="mountainInfoName"></strong>
+              <span id="mountainInfoRegion"></span>
+              <span id="mountainInfoPeak"></span>
+              <a id="mountainInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
+            </div>
+
+            <div id="sightInfo" class="mapToast sightInfo hidden" role="status" aria-live="polite">
+              <button id="sightInfoClose" class="infoClose secondary" type="button" aria-label="Informationen zur Sehenswürdigkeit schließen">×</button>
+              <img id="sightInfoImage" alt="" width="360" height="220" />
+              <strong id="sightInfoName"></strong>
+              <span id="sightInfoLocation"></span>
+              <span id="sightInfoFact"></span>
+              <a id="sightInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
+            </div>
+
+          </div>
+          <section id="result" class="result hidden" aria-live="polite">
+            <h2>Quiz beendet</h2>
+            <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
+          </section>
         </div>
 
-        <fieldset id="learnTopics" class="learnTopics hidden">
-          <legend>Themen in Lernen</legend>
-          <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
-          <label><input type="checkbox" data-learn-topic="rivers" checked /> Flüsse</label>
-          <label><input type="checkbox" data-learn-topic="mountains" checked /> Gebirge</label>
-          <label><input type="checkbox" data-learn-topic="sights" checked /> Sehenswürdigkeiten</label>
-        </fieldset>
+        <section class="mapWrap" aria-label="Bayernkarte">
+          <div class="mapToolbar" role="group" aria-label="Kartenzoom">
+            <button id="mapZoomIn" type="button" class="secondary" aria-label="Karte vergrößern" aria-controls="mapHost" disabled>+</button>
+            <button id="mapZoomOut" type="button" class="secondary" aria-label="Karte verkleinern" aria-controls="mapHost" disabled>−</button>
+            <button id="mapZoomReset" type="button" class="secondary" aria-label="Gesamte Bayernkarte anzeigen" aria-controls="mapHost" disabled>Zurücksetzen</button>
+            <output id="mapZoomPercentage" aria-label="Kartenvergrößerung" aria-live="off">100 %</output>
+          </div>
+          <details class="mapHelp">
+            <summary>Kartenhilfe</summary>
+            <p id="mapZoomHint" class="mapZoomHint">
+              <span class="mapZoomHint__mouse">Mit dem Mausrad zoomen, vergrößerte Karte ziehen.</span>
+              <span class="mapZoomHint__touch">Mit zwei Fingern zoomen. Vergrößerte Karte mit einem Finger verschieben; bei 100 % die Seite scrollen.</span>
+            </p>
+          </details>
+          <p id="mapKeyboardHint" class="srOnly">Tastatur: Plus und Minus zum Zoomen, Pfeiltasten zum Verschieben, Pos1 zum Zurücksetzen.</p>
+          <div id="mapHost" class="mapHost" role="group" tabindex="0" aria-label="Bayernkarte" aria-describedby="mapKeyboardHint" aria-busy="true"></div>
+          <p class="mapLegend"><span class="mapLegend__dot" aria-hidden="true"></span> Regierungssitz</p>
+        </section>
 
-        <div id="question" class="question" aria-live="polite"></div>
-        <div id="options" class="options hidden" aria-label="Antwortmöglichkeiten"></div>
-        <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
-
-        <div class="actions">
-          <button id="start" type="button">Start</button>
-          <button id="next" type="button" class="secondary hidden">Weiter</button>
-          <button id="restart" type="button" class="secondary hidden">Neustart</button>
-        </div>
-      </section>
-
-      <section class="mapWrap" aria-label="Bayernkarte">
-        <div class="mapToolbar" role="group" aria-label="Kartenzoom">
-          <button id="mapZoomIn" type="button" class="secondary" aria-label="Karte vergrößern" aria-controls="mapHost" disabled>+</button>
-          <button id="mapZoomOut" type="button" class="secondary" aria-label="Karte verkleinern" aria-controls="mapHost" disabled>−</button>
-          <button id="mapZoomReset" type="button" class="secondary" aria-label="Gesamte Bayernkarte anzeigen" aria-controls="mapHost" disabled>Zurücksetzen</button>
-          <output id="mapZoomPercentage" aria-label="Kartenvergrößerung" aria-live="off">100 %</output>
-        </div>
-        <p id="mapZoomHint" class="mapZoomHint">
-          <span class="mapZoomHint__mouse">Mit dem Mausrad zoomen, vergrößerte Karte ziehen.</span>
-          <span class="mapZoomHint__touch">Mit zwei Fingern zoomen. Vergrößerte Karte mit einem Finger verschieben; bei 100 % die Seite scrollen.</span>
-          <span class="srOnly">Tastatur: Plus und Minus zum Zoomen, Pfeiltasten zum Verschieben, Pos1 zum Zurücksetzen.</span>
-        </p>
-        <div id="mapHost" class="mapHost" role="group" tabindex="0" aria-label="Bayernkarte" aria-describedby="mapZoomHint" aria-busy="true"></div>
-        <p class="mapLegend"><span class="mapLegend__dot" aria-hidden="true"></span> Regierungssitz</p>
-      </section>
-
-      <div id="mapToast" class="mapToast hidden" role="status" aria-live="polite"></div>
-      <div id="riverInfo" class="mapToast riverInfo hidden" role="status" aria-live="polite">
-        <strong id="riverInfoName"></strong>
-        <span id="riverInfoLength"></span>
-        <a id="riverInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
       </div>
-      <div id="mountainInfo" class="mapToast riverInfo hidden" role="status" aria-live="polite">
-        <strong id="mountainInfoName"></strong>
-        <span id="mountainInfoRegion"></span>
-        <span id="mountainInfoPeak"></span>
-        <a id="mountainInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
-      </div>
-
-      <div id="sightInfo" class="mapToast sightInfo hidden" role="status" aria-live="polite">
-        <button id="sightInfoClose" class="sightInfoClose secondary" type="button" aria-label="Informationen zur Sehenswürdigkeit schließen">×</button>
-        <img id="sightInfoImage" alt="" width="360" height="220" />
-        <strong id="sightInfoName"></strong>
-        <span id="sightInfoLocation"></span>
-        <span id="sightInfoFact"></span>
-        <a id="sightInfoWikipedia" target="_blank" rel="noopener noreferrer">Mehr auf Wikipedia ↗</a>
-      </div>
-
-      <section id="result" class="result hidden" aria-live="polite">
-        <h2>Quiz beendet</h2>
-        <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
-      </section>
 
       <footer class="footer">
         Kartendaten: <a href="https://geoportal.bayern.de/geoportalbayern/details-suche?1=&amp;resId=baa244c2-42d2-43b2-932e-af30b4cd80cb">Bayerische Vermessungsverwaltung – www.geodaten.bayern.de</a>,

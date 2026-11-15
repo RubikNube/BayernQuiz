@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { constrainView, zoomView, panView, revealView, isDrag } from "../src/map-zoom.js";
+import { fitMapBounds, constrainView, zoomView, panView, revealView, isDrag } from "../src/map-zoom.js";
 
 const bounds = { x: 0, y: 0, width: 740, height: 740 };
 
@@ -59,4 +59,16 @@ test("tap tolerance uses CSS pixel distance, including diagonal movement", () =>
   assert.equal(isDrag(start, { x: 13, y: 14 }), false);
   assert.equal(isDrag(start, { x: 16, y: 16 }), true);
   assert.equal(isDrag(start, { x: 19, y: 10 }), true);
+});
+
+test("responsive map bounds fit wide and tall viewports without cropping the source", () => {
+  assert.deepEqual(fitMapBounds(bounds, 2), { x: -370, y: 0, width: 1480, height: 740 });
+  assert.deepEqual(fitMapBounds(bounds, 0.5), { x: 0, y: -370, width: 740, height: 1480 });
+  assert.deepEqual(fitMapBounds(bounds, 1), bounds);
+  assert.deepEqual(fitMapBounds(bounds, 0), bounds);
+  assert.deepEqual(fitMapBounds(bounds, Infinity), bounds);
+  const wide = fitMapBounds(bounds, 2);
+  const zoomed = zoomView(wide, wide, 4);
+  assert.equal(zoomed.width / zoomed.height, 2);
+  assert.deepEqual(zoomView(zoomed, wide, 0.25), wide);
 });
