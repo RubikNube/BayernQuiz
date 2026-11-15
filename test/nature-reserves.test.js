@@ -91,3 +91,21 @@ test("offline reserve generator is idempotent and preserves every other SVG laye
     rmSync(directory, { recursive: true, force: true });
   }
 });
+
+test("every reserve has a small local JPEG photo with complete Commons credits", () => {
+  const metadata = JSON.parse(readFileSync(new URL("../assets/nature-reserves/metadata.json", import.meta.url), "utf8"));
+  const credits = readFileSync(new URL("../assets/nature-reserves/ATTRIBUTION.md", import.meta.url), "utf8");
+  assert.equal(metadata.length, NATURE_RESERVES.length);
+  assert.deepEqual(new Set(metadata.map(({ slug }) => slug)), new Set(NATURE_RESERVES.map(({ code }) => code)));
+  for (const reserve of NATURE_RESERVES) {
+    const record = metadata.find(({ slug }) => slug === reserve.code);
+    assert.equal(record.path, `assets/nature-reserves/${reserve.code}.jpg`);
+    assert.ok(record.artist && record.license && record.license_url);
+    assert.equal(new URL(record.page_url).hostname, "commons.wikimedia.org");
+    assert.ok(credits.includes(record.page_url) && credits.includes(reserve.name));
+    const photo = readFileSync(new URL(`../${record.path}`, import.meta.url));
+    assert.equal(photo[0], 0xff);
+    assert.equal(photo[1], 0xd8);
+    assert.ok(photo.length > 1000 && photo.length < 150_000, `${reserve.code}: thumbnail size`);
+  }
+});

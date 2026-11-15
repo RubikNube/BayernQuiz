@@ -1,0 +1,375 @@
+[
+  {
+    "slug": "murnauer-moos",
+    "title": "Murnauer Moos",
+    "file": "Murnauer_Moos.jpg",
+    "coordinates": [
+      {
+        "lat": 47.648043,
+        "lon": 11.153183,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/f/ff/Murnauer_Moos.jpg/330px-Murnauer_Moos.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Murnauer_Moos.jpg",
+    "artist": "No machine-readable author provided. Dark Avenger~commonswiki assumed (based on copyright claims).",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "path": "assets/nature-reserves/murnauer-moos.jpg"
+  },
+  {
+    "slug": "osterseen",
+    "title": "Osterseen",
+    "file": "Aerial_image_of_Osterseen_(view_from_the_south,_2026).jpg",
+    "coordinates": [
+      {
+        "lat": 47.79027,
+        "lon": 11.30417,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/07/Aerial_image_of_Osterseen_%28view_from_the_south%2C_2026%29.jpg/330px-Aerial_image_of_Osterseen_%28view_from_the_south%2C_2026%29.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Aerial_image_of_Osterseen_(view_from_the_south,_2026).jpg",
+    "artist": "Carsten Steger",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/osterseen.jpg"
+  },
+  {
+    "slug": "ammersee-suedufer",
+    "title": "Vogelfreistätte Ammersee-Südufer",
+    "file": "NSG_Ammersee_Süd_HB-05.jpg",
+    "coordinates": [
+      {
+        "lat": 47.9379,
+        "lon": 11.1232,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/44/NSG_Ammersee_S%C3%BCd_HB-05.jpg/330px-NSG_Ammersee_S%C3%BCd_HB-05.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:NSG_Ammersee_S%C3%BCd_HB-05.jpg",
+    "artist": "Boschfoto",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/ammersee-suedufer.jpg"
+  },
+  {
+    "slug": "isarmuendung",
+    "title": "Isarmündung",
+    "file": "Isarmuendung_090124-2.jpg",
+    "coordinates": [
+      {
+        "lat": 48.77529722,
+        "lon": 12.95753611,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/7/7b/Isarmuendung_090124-2.jpg/330px-Isarmuendung_090124-2.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Isarmuendung_090124-2.jpg",
+    "artist": "Aconcagua (talk)",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/isarmuendung.jpg"
+  },
+  {
+    "slug": "unterer-inn",
+    "title": "Unterer Inn",
+    "file": "Simbach a. Inn - NSG Unterer Inn - 2023 08 31-1.jpg",
+    "coordinates": null,
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/88/Simbach_a._Inn_-_NSG_Unterer_Inn_-_2023_08_31-1.jpg/330px-Simbach_a._Inn_-_NSG_Unterer_Inn_-_2023_08_31-1.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Simbach_a._Inn_-_NSG_Unterer_Inn_-_2023_08_31-1.jpg",
+    "artist": "Ewald Ehtreiber",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/unterer-inn.jpg"
+  },
+  {
+    "slug": "dost",
+    "title": "Doost",
+    "file": "Doost.JPG",
+    "coordinates": [
+      {
+        "lat": 49.71427,
+        "lon": 12.23684,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ef/Doost.JPG/330px-Doost.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Doost.JPG",
+    "artist": "Benreis",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/dost.jpg"
+  },
+  {
+    "slug": "hoelle",
+    "title": "Naturschutzgebiet Hölle (Oberpfalz)",
+    "file": "NSG_Hölle.JPG",
+    "coordinates": [
+      {
+        "lat": 49.084212,
+        "lon": 12.428345,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/1/1f/NSG_H%C3%B6lle.JPG/330px-NSG_H%C3%B6lle.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:NSG_H%C3%B6lle.JPG",
+    "artist": "Rosa-Maria Rinkl",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/hoelle.jpg"
+  },
+  {
+    "slug": "waldnaabtal",
+    "title": "Naturschutzgebiet Waldnaabtal",
+    "file": "Butterfass-im-Naturschutzgebiet-WALDNAABTAL_B71.jpg",
+    "coordinates": [
+      {
+        "lat": 49.826284,
+        "lon": 12.197986,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/9c/Butterfass-im-Naturschutzgebiet-WALDNAABTAL_B71.jpg/330px-Butterfass-im-Naturschutzgebiet-WALDNAABTAL_B71.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Butterfass-im-Naturschutzgebiet-WALDNAABTAL_B71.jpg",
+    "artist": "Bernd Stengl",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/waldnaabtal.jpg"
+  },
+  {
+    "slug": "luisenburg",
+    "title": "Luisenburg-Felsenlabyrinth",
+    "file": "Wunsiedel, Luisenburg-Felsenlabyrinth-04.jpg",
+    "coordinates": [
+      {
+        "lat": 50.01208,
+        "lon": 11.99209,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a7/Wunsiedel%2C_Luisenburg-Felsenlabyrinth-04.jpg/330px-Wunsiedel%2C_Luisenburg-Felsenlabyrinth-04.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Wunsiedel,_Luisenburg-Felsenlabyrinth-04.jpg",
+    "artist": "Dguendel",
+    "license": "CC BY 3.0",
+    "license_url": "https://creativecommons.org/licenses/by/3.0",
+    "path": "assets/nature-reserves/luisenburg.jpg"
+  },
+  {
+    "slug": "waldsteingipfel",
+    "title": "Großer Waldstein",
+    "file": "Großer_Waldstein_i._Fichtelgebirge.jpg",
+    "coordinates": [
+      {
+        "lat": 50.12902778,
+        "lon": 11.85452778,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/8d/Gro%C3%9Fer_Waldstein_i._Fichtelgebirge.jpg/330px-Gro%C3%9Fer_Waldstein_i._Fichtelgebirge.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Gro%C3%9Fer_Waldstein_i._Fichtelgebirge.jpg",
+    "artist": "AriStonewood",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/waldsteingipfel.jpg"
+  },
+  {
+    "slug": "fichtelseemoor",
+    "title": "Naturwaldreservat Fichtelseemoor",
+    "file": "Bäume im Fichtelseemoor nördlich des Fichtelsees.jpg",
+    "coordinates": [
+      {
+        "lat": 50.017777,
+        "lon": 11.865892,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/3b/B%C3%A4ume_im_Fichtelseemoor_n%C3%B6rdlich_des_Fichtelsees.jpg/330px-B%C3%A4ume_im_Fichtelseemoor_n%C3%B6rdlich_des_Fichtelsees.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:B%C3%A4ume_im_Fichtelseemoor_n%C3%B6rdlich_des_Fichtelsees.jpg",
+    "artist": "Stephan van Helden",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/fichtelseemoor.jpg"
+  },
+  {
+    "slug": "brucker-lache",
+    "title": "Brucker Lache",
+    "file": "Wald im NSG Brucker Lache 0135.jpg",
+    "coordinates": [
+      {
+        "lat": 49.563636,
+        "lon": 11.020489,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/c/c4/Wald_im_NSG_Brucker_Lache_0135.jpg/330px-Wald_im_NSG_Brucker_Lache_0135.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Wald_im_NSG_Brucker_Lache_0135.jpg",
+    "artist": "Dieter Wollscheid",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/brucker-lache.jpg"
+  },
+  {
+    "slug": "tennenloher-forst",
+    "title": "Tennenloher Forst",
+    "file": "Naturschutzgebiet_Tennenloher_Forst.jpg",
+    "coordinates": [
+      {
+        "lat": 49.559182,
+        "lon": 11.05083,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/e/ea/Naturschutzgebiet_Tennenloher_Forst.jpg/330px-Naturschutzgebiet_Tennenloher_Forst.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Naturschutzgebiet_Tennenloher_Forst.jpg",
+    "artist": "Nico1995fcb",
+    "license": "CC0",
+    "license_url": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+    "path": "assets/nature-reserves/tennenloher-forst.jpg"
+  },
+  {
+    "slug": "scheerweiher",
+    "title": "Scheerweihergebiet bei Schalkhausen",
+    "file": "Scheerweiher.jpg",
+    "coordinates": [
+      {
+        "lat": 49.309,
+        "lon": 10.5153,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/5/54/Scheerweiher.jpg/330px-Scheerweiher.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Scheerweiher.jpg",
+    "artist": "EapClochydd",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/scheerweiher.jpg"
+  },
+  {
+    "slug": "lange-rhoen",
+    "title": "Lange Rhön",
+    "file": "Heidelstein_von_Südosten.jpg",
+    "coordinates": [
+      {
+        "lat": 50.45861111,
+        "lon": 10.00666667,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/0/04/Heidelstein_von_S%C3%BCdosten.jpg/330px-Heidelstein_von_S%C3%BCdosten.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Heidelstein_von_S%C3%BCdosten.jpg",
+    "artist": "J. Braukmann",
+    "license": "CC BY-SA 4.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/4.0",
+    "path": "assets/nature-reserves/lange-rhoen.jpg"
+  },
+  {
+    "slug": "gangolfsberg",
+    "title": "Gangolfsberg (Rhön)",
+    "file": "Basaltprismenwand_Gangolfsberg.jpg",
+    "coordinates": [
+      {
+        "lat": 50.465,
+        "lon": 10.0865,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/3/31/Basaltprismenwand_Gangolfsberg.jpg/330px-Basaltprismenwand_Gangolfsberg.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Basaltprismenwand_Gangolfsberg.jpg",
+    "artist": "Barbara Michalski",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/gangolfsberg.jpg"
+  },
+  {
+    "slug": "sulzheimer-gipshuegel",
+    "title": "Naturschutzgebiet Sulzheimer Gipshügel",
+    "file": "2015_Sulzheimer_Gipshügel_01.jpg",
+    "coordinates": [
+      {
+        "lat": 49.952771,
+        "lon": 10.319436,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/8/84/2015_Sulzheimer_Gipsh%C3%BCgel_01.jpg/330px-2015_Sulzheimer_Gipsh%C3%BCgel_01.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:2015_Sulzheimer_Gipsh%C3%BCgel_01.jpg",
+    "artist": "Derzno",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/sulzheimer-gipshuegel.jpg"
+  },
+  {
+    "slug": "allgaeuer-hochalpen",
+    "title": "Allgäuer Hochalpen",
+    "file": "Nsg_allgaeuer_hochalpen.jpg",
+    "coordinates": [
+      {
+        "lat": 47.37247222,
+        "lon": 10.33719444,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/9/94/Nsg_allgaeuer_hochalpen.jpg/330px-Nsg_allgaeuer_hochalpen.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:Nsg_allgaeuer_hochalpen.jpg",
+    "artist": "Clemenspool",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/allgaeuer-hochalpen.jpg"
+  },
+  {
+    "slug": "eistobel",
+    "title": "Eistobel (Naturschutzgebiet)",
+    "file": "D-BY_-_Eistobel_074.JPG",
+    "coordinates": [
+      {
+        "lat": 47.63711389,
+        "lon": 10.03154722,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/4/4f/D-BY_-_Eistobel_074.JPG/330px-D-BY_-_Eistobel_074.JPG?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:D-BY_-_Eistobel_074.JPG",
+    "artist": "ANKAWÜ",
+    "license": "CC BY-SA 3.0",
+    "license_url": "https://creativecommons.org/licenses/by-sa/3.0",
+    "path": "assets/nature-reserves/eistobel.jpg"
+  },
+  {
+    "slug": "benninger-ried",
+    "title": "Benninger Ried",
+    "file": "BenningerRied_131.jpg",
+    "coordinates": [
+      {
+        "lat": 47.974,
+        "lon": 10.204,
+        "primary": "",
+        "globe": "earth"
+      }
+    ],
+    "image_url": "https://thumb.wikimedia.org/wikipedia/commons/thumb/a/a0/BenningerRied_131.jpg/330px-BenningerRied_131.jpg?utm_source=commons.wikimedia.org&utm_campaign=imageinfo&utm_content=thumbnail",
+    "page_url": "https://commons.wikimedia.org/wiki/File:BenningerRied_131.jpg",
+    "artist": "Johannes Böckh & Thomas Mirtsch",
+    "license": "CC BY-SA 3.0",
+    "license_url": "http://creativecommons.org/licenses/by-sa/3.0/",
+    "path": "assets/nature-reserves/benninger-ried.jpg"
+  }
+]

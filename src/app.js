@@ -3,6 +3,7 @@ import { createMapZoom } from "./map-zoom.js";
 
 const elements = {
   natureInfo: document.querySelector("#natureInfo"),
+  natureInfoImage: document.querySelector("#natureInfoImage"),
   natureInfoName: document.querySelector("#natureInfoName"),
   natureInfoLocation: document.querySelector("#natureInfoLocation"),
   natureInfoFact: document.querySelector("#natureInfoFact"),
@@ -192,6 +193,8 @@ function showSightInfo(sight) {
 
 function hideNatureInfo() {
   elements.natureInfo.classList.add("hidden");
+  elements.natureInfoImage.removeAttribute("src");
+  elements.natureInfoImage.hidden = true;
 }
 
 function showNatureInfo(reserve) {
@@ -204,6 +207,9 @@ function showNatureInfo(reserve) {
   elements.natureInfoLocation.textContent = `${reserve.location} – ${region.name}`;
   elements.natureInfoFact.textContent = reserve.fact;
   elements.natureInfoWikipedia.href = wikipediaUrl(reserve.wikipediaTitle);
+  elements.natureInfoImage.hidden = true;
+  elements.natureInfoImage.alt = `Foto: ${reserve.name}`;
+  elements.natureInfoImage.src = `assets/nature-reserves/${reserve.code}.jpg`;
   elements.natureInfo.classList.remove("hidden");
   revealInfo(elements.natureInfo);
 }
@@ -225,6 +231,14 @@ elements.sightInfoImage.addEventListener("error", () => {
 elements.sightInfoImage.addEventListener("load", () => {
   elements.sightInfoImage.hidden = false;
   revealInfo(elements.sightInfo);
+});
+
+elements.natureInfoImage.addEventListener("error", () => {
+  elements.natureInfoImage.hidden = true;
+});
+elements.natureInfoImage.addEventListener("load", () => {
+  elements.natureInfoImage.hidden = false;
+  revealInfo(elements.natureInfo);
 });
 
 function updateCountOptions() {
