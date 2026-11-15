@@ -80,7 +80,18 @@
       </section>
 
       <section class="mapWrap" aria-label="Bayernkarte">
-        <div id="mapHost" class="mapHost" aria-busy="true"></div>
+        <div class="mapToolbar" role="group" aria-label="Kartenzoom">
+          <button id="mapZoomIn" type="button" class="secondary" aria-label="Karte vergrößern" aria-controls="mapHost" disabled>+</button>
+          <button id="mapZoomOut" type="button" class="secondary" aria-label="Karte verkleinern" aria-controls="mapHost" disabled>−</button>
+          <button id="mapZoomReset" type="button" class="secondary" aria-label="Gesamte Bayernkarte anzeigen" aria-controls="mapHost" disabled>Zurücksetzen</button>
+          <output id="mapZoomPercentage" aria-label="Kartenvergrößerung" aria-live="off">100 %</output>
+        </div>
+        <p id="mapZoomHint" class="mapZoomHint">
+          <span class="mapZoomHint__mouse">Mit dem Mausrad zoomen, vergrößerte Karte ziehen.</span>
+          <span class="mapZoomHint__touch">Mit zwei Fingern zoomen. Vergrößerte Karte mit einem Finger verschieben; bei 100 % die Seite scrollen.</span>
+          <span class="srOnly">Tastatur: Plus und Minus zum Zoomen, Pfeiltasten zum Verschieben, Pos1 zum Zurücksetzen.</span>
+        </p>
+        <div id="mapHost" class="mapHost" role="group" tabindex="0" aria-label="Bayernkarte" aria-describedby="mapZoomHint" aria-busy="true"></div>
         <p class="mapLegend"><span class="mapLegend__dot" aria-hidden="true"></span> Regierungssitz</p>
       </section>
 

@@ -1,4 +1,5 @@
 import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
+import { createMapZoom } from "./map-zoom.js";
 
 const elements = {
   sightInfo: document.querySelector("#sightInfo"),
@@ -47,6 +48,7 @@ const elements = {
 };
 
 let game = null;
+let mapZoom = null;
 let advanceTimer = null;
 const learnTopics = Object.fromEntries(["regions", "rivers", "mountains", "sights"].map((topic) => {
   const checkbox = elements.learnTopics.querySelector(`[data-learn-topic="${topic}"]`);
@@ -370,6 +372,7 @@ function render() {
 }
 
 function resetMode() {
+  mapZoom?.reset();
   cancelAdvance();
   hideMapToast();
   hideRiverInfo();
@@ -400,6 +403,7 @@ function startGame() {
     return;
   }
   game = createGame(elements.mode.value, Number(elements.count.value));
+  mapZoom?.reset();
   if (game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
@@ -605,6 +609,15 @@ async function loadMap() {
     const response = await fetch("regions.svg");
     if (!response.ok) throw new Error(`HTTP ${response.status}`);
     elements.mapHost.innerHTML = await response.text();
+    mapZoom?.destroy();
+    mapZoom = createMapZoom({
+      svg: elements.mapHost.querySelector("#bayernMap"),
+      host: elements.mapHost,
+      zoomIn: document.querySelector("#mapZoomIn"),
+      zoomOut: document.querySelector("#mapZoomOut"),
+      resetButton: document.querySelector("#mapZoomReset"),
+      percentage: document.querySelector("#mapZoomPercentage"),
+    });
     elements.mapHost.setAttribute("aria-busy", "false");
     updateMapMode();
   } catch {

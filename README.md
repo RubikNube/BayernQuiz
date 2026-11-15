@@ -10,6 +10,16 @@ Im Modus **Sehenswürdigkeiten finden** können 20 Bauwerke und Naturziele aus a
 
 Im Modus **Lernen** können Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten über Checkboxen einzeln ein- und ausgeblendet werden. Alle vier Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen.
 
+## Karte vergrößern und verschieben
+
+In allen Modi kann die Karte über **+** und **−** zwischen 100 % und 400 % vergrößert werden. **Zurücksetzen** zeigt wieder ganz Bayern. Am PC zoomt das Mausrad um die Zeigerposition; eine vergrößerte Karte lässt sich mit gedrückter Maustaste verschieben. Browser-Zoom mit Strg/Cmd bleibt verfügbar.
+
+Auf dem Smartphone vergrößern und verkleinern zwei Finger die Karte. Nach dem Vergrößern verschiebt ein Finger die Karte; bei 100 % scrollt ein Finger die Seite. Außerhalb der Karte bleibt die normale Seitenbedienung verfügbar. Ziehen und Zoomen wählen keine Quizantwort aus.
+
+Mit der Tastatur: Karte per Tab fokussieren, mit **+ / −** zoomen, mit den **Pfeiltasten** verschieben und mit **Pos1** zurücksetzen. Kartenelemente bleiben mit Tab und Enter/Leertaste auswählbar und werden beim Fokussieren sichtbar gemacht.
+
+Zoom und Ausschnitt bleiben zwischen Fragen und beim Ändern der Lernthemen erhalten. Start, Neustart und Moduswechsel setzen die Ansicht zurück. Die Ansicht wird nicht dauerhaft gespeichert.
+
 ## Lokal starten
 
 Node.js und Python 3 werden benötigt; npm-Abhängigkeiten gibt es nicht.
