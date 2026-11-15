@@ -598,7 +598,36 @@ export function shuffle(items, random = Math.random) {
   return result;
 }
 
+export const MAP_TOPICS = Object.freeze({
+  map: REGIONS, city: CITIES, lake: LAKES, river: RIVERS,
+  mountain: MOUNTAINS, sight: SIGHTS, nature: NATURE_RESERVES,
+});
+
+export const TOPIC_LABELS = Object.freeze({
+  map: "Regierungsbezirke", city: "Städte", lake: "Seen", river: "Flüsse",
+  mountain: "Gebirge", sight: "Sehenswürdigkeiten", nature: "Naturschutzgebiete",
+});
+
+export function questionTopic(game, target = currentQuestion(game)) {
+  return game?.mode === "mix" ? target?.topic : game?.mode;
+}
+
+function questionKey(game, target) {
+  return game.mode === "mix" ? target.key : target.code;
+}
+
+function createMixedQuestions(count, random) {
+  const topics = shuffle(Object.keys(MAP_TOPICS), random);
+  const questions = topics.flatMap((topic, index) => {
+    const size = Math.floor(count / topics.length) + (index < count % topics.length ? 1 : 0);
+    return shuffle(MAP_TOPICS[topic], random).slice(0, size)
+      .map(item => ({ ...item, topic, key: `${topic}:${item.code}` }));
+  });
+  return shuffle(questions, random);
+}
+
 export function getAllowedQuestionCounts(mode) {
+  if (mode === "mix") return [7, 10, 15, 20];
   if (!["map", "seat", "river", "mountain", "sight", "city", "nature", "lake"].includes(mode)) return [];
   return mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
     : (mode === "sight" || mode === "nature" || mode === "lake") ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
@@ -610,7 +639,8 @@ export function createGame(mode, count, random = Math.random) {
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
-  return newRound(mode, shuffle(mode === "lake" ? LAKES : mode === "nature" ? NATURE_RESERVES : mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count));
+  return newRound(mode, mode === "mix" ? createMixedQuestions(count, random)
+    : shuffle(mode === "seat" ? REGIONS : MAP_TOPICS[mode], random).slice(0, count));
 }
 
 function newRound(mode, questions, isPractice = false) {
@@ -630,8 +660,8 @@ function newRound(mode, questions, isPractice = false) {
 
 export function createRetryGame(completedGame, random = Math.random) {
   if (!completedGame?.finished) throw new Error("A finished round is required");
-  const missed = new Set(completedGame.history.filter(({ correct }) => !correct).map(({ questionCode }) => questionCode));
-  const questions = completedGame.questions.filter(({ code }) => missed.has(code));
+  const missed = new Set(completedGame.history.filter(({ correct }) => !correct).map(({ questionKey, questionCode }) => questionKey ?? questionCode));
+  const questions = completedGame.questions.filter(target => missed.has(questionKey(completedGame, target)));
   if (!questions.length) throw new Error("No mistakes to retry");
   return newRound(completedGame.mode, shuffle(questions, random), true);
 }
@@ -646,14 +676,13 @@ export function questionText(mode, target) {
 
 export function getMistakeReview(game) {
   if (!game?.finished) return [];
-  const items = game.mode === "seat" ? [...REGIONS, ...OTHER_CITIES]
-    : game.mode === "lake" ? LAKES : game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES
-    : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS;
-  return game.history.filter(({ correct }) => !correct).map(({ questionCode, selectedCode }) => {
-    const target = game.questions.find(({ code }) => code === questionCode);
+  return game.history.filter(({ correct }) => !correct).map(({ questionCode, questionKey: key, selectedCode }) => {
+    const target = game.questions.find(item => questionKey(game, item) === (key ?? questionCode));
+    const topic = questionTopic(game, target);
+    const items = topic === "seat" ? [...REGIONS, ...OTHER_CITIES] : MAP_TOPICS[topic];
     const selected = items.find(({ code }) => code === selectedCode);
     return {
-      question: questionText(game.mode, target),
+      question: questionText(topic, target),
       selectedAnswer: game.mode === "seat" ? selected.seat : selected.name,
       correctAnswer: game.mode === "seat" ? target.seat : target.name,
     };
@@ -678,14 +707,17 @@ export function answer(game, selectedCode) {
   if (game.finished || game.answered) return null;
   const target = currentQuestion(game);
   if (!target) return null;
-  const valid = game.mode === "seat"
+  const topic = questionTopic(game, target);
+  const valid = topic === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : (game.mode === "lake" ? LAKES : game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
+    : MAP_TOPICS[topic].some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;
   game.selectedCode = selectedCode;
-  game.history.push({ questionCode: target.code, selectedCode, correct });
+  game.history.push({ questionCode: target.code, selectedCode, correct,
+    ...(game.mode === "mix" ? { topic, questionKey: target.key } : {}),
+  });
   if (correct) game.score += 1;
   return correct;
 }

@@ -29,6 +29,15 @@
         <legend id="modeCardsTitle">Was möchtest du entdecken?</legend>
         <div class="modeGrid">
           <label class="modeCard">
+            <input type="radio" name="mode" value="mix" aria-labelledby="mode-mix-title" aria-describedby="mode-mix-description mode-mix-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-learn.svg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-mix-title" class="modeCard__title">Bayern-Mix</strong>
+              <span id="mode-mix-description" class="modeCard__description">Sieben Kartenthemen, eine abwechslungsreiche Runde.</span>
+              <span id="mode-mix-best" class="modeCard__best" data-mode-best="mix">Dein Rekord: noch keiner · 10 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
             <input type="radio" name="mode" value="learn" aria-labelledby="mode-learn-title" aria-describedby="mode-learn-description mode-learn-best" checked />
             <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-learn.svg" alt="" width="96" height="96" />
             <span class="modeCard__content">
@@ -162,20 +171,29 @@
 
           <section class="questionBar" aria-label="Aufgabe und Fortschritt">
             <p id="practiceLabel" class="practiceLabel hidden">Fehler üben · Übungsrunde – ohne Rekordwertung</p>
+            <p id="questionTopic" class="questionTopic"></p>
             <div id="question" class="question" tabindex="-1" aria-live="polite"></div>
             <div id="stats" class="stats" aria-live="polite">
               <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
               <span>Punkte <strong id="score">0</strong></span>
             </div>
+            <progress id="quizProgress" value="0" max="7" aria-labelledby="progressLabel"></progress>
+            <span id="progressLabel" class="progressLabel">0 von 7 Fragen beantwortet</span>
+            <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
+            <div id="correctionActions" class="correctionActions hidden">
+              <button type="button" class="secondary" data-compare="selected">Deine Auswahl ansehen</button>
+              <button type="button" class="secondary" data-compare="correct">Richtige Antwort ansehen</button>
+            </div>
+            <div class="questionActions">
+              <button id="next" type="button" class="secondary hidden">Weiter</button>
+            </div>
           </section>
 
           <section id="quizControls" class="prompt quizControls" aria-label="Quizantwort und Aktionen">
             <div id="options" class="options hidden" aria-label="Antwortmöglichkeiten"></div>
-            <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
 
             <div class="actions">
               <button id="start" type="button">Start</button>
-              <button id="next" type="button" class="secondary hidden">Weiter</button>
               <button id="restart" type="button" class="secondary hidden">Neustart</button>
             </div>
           </section>

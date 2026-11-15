@@ -285,5 +285,7 @@ export function createMapZoom({ svg, host, zoomIn, zoomOut, resetButton, percent
   on(svg, "dragstart", (event) => event.preventDefault());
   render(view);
 
-  return { reset, destroy() { resizeObserver.disconnect(); cancel(); listeners.abort(); } };
+  return { reset, reveal(element) {
+    if (element) render(revealView(view, bounds, element.getBBox(), view.width * 0.02));
+  }, destroy() { resizeObserver.disconnect(); cancel(); listeners.abort(); } };
 }

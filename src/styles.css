@@ -118,7 +118,7 @@ button:focus-visible, select:focus-visible, .region:focus-visible, .seat-dot:foc
 .mapHelp { color: var(--muted); font-size: .85rem; text-align: center; }
 .mapHelp summary { width: fit-content; margin: 0 auto; }
 .mapZoomHint__touch { display: none; }
-.mapHost--zoomed #bayernMap, .mapHost--zoomed #bayernMap * { cursor: grab; }
+.mapHost--zoomed #bayernMap { cursor: grab; }
 .mapHost--dragging #bayernMap, .mapHost--dragging #bayernMap * { cursor: grabbing; }
 .mapHost--dragging { user-select: none; }
 .srOnly { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; border: 0; }
@@ -131,16 +131,16 @@ button:focus-visible, select:focus-visible, .region:focus-visible, .seat-dot:foc
 .neighbor-context .neighbor-note { font-size: 17px; }
 .neighbor-borders { fill: none; stroke: #526489; stroke-width: 1; }
 .neighbor-borders path { vector-effect: non-scaling-stroke; }
-.region { fill: var(--region); stroke: #8090ad; stroke-width: 1.1; vector-effect: non-scaling-stroke; cursor: pointer; transition: fill .15s ease; }
+.region { fill: var(--region); stroke: #8090ad; stroke-width: 1.1; vector-effect: non-scaling-stroke; cursor: default; transition: fill .15s ease; }
 .region:hover, .region:focus-visible { fill: var(--region-hover); }
 .region.selected { fill: var(--accent); }
 .region.correct { fill: var(--good); }
 .region.wrong { fill: var(--bad); }
-.seat-dot { fill: #000; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: pointer; }
+.seat-dot { fill: #000; stroke: #fff; stroke-width: 2; vector-effect: non-scaling-stroke; cursor: default; }
 .seat-dot:hover, .seat-dot:focus-visible { fill: #000; }
 .river-line, .river-hit { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .river-line { stroke: #62c9f7; stroke-width: 3.5; pointer-events: none; }
-.river-hit { stroke: transparent; stroke-width: 20; pointer-events: stroke; cursor: pointer; }
+.river-hit { stroke: transparent; stroke-width: 20; pointer-events: stroke; cursor: default; }
 .river:hover .river-line, .river:focus-visible .river-line { stroke: #d1f2ff; stroke-width: 5; }
 .river.correct .river-line { stroke: var(--good); stroke-width: 6; }
 .river.wrong .river-line { stroke: var(--bad); stroke-width: 6; }
@@ -148,7 +148,7 @@ button:focus-visible, select:focus-visible, .region:focus-visible, .seat-dot:foc
 .river-mode .region { cursor: default; }
 .mountain-line, .mountain-hit { fill: none; stroke-linecap: round; stroke-linejoin: round; vector-effect: non-scaling-stroke; }
 .mountain-line { stroke: #e7bd75; stroke-width: 5; pointer-events: none; }
-.mountain-hit { stroke: transparent; stroke-width: 20; pointer-events: stroke; cursor: pointer; }
+.mountain-hit { stroke: transparent; stroke-width: 20; pointer-events: stroke; cursor: default; }
 .mountain:hover .mountain-line, .mountain:focus-visible .mountain-line, .mountain.learned .mountain-line { stroke: #fff0c9; stroke-width: 7; }
 .mountain.correct .mountain-line { stroke: var(--good); stroke-width: 8; }
 .mountain.wrong .mountain-line { stroke: var(--bad); stroke-width: 8; }
@@ -177,7 +177,7 @@ a { color: #9dd4ff; }
   .sidebar { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 16px; max-height: max(400px, calc(100dvh - var(--workspace-top, 114px) - 16px)); overflow-y: auto; scrollbar-gutter: stable; scrollbar-color: #526489 var(--panel); }
   .sidebar > * { flex: none; }
   .sidebar > * { order: 0; }
-  .quizActive .questionBar { position: static; box-shadow: none; }
+  .quizActive .questionBar { position: sticky; top: 0; z-index: 2; background: var(--panel); }
   .controls { align-items: stretch; }
   .controls label { width: 100%; }
   .controls label select { flex: 1; }
@@ -199,7 +199,7 @@ a { color: #9dd4ff; }
   .quizActive .questionBar { position: static; }
 }
 
-.sight { cursor: pointer; }
+.sight { cursor: default; }
 .sight-dot { fill: #e3a7ff; stroke: #18223c; stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
 .sight-hit { fill: transparent; pointer-events: all; }
 .sight:hover .sight-dot, .sight:focus-visible .sight-dot, .sight.learned .sight-dot { fill: #ffe4ff; stroke: #fff; }
@@ -210,7 +210,7 @@ a { color: #9dd4ff; }
 .sightInfo { display: grid; gap: 6px; }
 .sightInfo img { display: block; width: 100%; height: auto; max-height: 180px; object-fit: contain; border-radius: 6px; }
 
-.city { cursor: pointer; }
+.city { cursor: default; }
 .city-dot { fill: #ffc857; stroke: #18223c; stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
 .city-hit { fill: transparent; pointer-events: all; }
 .city:hover .city-dot, .city:focus-visible .city-dot, .city.learned .city-dot { fill: #fff0ba; stroke: #fff; }
@@ -223,7 +223,7 @@ a { color: #9dd4ff; }
 .cityInfoContent > div { min-width: 0; }
 .cityCoat { flex: none; width: 64px; height: 72px; padding: 4px; object-fit: contain; border-radius: 4px; background: #f7f8fc; }
 
-.nature { cursor: pointer; }
+.nature { cursor: default; }
 .nature-dot { fill: #57d5cc; stroke: #18223c; stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
 .nature-hit { fill: transparent; pointer-events: all; }
 .nature:hover .nature-dot, .nature:focus-visible .nature-dot, .nature.learned .nature-dot { fill: #c8fffa; stroke: #fff; }
@@ -235,7 +235,7 @@ a { color: #9dd4ff; }
 .natureInfo img, .mountainInfo img { width: 100%; max-width: 240px; height: 140px; object-fit: contain; border-radius: 6px; }
 
 /* Lake outlines keep their geographic shape; transparent strokes aid selection. */
-.lake { cursor: pointer; }
+.lake { cursor: default; }
 .lake-shape { fill: #469de0; stroke: #163f69; stroke-width: 1; vector-effect: non-scaling-stroke; pointer-events: none; fill-rule: evenodd; }
 .lake-hit { fill: transparent; stroke: transparent; stroke-width: 12; vector-effect: non-scaling-stroke; pointer-events: all; fill-rule: evenodd; }
 .lake:hover .lake-shape, .lake:focus-visible .lake-shape, .lake.learned .lake-shape { fill: #b2e5ff; stroke: #fff; }
@@ -245,3 +245,26 @@ a { color: #9dd4ff; }
 .lake-mode .region { cursor: default; }
 .lakeInfo { display: grid; gap: 6px; }
 .lakeInfo img { width: 100%; max-width: 240px; height: 140px; object-fit: contain; border-radius: 6px; }
+
+/* Keep the task, correction and next action together at every screen size. */
+.questionTopic { margin: 0 0 6px; color: var(--accent); font-size: .85rem; font-weight: 650; }
+.questionTopic:empty, .questionActions:not(:has(button:not(.hidden))) { display: none; }
+.question__target { display: block; margin: 4px 0; font-size: 1.4rem; color: #fff; }
+#quizProgress { display: block; width: 100%; height: 8px; margin: 12px 0 5px; accent-color: var(--accent); border: 0; border-radius: 4px; overflow: hidden; background: #314266; }
+#quizProgress::-webkit-progress-bar { background: #314266; }
+#quizProgress::-webkit-progress-value { background: var(--accent); }
+#quizProgress::-moz-progress-bar { background: var(--accent); }
+#quizProgress[hidden] { display: none; }
+.progressLabel { display: block; color: var(--muted); font-size: .8rem; }
+.progressLabel[hidden] { display: none; }
+.questionBar .feedback { margin: 10px 0 0; }
+.correctionActions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px; }
+.correctionActions button { flex: 1; padding: 8px; font-size: .85rem; }
+.questionActions { margin-top: 12px; }
+.questionActions button { width: 100%; }
+.region.correct, .river.correct .river-line, .mountain.correct .mountain-line,
+.sight.correct .sight-dot, .city.correct .city-dot, .nature.correct .nature-dot,
+.lake.correct .lake-shape { filter: drop-shadow(0 0 3px #fff); }
+@media (max-width: 1099px) {
+  .quizActive .questionBar { max-height: 48dvh; overflow-y: auto; }
+}
