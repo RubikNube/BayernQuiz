@@ -77,6 +77,54 @@ npm run serve:dist
 
 Danach `http://localhost:8000/` öffnen. `npm test` prüft die Quizdaten und den Spielablauf.
 
+## Als App installieren und offline spielen
+
+Die gebaute Version in `dist/` ist eine Progressive Web App (PWA). Auf Android die
+Website in Chrome öffnen und **App installieren** wählen, sobald der Knopf
+angeboten wird. Alternativ im Browsermenü **App installieren** oder **Zum
+Startbildschirm hinzufügen** wählen. Das BayernQuiz-Symbol startet das Spiel in
+einem eigenen Fenster. Die genaue Installation hängt vom Browser ab.
+
+Beim ersten Onlinebesuch lädt der Service Worker sämtliche lokalen Spieldateien,
+Karten, Fotos und Lizenznachweise herunter (etwa 4,6 MB zuzüglich App-Symbolen).
+Erst **Offline verfügbar** bestätigt den abgeschlossenen Download. Danach lässt
+sich das Spiel auch ohne Verbindung öffnen; externe Wikipedia- und Quellenlinks
+benötigen weiterhin Internet. **Offline noch nicht verfügbar** bedeutet, dass
+der Download noch läuft oder fehlgeschlagen ist; bei einer späteren Onlineöffnung
+wird die Installation erneut versucht. Browser können gespeicherte Dateien bei
+Speicherknappheit oder beim Löschen von Websitedaten entfernen.
+
+Updates werden beim Onlineöffnen im Hintergrund vollständig heruntergeladen.
+Sie werden erst aktiv, wenn alle offenen BayernQuiz-Fenster und -Tabs geschlossen
+sind. Eine laufende Runde wird nicht neu geladen. Rekorde und Lernthemen bleiben
+unter ihren bisherigen Browser-Speicherschlüsseln erhalten; laufende Runden werden
+nicht gespeichert. Gespeicherte Daten sind an den Browser und die Hosting-Origin
+gebunden und werden bei einem Domainwechsel nicht automatisch übernommen.
+
+Zum Prüfen `npm run build` und `npm run serve:dist` ausführen. Auf
+`http://localhost:8000/` ist der Service Worker auch ohne HTTPS erlaubt. In den
+Chromium-Entwicklerwerkzeugen unter **Application** Manifest, Service Worker und
+Cache Storage prüfen. Nach **Offline verfügbar** im Network-Panel **Offline**
+aktivieren und die Seite neu laden; alle Quizmodi und bisher ungeöffnete Fotos
+müssen funktionieren. Auf Android zusätzlich nach der Installation im Flugmodus
+über das App-Symbol starten. Eine unverschlüsselte LAN-IP ist kein Ersatz für
+HTTPS bei der Prüfung auf dem Telefon. Direktes Öffnen per `file://` oder das
+Ausliefern von `src/` unterstützt die Offlineinstallation nicht.
+
+Für späteres Hosting den gesamten Inhalt von `dist/` auf einem statischen
+HTTPS-Host veröffentlichen. Domainwurzel und Unterverzeichnisse wie
+`/BayernQuiz/` werden unterstützt; Unterverzeichnisse mit abschließendem Slash
+ausliefern. `manifest.webmanifest` als `application/manifest+json` und JavaScript
+einschließlich `sw.js` mit JavaScript-MIME-Typ ausliefern. Für `sw.js` und
+`index.html` `Cache-Control: no-cache` setzen; keine dauerhaft unveränderlichen
+HTTP-Caches für die übrigen unversionierten Dateinamen verwenden. Neue Builds
+vollständig und möglichst atomar bereitstellen, damit die Cacheinstallation
+nicht Dateien verschiedener Versionen mischt. Ein Hostinganbieter und eine
+Veröffentlichung sind hier nicht eingerichtet.
+
+`npm test` prüft zusätzlich Manifest, PNG-Abmessungen, Build-Versionierung,
+vollständige Offline-Dateiliste, fehlgeschlagene Downloads und Cache-Isolation.
+
 ## Kartendaten
 
 Die Karte wurde aus dem WFS-Layer `vergr:BezirkeFlaeche` des [Verwaltungsatlas Bayern](https://geoportal.bayern.de/geoportalbayern/details-suche?1=&resId=baa244c2-42d2-43b2-932e-af30b4cd80cb) erzeugt (abgerufen am 13. November 2026). Datenquelle: **Bayerische Vermessungsverwaltung – www.geodaten.bayern.de**, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.de). Für die Darstellung wurden die Polygone vereinfacht; Grenzen sind daher nicht für amtliche Zwecke geeignet.

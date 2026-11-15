@@ -11,6 +11,8 @@
 }
 
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
+.pwaTools { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: var(--muted); font-size: .875rem; }
 body {
   margin: 0;
   font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;

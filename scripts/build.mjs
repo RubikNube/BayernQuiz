@@ -1,7 +1,9 @@
 import { cp, mkdir, rm } from "node:fs/promises";
+import { buildOfflineWorker } from "./build-pwa.mjs";
 
 await rm("dist", { recursive: true, force: true });
 await mkdir("dist", { recursive: true });
 await cp("src", "dist", { recursive: true });
 await cp("LICENSE", "dist/LICENSE");
 await cp("assets", "dist/assets", { recursive: true });
+await buildOfflineWorker("dist");

@@ -6,6 +6,7 @@
     <meta name="theme-color" content="#0b1220" />
     <title>Bayern Quiz – Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete kennenlernen</title>
     <link rel="icon" type="image/svg+xml" href="bavarian-landessymbol.svg" />
+    <link rel="manifest" href="manifest.webmanifest" />
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -16,6 +17,10 @@
           <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete.</p>
         </div>
       </header>
+      <div class="pwaTools">
+        <button id="installApp" class="secondary" type="button" hidden>App installieren</button>
+        <span id="offlineStatus" role="status" aria-live="polite"></span>
+      </div>
 
       <div id="topicLaunch" class="topicLaunch">
         <div class="topicLaunch__summary" aria-live="polite">
@@ -318,5 +323,6 @@
       </form>
     </dialog>
     <script type="module" src="app.js"></script>
+    <script type="module" src="pwa.js"></script>
   </body>
 </html>
