@@ -8,6 +8,54 @@ export const REGIONS = Object.freeze([
   { code: "schwaben", name: "Schwaben", seat: "Augsburg" },
 ]);
 
+// Selected official NSGs; approximate representative WGS84 points from the
+// regional Wikipedia lists (coordinate sources and status notes in README).
+const NSG_LIST = "https://www.lfu.bayern.de/natur/schutzgebiete/schutzgebietslisten/doc/naturschutzgebiete.pdf";
+export const NATURE_RESERVES = Object.freeze([
+  { code: "murnauer-moos", name: "Murnauer Moos", nsgId: "NSG-00129.01", regionCode: "oberbayern", lat: 47.64033, lon: 11.16732,
+    location: "Südlich von Murnau am Staffelsee", fact: "Moore, Streuwiesen und bewaldete Hügel prägen diese Landschaft am Alpenrand.", wikipediaTitle: "Murnauer Moos", sourceUrl: NSG_LIST },
+  { code: "osterseen", name: "Osterseen", nsgId: "NSG-00143.01", regionCode: "oberbayern", lat: 47.80690, lon: 11.31847,
+    location: "Bei Iffeldorf südlich des Starnberger Sees", fact: "Die Seenlandschaft entstand beim Abschmelzen des eiszeitlichen Würmgletschers.", wikipediaTitle: "Osterseen", sourceUrl: "https://www.weilheim-schongau.de/landratsamt/naturschutz-betretungsregelungen/osterseen/" },
+  { code: "ammersee-suedufer", name: "Vogelfreistätte Ammersee-Südufer", nsgId: "NSG-00120.01", regionCode: "oberbayern", lat: 47.93986, lon: 11.13034,
+    location: "Am Südufer des Ammersees", fact: "Röhrichte und Feuchtflächen am See bieten Wasservögeln wichtige Rückzugsräume.", wikipediaTitle: "Vogelfreistätte Ammersee-Südufer", sourceUrl: NSG_LIST },
+  { code: "isarmuendung", name: "Isarmündung", nsgId: "NSG-00369.01", regionCode: "niederbayern", lat: 48.78322, lon: 12.93493,
+    location: "Bei Moos südöstlich von Deggendorf", fact: "Wo die Isar in die Donau mündet, liegen Auwälder, Altwasser und Auenwiesen.", wikipediaTitle: "Isarmündung", sourceUrl: "https://www.regierung.niederbayern.bayern.de/service/umwelt_naturschutz/naturschutzgebiete/index.html" },
+  { code: "unterer-inn", name: "Unterer Inn", nsgId: "NSG-00094.01", regionCode: "niederbayern", lat: 48.29721, lon: 13.18870,
+    location: "Am Inn an der Grenze zu Oberösterreich", fact: "Die Wasserflächen, Inseln und Auen sind ein bedeutender Lebensraum für Wasservögel.", wikipediaTitle: "Unterer Inn", sourceUrl: "https://www.regierung.niederbayern.bayern.de/service/umwelt_naturschutz/naturschutzgebiete/index.html" },
+  { code: "dost", name: "Dost", nsgId: "NSG-00001.01", regionCode: "oberpfalz", lat: 49.71419, lon: 12.23725,
+    location: "Bei Diepoltsreuth in der Gemeinde Floß", fact: "Auch Doost genannt: Große Granitblöcke bilden ein Blockmeer mit Moosen, Farnen und Flechten.", wikipediaTitle: "Doost", sourceUrl: "https://www.regierung.oberpfalz.bayern.de/regierungsbezirk/natur_landschaft/schutzgebiete/naturschutzgebiete/dost/index.html" },
+  { code: "hoelle", name: "Hölle", nsgId: "NSG-00048.01", regionCode: "oberpfalz", lat: 49.08432, lon: 12.42857,
+    location: "Am Höllbach zwischen Brennberg und Rettenbach", fact: "Der Höllbach fließt durch ein enges Tal mit mächtigen Granitblöcken.", wikipediaTitle: "Naturschutzgebiet Hölle (Oberpfalz)", sourceUrl: "https://www.regierung.oberpfalz.bayern.de/regierungsbezirk/natur_landschaft/schutzgebiete/naturschutzgebiete/hoelle/index.html" },
+  { code: "waldnaabtal", name: "Waldnaabtal", nsgId: "NSG-00050.01", regionCode: "oberpfalz", lat: 49.82628, lon: 12.19799,
+    location: "Zwischen Falkenberg und Windischeschenbach", fact: "Die Waldnaab windet sich durch ein felsiges Tal mit Granitblöcken im Flussbett.", wikipediaTitle: "Naturschutzgebiet Waldnaabtal", sourceUrl: "https://www.kreis-tir.de/landratsamt/naturschutzrecht/schutzgebiete" },
+  // The 2026 designation replaces Luisenburg (NSG-00006.01). Use the regional
+  // identifier from its ordinance rather than the retired statewide SGD-ID.
+  { code: "luisenburg", name: "Luisenburg-Felsenlabyrinth Wunsiedel", nsgId: "NSG-105 (Oberfranken)", regionCode: "oberfranken", lat: 50.00984, lon: 11.99465,
+    location: "Südlich von Wunsiedel im Fichtelgebirge", fact: "Granitfelsen und Blockmeere prägen das Felsenlabyrinth und seine umgebenden Wälder.", wikipediaTitle: "Luisenburg-Felsenlabyrinth", sourceUrl: "https://www.regierung.oberfranken.bayern.de/mam/service/umwelt/natur/105_02_luisenburg_felsenlabyrinth_wunsiedel.pdf" },
+  { code: "waldsteingipfel", name: "Waldsteingipfel", nsgId: "NSG-00052.01", regionCode: "oberfranken", lat: 50.12884, lon: 11.85771,
+    location: "Am Großen Waldstein bei Sparneck", fact: "Felstürme und verwitterte Granitblöcke kennzeichnen den geschützten Gipfelbereich.", wikipediaTitle: "Großer Waldstein", sourceUrl: "https://www.regierung.oberfranken.bayern.de/service/umwelt_naturschutz/natur/naturschutzgebiete/index.html" },
+  { code: "fichtelseemoor", name: "Naturwaldreservat Fichtelseemoor", nsgId: "NSG-00155.01", regionCode: "oberfranken", lat: 50.01915, lon: 11.86573,
+    location: "Am Fichtelsee bei Fichtelberg", fact: "Das Moorgebiet im Fichtelgebirge schützt Moorreste und ihre umgebenden Wälder.", wikipediaTitle: "Naturwaldreservat Fichtelseemoor", sourceUrl: "https://www.regierung.oberfranken.bayern.de/service/umwelt_naturschutz/natur/naturschutzgebiete/index.html" },
+  { code: "brucker-lache", name: "Brucker Lache", nsgId: "NSG-00199.01", regionCode: "mittelfranken", lat: 49.56535, lon: 11.01929,
+    location: "Im Süden Erlangens", fact: "Feuchte Waldbestände bilden einen geschützten Lebensraum nahe der Stadt.", wikipediaTitle: "Brucker Lache", sourceUrl: "https://erlangen.de/aktuelles/naturschutz-brucker-lache" },
+  { code: "tennenloher-forst", name: "Tennenloher Forst", nsgId: "NSG-00483.01", regionCode: "mittelfranken", lat: 49.55347, lon: 11.05880,
+    location: "Östlich von Tennenlohe bei Erlangen", fact: "Auf dem ehemaligen Übungsplatz werden offene Sandflächen unter anderem durch Wildpferde erhalten.", wikipediaTitle: "Tennenloher Forst", sourceUrl: "https://erlangen.de/aktuelles/naturschutzgebiete-in-der-stadt" },
+  { code: "scheerweiher", name: "Scheerweihergebiet bei Schalkhausen", nsgId: "NSG-00368.01", regionCode: "mittelfranken", lat: 49.30896, lon: 10.51532,
+    location: "Bei Schalkhausen im Westen Ansbachs", fact: "Ein flacher Weiher mit breiten Röhrichtzonen prägt dieses Feuchtgebiet.", wikipediaTitle: "Scheerweihergebiet bei Schalkhausen", sourceUrl: NSG_LIST },
+  { code: "lange-rhoen", name: "Lange Rhön", nsgId: "NSG-00152.01", regionCode: "unterfranken", lat: 50.43873, lon: 10.03646,
+    location: "Auf der Hochrhön westlich von Oberelsbach", fact: "Offene Hochflächen, Bergwiesen und Moore prägen diesen Teil der Rhön.", wikipediaTitle: "Lange Rhön", sourceUrl: "https://www.regierung.unterfranken.bayern.de/mam/aufgaben/bereich5/sg51/lange_rhoen_web_bf.pdf" },
+  { code: "gangolfsberg", name: "Gangolfsberg", nsgId: "NSG-00065.01", regionCode: "unterfranken", lat: 50.46628, lon: 10.07800,
+    location: "Nordwestlich von Oberelsbach in der Rhön", fact: "Am bewaldeten Gangolfsberg sind markante Basaltsäulen zu sehen.", wikipediaTitle: "Gangolfsberg (Rhön)", sourceUrl: "https://karte.biosphaerenreservat-rhoen.de/" },
+  { code: "sulzheimer-gipshuegel", name: "Sulzheimer Gipshügel", nsgId: "NSG-00118.01", regionCode: "unterfranken", lat: 49.95277, lon: 10.31944,
+    location: "Bei Sulzheim südöstlich von Schweinfurt", fact: "Gipshügel mit Trockenrasen bieten Pflanzen trockener Standorte einen Lebensraum.", wikipediaTitle: "Naturschutzgebiet Sulzheimer Gipshügel", sourceUrl: NSG_LIST },
+  { code: "allgaeuer-hochalpen", name: "Allgäuer Hochalpen", nsgId: "NSG-00400.01", regionCode: "schwaben", lat: 47.35399, lon: 10.32403,
+    location: "In den Bergen südlich und östlich von Oberstdorf", fact: "Das Schutzgebiet umfasst alpine Lebensräume entlang der Landesgrenze zu Österreich.", wikipediaTitle: "Allgäuer Hochalpen", sourceUrl: "https://www.oberallgaeu.org/umwelt-und-natur/naturschutz/nsg-allgaeuer-hochalpen" },
+  { code: "eistobel", name: "Eistobel", nsgId: "NSG-00093.01", regionCode: "schwaben", lat: 47.62663, lon: 10.03483,
+    location: "Bei Grünenbach im Westallgäu", fact: "Die Obere Argen fließt hier durch eine Schlucht mit Wasserfällen und Stromschnellen.", wikipediaTitle: "Eistobel (Naturschutzgebiet)", sourceUrl: "https://www.regierung.schwaben.bayern.de/aufgaben/168895/168926/leistung/leistung_12291/index.html" },
+  { code: "benninger-ried", name: "Benninger Ried", nsgId: "NSG-00086.01", regionCode: "schwaben", lat: 47.97486, lon: 10.20306,
+    location: "Zwischen Benningen und Memmingen", fact: "Quellwasser speist dieses seltene Kalkquellmoor im Unterallgäu.", wikipediaTitle: "Benninger Ried", sourceUrl: "https://www.landratsamt-unterallgaeu.de/buergerservice/natur-und-umwelt/naturschutz/schutzgebiete" },
+]);
+
 // Bayerisches Landesamt für Umwelt: 30 längste Fließgewässer, Länge in Bayern (km), Stand 2016.
 export const RIVERS = Object.freeze([
   { code: "main", name: "Main", lengthKm: 407.52 },
@@ -348,15 +396,15 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createGame(mode, count, random = Math.random) {
-  if (!["map", "seat", "river", "mountain", "sight", "city"].includes(mode)) throw new Error("Unknown mode");
+  if (!["map", "seat", "river", "mountain", "sight", "city", "nature"].includes(mode)) throw new Error("Unknown mode");
   const allowedCounts = mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
-    : mode === "sight" ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
+    : (mode === "sight" || mode === "nature") ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
   return {
     mode,
-    questions: shuffle(mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
+    questions: shuffle(mode === "nature" ? NATURE_RESERVES : mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
     index: 0,
     score: 0,
     answered: false,
@@ -386,7 +434,7 @@ export function answer(game, selectedCode) {
   if (!target) return null;
   const valid = game.mode === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : (game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
+    : (game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;

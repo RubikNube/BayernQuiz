@@ -1,6 +1,6 @@
 # BayernQuiz
 
-Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Städte, Flüsse, Gebirge und Sehenswürdigkeiten Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Städtequiz, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
+Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Städte, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Städtequiz, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz, ein Naturschutzgebiete-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
 
 Im Modus **Städte finden** werden die 25 kreisfreien Städte Bayerns auf der Karte gesucht. Vor dem Start und nach Spielende zeigt ein Klick auf einen gelben Punkt ein kleines Stadtwappen, den Stadtnamen, den Regierungsbezirk und einen Wikipedia-Link. Eine Runde enthält 3, 5, 7, 10, 15, 20 oder 25 unterschiedliche Fragen (Standard: 7). Bei einer falschen Antwort werden die gewählte Stadt rot und die gesuchte Stadt grün markiert. Nach jeder Antwort erscheinen Informationen zur gewählten Stadt und **Weiter** ist verfügbar. **Automatisch weiter** wechselt nach einer richtigen Antwort nach 1,6 Sekunden zur nächsten Frage. Die Marker sind mit Tab und Enter/Leertaste bedienbar; bei nahe beieinanderliegenden Städten helfen die Zoomfunktionen.
 
@@ -10,7 +10,9 @@ Im Modus **Gebirge finden** lassen sich vor dem Start und nach dem Spiel 15 Gebi
 
 Im Modus **Sehenswürdigkeiten finden** können 20 Bauwerke und Naturziele aus allen sieben Regierungsbezirken erkundet werden. Ein Klick auf einen violetten Kartenpunkt zeigt ein lokal gespeichertes Foto, Lage, einen kurzen Informationstext und einen deutschen Wikipedia-Link. **Start** beginnt das Kartenquiz mit 3, 5, 7, 10, 15 oder 20 unterschiedlichen Fragen (Standard: 7). Nach jeder Antwort erscheint die Information zum gewählten Ort. Bei einer falschen Antwort wird der gewählte Punkt rot und der richtige grün markiert. **Weiter** ist nach jeder Antwort möglich; **Automatisch weiter** wechselt nach einer richtigen Antwort nach fünf Sekunden. Nach Spielende können alle Orte wieder erkundet werden. Die Infokarte lässt sich schließen; auf großen Bildschirmen erscheint sie neben der Karte, auf kleineren darunter. Kartenpunkte sind auch mit Tab und Enter/Leertaste bedienbar.
 
-Im Modus **Lernen** können Regierungsbezirke, Städte, Flüsse, Gebirge und Sehenswürdigkeiten über Checkboxen einzeln ein- und ausgeblendet werden. Alle fünf Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
+Im Modus **Naturschutzgebiete finden** können 20 ausgewählte Schutzgebiete aus allen sieben Regierungsbezirken über türkisfarbene Kartenpunkte erkundet werden. Eine schließbare Infokarte zeigt Name, Lage, Regierungsbezirk, einen kurzen Text und einen deutschen Wikipedia-Link. **Start** beginnt das Kartenquiz mit 3, 5, 7, 10, 15 oder 20 unterschiedlichen Fragen (Standard: 7). Bei einer falschen Antwort wird der gewählte Punkt rot und der gesuchte grün markiert. Nach jeder Antwort erscheinen die Informationen zum gewählten Gebiet; weitere Punkte lassen sich bis **Weiter** ohne zusätzliche Wertung erkunden. **Automatisch weiter** wechselt nach einer richtigen Antwort nach fünf Sekunden zur nächsten Frage. Vor dem Start und nach Spielende können alle Gebiete erkundet werden. Die Punkte sind mit Tab und Enter/Leertaste bedienbar; bei nahe gelegenen Gebieten hilft der Kartenzoom.
+
+Im Modus **Lernen** können Regierungsbezirke, Städte, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete über Checkboxen einzeln ein- und ausgeblendet werden. Alle sechs Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Bereits gespeicherte Einstellungen bleiben erhalten; das neue Thema Naturschutzgebiete ist zunächst eingeschaltet. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
 
 ## Oberfläche und Bildschirmgrößen
 
@@ -75,6 +77,16 @@ python3 scripts/fetch-sight-images.py --refresh
 
 Das Skript prüft Bildquellen und freie Lizenzen; die kuratierten Markerkoordinaten bleiben dabei erhalten. Beide Sehenswürdigkeiten-Skripte benötigen zusätzlich Node.js zum Einlesen des gemeinsamen Datenbestands.
 
+### Naturschutzgebiete
+
+`NATURE_RESERVES` in `src/game.js` enthält die gemeinsame Datengrundlage für Quiz, Lernen und Kartengenerator: stabile Codes, amtliche Namen und Kennungen, Regierungsbezirke, WGS84-Koordinaten, Lagebeschreibungen, deutsche Kurztexte, Wikipedia-Titel und amtliche Quellenlinks. Die Auswahl ist kuratiert und enthält 20 Gebiete; Nationalparks und Naturparks sind nicht Teil dieses Quiz.
+
+Die Namen und SGD-Kennungen wurden mit der [Grünen Liste des LfU](https://www.lfu.bayern.de/natur/schutzgebiete/schutzgebietslisten/doc/naturschutzgebiete.pdf) (Stand 31.12.2025) abgeglichen. Eine aktuelle Änderung berücksichtigt die [Verordnung der Regierung von Oberfranken vom 21. Januar 2026](https://www.regierung.oberfranken.bayern.de/mam/service/umwelt/natur/105_02_luisenburg_felsenlabyrinth_wunsiedel.pdf): Das frühere Gebiet Luisenburg wurde zum 1. Februar 2026 durch **Luisenburg-Felsenlabyrinth Wunsiedel** ersetzt. Hier wird die regionale Kennung **NSG-105 (Oberfranken)** verwendet, statt die alte SGD-Kennung weiterzuführen. Die übrigen Kennungen folgen der Grünen Liste. Quellenabgleich: 15. November 2026.
+
+Die Markerkoordinaten stammen aus den Positionsangaben der Wikipedia-Gebietslisten für [Oberbayern](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Oberbayern), [Niederbayern](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Niederbayern), [Oberpfalz](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_der_Oberpfalz), [Oberfranken](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Oberfranken), [Mittelfranken](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Mittelfranken), [Unterfranken](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Unterfranken) und [Schwaben](https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Schwaben_(Bayern)), abgerufen am 15. November 2026 und auf fünf Nachkommastellen gerundet. Der Luisenburg-Punkt liegt im Felsenlabyrinth und wird auch für das neu abgegrenzte Gebiet verwendet. Die Punkte zeigen ungefähre repräsentative Lagen, keine Schutzgebietsgrenzen oder Eingänge. Die Kurztexte wurden anhand der verlinkten Gebietsartikel und amtlichen Informationsangebote eigenständig formuliert. Wikipedia-Inhalte: [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/deed.de), jeweilige Versionsgeschichten bei den verlinkten Artikeln. Es werden keine Fotos oder externen APIs geladen.
+
+`python3 scripts/generate-nature-reserves.py src/regions.svg` projiziert die gemeinsamen Daten ohne Netzwerkzugriff auf die Karte. Node.js wird zum Einlesen benötigt. Das Skript zuletzt ausführen, damit die Reservemarker über den übrigen Kartenebenen liegen. Wiederholtes Ausführen ersetzt ausschließlich die eigene Ebene.
+
 Zur Aktualisierung der Karte die WFS-GetFeature-Antwort für `vergr:BezirkeFlaeche` in EPSG:3857 als GML speichern und ausführen:
 
 ```sh
@@ -83,6 +95,7 @@ python3 scripts/generate-rivers.py src/regions.svg
 python3 scripts/generate-mountains.py src/regions.svg
 python3 scripts/generate-cities.py src/regions.svg
 python3 scripts/generate-sights.py src/regions.svg
+python3 scripts/generate-nature-reserves.py src/regions.svg
 ```
 
 ## Lizenz

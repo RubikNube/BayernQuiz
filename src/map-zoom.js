@@ -255,7 +255,7 @@ export function createMapZoom({ svg, host, zoomIn, zoomOut, resetButton, percent
     event.preventDefault();
   });
   on(host, "focusin", (event) => {
-    const feature = event.target.closest(".region, .seat-dot, .river, .mountain, .sight, .city");
+    const feature = event.target.closest(".region, .seat-dot, .river, .mountain, .sight, .city, .nature");
     if (feature) render(revealView(view, bounds, feature.getBBox(), view.width * 0.02));
   });
 

@@ -128,6 +128,7 @@ a { color: #9dd4ff; }
   .controls { align-items: stretch; }
   .controls label { width: 100%; }
   .controls label select { flex: 1; }
+  .controls label[for="mode"] { flex-direction: column; align-items: stretch; }
   .learnTopics { gap: 0 12px; }
 }
 @media (max-width: 700px) {
@@ -169,3 +170,13 @@ a { color: #9dd4ff; }
 .cityInfoContent { display: flex; align-items: flex-start; gap: 12px; }
 .cityInfoContent > div { min-width: 0; }
 .cityCoat { flex: none; width: 64px; height: 72px; padding: 4px; object-fit: contain; border-radius: 4px; background: #f7f8fc; }
+
+.nature { cursor: pointer; }
+.nature-dot { fill: #57d5cc; stroke: #18223c; stroke-width: 2; vector-effect: non-scaling-stroke; pointer-events: none; }
+.nature-hit { fill: transparent; pointer-events: all; }
+.nature:hover .nature-dot, .nature:focus-visible .nature-dot, .nature.learned .nature-dot { fill: #c8fffa; stroke: #fff; }
+.nature:focus-visible { outline: 3px solid #ffcf66; outline-offset: 3px; }
+.nature.correct .nature-dot { fill: var(--good); stroke: #fff; }
+.nature.wrong .nature-dot { fill: var(--bad); stroke: #fff; }
+.nature-mode .region { cursor: default; }
+.natureInfo { display: grid; gap: 6px; }
