@@ -268,5 +268,7 @@ a { color: #9dd4ff; }
 .sight.correct .sight-dot, .city.correct .city-dot, .nature.correct .nature-dot,
 .lake.correct .lake-shape { filter: drop-shadow(0 0 3px #fff); }
 @media (max-width: 1099px) {
+  /* Question transitions control scrolling as answer details open and close. */
+  body.quizActive { overflow-anchor: none; }
   .quizActive .questionBar { max-height: 48dvh; overflow-y: auto; }
 }

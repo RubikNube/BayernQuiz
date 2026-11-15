@@ -149,6 +149,25 @@ function setFeedback(message, tone = "") {
   elements.feedback.className = `feedback ${tone}`;
 }
 
+function revealQuestionMap() {
+  // Let closing details and browser scroll adjustments settle before measuring.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    if (!game || game.finished || window.matchMedia("(min-width: 1100px)").matches) return;
+    const questionBar = document.querySelector(".questionBar");
+    const sticky = getComputedStyle(questionBar).position === "sticky";
+    // Keep answer options visible for seat questions, and the prompt on short screens.
+    const target = !sticky ? questionBar
+      : activeTopic() === "seat" ? elements.quizControls : elements.mapHost.closest(".mapWrap");
+    const top = (window.visualViewport?.offsetTop ?? 0)
+      + (sticky ? questionBar.getBoundingClientRect().height : 0) + 12;
+    const delta = target.getBoundingClientRect().top - top;
+    if (Math.abs(delta) > 1) window.scrollTo({
+      top: Math.max(0, window.scrollY + delta),
+      behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+    });
+  }));
+}
+
 function revealInfo(card) {
   requestAnimationFrame(() => {
     if (!card.getClientRects().length) return;
@@ -723,8 +742,9 @@ function startGame(practiceGame = null) {
   if (game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.mode === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
   render();
-  elements.question.focus();
-  elements.question.scrollIntoView({ block: "nearest" });
+  elements.question.focus({ preventScroll: true });
+  if (window.matchMedia("(min-width: 1100px)").matches) elements.question.scrollIntoView({ block: "nearest" });
+  revealQuestionMap();
 }
 
 function advance() {
@@ -743,7 +763,10 @@ function advance() {
   setFeedback(game.finished ? "" : game.mode === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
   render();
   if (game.finished) elements.resultTitle.focus();
-  else elements.question.focus({ preventScroll: true });
+  else {
+    elements.question.focus({ preventScroll: true });
+    revealQuestionMap();
+  }
 }
 
 function submit(code) {
