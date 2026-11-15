@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <defs>
+    <pattern id="lozenges" width="24" height="40" patternUnits="userSpaceOnUse" patternTransform="skewX(-30)">
+      <path d="M12 0 24 20 12 40 0 20Z" fill="#008ac5" />
+    </pattern>
+  </defs>
+  <path fill="#fff" d="M16 8h88v45c0 30-20 49-44 61C36 102 16 83 16 53Z" />
+  <path fill="url(#lozenges)" stroke="#fff" stroke-width="3" stroke-linejoin="round" d="M16 8h88v45c0 30-20 49-44 61C36 102 16 83 16 53Z" />
+</svg>
