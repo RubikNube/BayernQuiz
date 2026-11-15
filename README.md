@@ -16,6 +16,14 @@ Im Modus **Naturschutzgebiete finden** können 20 ausgewählte Schutzgebiete aus
 
 Im Modus **Lernen** können Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete über Checkboxen einzeln ein- und ausgeblendet werden. Alle sieben Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Bereits gespeicherte Einstellungen bleiben erhalten; neue Themen wie Seen sind zunächst eingeschaltet. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
 
+## Fehler ansehen und wiederholen
+
+Nach einer abgeschlossenen Runde zeigt **Deine Fehler** die falsch beantworteten Fragen mit **Deine Antwort** und **Richtige Antwort**. Bei einer fehlerfreien Runde erscheint **Alles richtig!**. Die Übersicht wird nach dem Weitergehen nach der letzten Antwort angezeigt.
+
+**Fehler wiederholen (N)** startet eine zufällig sortierte Übungsrunde mit genau den zuletzt falsch beantworteten Fragen, auch bei nur einer oder zwei Fragen. Nach jeder Übungsrunde können ausschließlich die noch verbleibenden Fehler erneut geübt werden. Sobald alle Antworten richtig sind, erscheint **Alle Fehler geschafft!**. **Übung neu starten** beginnt die aktuelle Übungsrunde mit ihrem vollständigen Fragensatz erneut; **Neue Runde** startet ein normales Quiz mit der eingestellten Fragenanzahl.
+
+Übungsrunden sind als **Fehler üben · Übungsrunde – ohne Rekordwertung** gekennzeichnet und verändern keine persönlichen Rekorde. Kartenbedienung, Rückmeldungen und automatisches Weitergehen funktionieren wie im normalen Quiz. Fehlerübersichten bleiben nur im Arbeitsspeicher: Eine neue normale Runde, ein Moduswechsel oder das Neuladen der Seite verwirft sie. Die Fragenanzahl kann nach Spielende geändert werden, ohne die aktuelle Übersicht zu verlieren; sie gilt für die nächste normale Runde.
+
 ## Persönliche Rekorde
 
 Alle acht Quizmodi speichern einen persönlichen Rekord getrennt nach Modus und Fragenanzahl. In den Einstellungen steht der bisherige Bestwert, etwa **Dein Rekord: 6/7**. Nach einer abgeschlossenen Runde zeigt das Ergebnis einen ersten, verbesserten oder eingestellten Rekord an. Gewertet werden ausschließlich richtige Antworten; es gibt keine Zeitwertung. Eine Runde zählt erst nach dem Weitergehen nach der letzten Antwort. Abgebrochene und neu gestartete Runden sowie **Lernen** erhalten keinen Rekord.

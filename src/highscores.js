@@ -58,7 +58,7 @@ export function createHighscores(storageProvider = () => globalThis.localStorage
     },
     resetAll() { return resetTo(new Map()); },
     recordCompletedRound(game) {
-      if (!game || game.finished !== true || !Array.isArray(game.questions)
+      if (!game || game.isPractice || game.finished !== true || !Array.isArray(game.questions)
         || !validRecord(game.mode, game.questions.length, game.score)) return null;
       if (completed.has(game)) return completed.get(game);
 

@@ -74,7 +74,8 @@
           </details>
 
           <section class="questionBar" aria-label="Aufgabe und Fortschritt">
-            <div id="question" class="question" aria-live="polite"></div>
+            <p id="practiceLabel" class="practiceLabel hidden">Fehler üben · Übungsrunde – ohne Rekordwertung</p>
+            <div id="question" class="question" tabindex="-1" aria-live="polite"></div>
             <div id="stats" class="stats" aria-live="polite">
               <span>Frage <strong id="round">–</strong>/<strong id="totalRounds">7</strong></span>
               <span>Punkte <strong id="score">0</strong></span>
@@ -139,9 +140,16 @@
 
           </div>
           <section id="result" class="result hidden" aria-live="polite">
-            <h2>Quiz beendet</h2>
+            <h2 id="resultTitle" tabindex="-1">Quiz beendet</h2>
             <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
             <p id="highscoreResult"></p>
+            <h3 id="reviewTitle">Deine Fehler</h3>
+            <ol id="mistakeReview" class="mistakeReview"></ol>
+            <p id="reviewSuccess" class="hidden"></p>
+            <div class="actions">
+              <button id="retryMistakes" type="button" class="hidden">Fehler wiederholen</button>
+              <button id="newRound" type="button" class="secondary">Neue Runde</button>
+            </div>
           </section>
         </div>
 

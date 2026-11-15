@@ -1,4 +1,4 @@
-import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createGame, currentQuestion, makeSeatOptions, nextQuestion } from "./game.js";
+import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createGame, createRetryGame, currentQuestion, getMistakeReview, questionText, makeSeatOptions, nextQuestion } from "./game.js";
 import { createMapZoom } from "./map-zoom.js";
 import { createHighscores, highscoreMessage } from "./highscores.js";
 
@@ -50,6 +50,13 @@ const elements = {
   next: document.querySelector("#next"),
   restart: document.querySelector("#restart"),
   result: document.querySelector("#result"),
+  resultTitle: document.querySelector("#resultTitle"),
+  practiceLabel: document.querySelector("#practiceLabel"),
+  reviewTitle: document.querySelector("#reviewTitle"),
+  mistakeReview: document.querySelector("#mistakeReview"),
+  reviewSuccess: document.querySelector("#reviewSuccess"),
+  retryMistakes: document.querySelector("#retryMistakes"),
+  newRound: document.querySelector("#newRound"),
   finalScore: document.querySelector("#finalScore"),
   finalTotal: document.querySelector("#finalTotal"),
   stats: document.querySelector("#stats"),
@@ -77,6 +84,7 @@ const highscores = createHighscores();
 let roundRecord = null;
 let resetTarget = null;
 let game = null;
+let practiceSource = null;
 let mapZoom = null;
 let advanceTimer = null;
 const learnTopics = Object.fromEntries(["regions", "rivers", "mountains", "sights", "cities", "nature", "lakes"].map((topic) => {
@@ -435,6 +443,30 @@ function renderOptions() {
   elements.options.classList.remove("hidden");
 }
 
+function renderReview() {
+  const mistakes = getMistakeReview(game);
+  elements.resultTitle.textContent = game.isPractice ? "Übungsrunde beendet" : "Quiz beendet";
+  elements.mistakeReview.replaceChildren();
+  for (const mistake of mistakes) {
+    const item = document.createElement("li");
+    const question = document.createElement("strong");
+    question.textContent = mistake.question;
+    const selected = document.createElement("p");
+    selected.textContent = `Deine Antwort: ${mistake.selectedAnswer}`;
+    const correct = document.createElement("p");
+    correct.className = "reviewCorrect";
+    correct.textContent = `Richtige Antwort: ${mistake.correctAnswer}`;
+    item.append(question, selected, correct);
+    elements.mistakeReview.append(item);
+  }
+  elements.reviewTitle.classList.toggle("hidden", !mistakes.length);
+  elements.mistakeReview.classList.toggle("hidden", !mistakes.length);
+  elements.retryMistakes.classList.toggle("hidden", !mistakes.length);
+  elements.retryMistakes.textContent = `Fehler wiederholen (${mistakes.length})`;
+  elements.reviewSuccess.classList.toggle("hidden", Boolean(mistakes.length));
+  elements.reviewSuccess.textContent = game.isPractice ? "Alle Fehler geschafft!" : "Alles richtig!";
+}
+
 function render() {
   const mode = elements.mode.value;
   const isLearn = mode === "learn";
@@ -454,8 +486,10 @@ function render() {
   elements.autoLabel.classList.toggle("hidden", isLearn);
   elements.stats.classList.toggle("hidden", isLearn);
   elements.count.disabled = Boolean(game && !game.finished);
-  elements.start.classList.toggle("hidden", isLearn || Boolean(game && !game.finished));
+  elements.start.classList.toggle("hidden", isLearn || Boolean(game));
   elements.restart.classList.toggle("hidden", isLearn || !game || game.finished);
+  elements.restart.textContent = game?.isPractice ? "Übung neu starten" : "Neustart";
+  elements.practiceLabel.classList.toggle("hidden", !game?.isPractice);
   elements.next.classList.toggle("hidden", !game || game.finished || !game.answered);
   elements.next.disabled = !game?.answered;
   elements.result.classList.toggle("hidden", !game?.finished);
@@ -497,22 +531,16 @@ function render() {
     elements.finalScore.textContent = String(game.score);
     elements.finalTotal.textContent = String(game.questions.length);
     elements.highscoreResult.textContent = highscoreMessage(roundRecord);
+    renderReview();
     elements.options.classList.add("hidden");
     setFeedback(mode === "lake" ? "Wähle einen See, um mehr zu erfahren, oder starte eine neue Runde." : mode === "nature" ? "Wähle ein Naturschutzgebiet, um mehr zu erfahren, oder starte eine neue Runde." : mode === "city" ? "Wähle eine Stadt, um mehr zu erfahren, oder starte eine neue Runde." : mode === "sight" ? "Wähle eine Sehenswürdigkeit, um mehr zu erfahren, oder starte eine neue Runde." : mode === "mountain" ? "Wähle ein Gebirge, um mehr darüber zu erfahren, oder starte eine neue Runde."
       : mode === "river" ? "Wähle einen Fluss, um seine Länge zu sehen, oder starte eine neue Runde."
-        : "Wähle Start für eine neue Runde.");
+        : "Wähle Neue Runde für eine neue Runde.");
     return;
   }
 
   const target = currentQuestion(game);
-  elements.question.textContent = mode === "nature"
-    ? `Wo liegt das Naturschutzgebiet »${target.name}«?`
-    : (mode === "sight" || mode === "mountain")
-    ? `Finde ${target.name} auf der Karte.`
-    : mode === "river"
-    ? `Wo fließt ${target.name}?`
-    : (mode === "map" || mode === "city" || mode === "lake") ? `Wo liegt ${target.name}?`
-      : `Wo ist der Sitz der Regierung von ${target.name}?`;
+  elements.question.textContent = questionText(mode, target);
   if (mode === "seat") highlight(target.code, "selected");
   if (game.answered && mode === "map") {
     highlight(target.code, "correct");
@@ -556,6 +584,7 @@ function resetMode() {
   hideMountainInfo();
   hideSightInfo();
   game = null;
+  practiceSource = null;
   roundRecord = null;
   elements.result.classList.add("hidden");
   elements.settings.open = true;
@@ -563,7 +592,7 @@ function resetMode() {
   render();
 }
 
-function startGame() {
+function startGame(practiceGame = null) {
   elements.resetRecordsStatus.textContent = "";
   hideNatureInfo();
   hideLakeInfo();
@@ -596,13 +625,15 @@ function startGame() {
     setFeedback("Die Seenkarte konnte nicht geladen werden.", "bad");
     return;
   }
-  game = createGame(elements.mode.value, Number(elements.count.value));
+  game = practiceGame ?? createGame(elements.mode.value, Number(elements.count.value));
+  if (!practiceGame) practiceSource = null;
   roundRecord = null;
   elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
   mapZoom?.reset();
   if (game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.mode === "lake" ? "Wähle den gesuchten See auf der Karte." : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
+  elements.question.focus();
 }
 
 function advance() {
@@ -614,10 +645,11 @@ function advance() {
   hideMountainInfo();
   hideSightInfo();
   if (!game || !nextQuestion(game)) return;
-  if (game.finished) roundRecord = highscores.recordCompletedRound(game);
+  if (game.finished) roundRecord = game.isPractice ? null : highscores.recordCompletedRound(game);
   if (!game.finished && game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.finished ? "" : game.mode === "lake" ? "Wähle den gesuchten See auf der Karte." : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
+  if (game.finished) elements.resultTitle.focus();
 }
 
 function submit(code) {
@@ -706,8 +738,16 @@ elements.count.addEventListener("change", () => {
   elements.resetRecordsStatus.textContent = "";
   if (!game || game.finished) render();
 });
-elements.start.addEventListener("click", startGame);
-elements.restart.addEventListener("click", startGame);
+elements.start.addEventListener("click", () => startGame());
+elements.newRound.addEventListener("click", () => startGame());
+elements.restart.addEventListener("click", () => {
+  startGame(game?.isPractice ? createRetryGame(practiceSource) : null);
+});
+elements.retryMistakes.addEventListener("click", () => {
+  if (!game?.finished || !getMistakeReview(game).length) return;
+  practiceSource = game;
+  startGame(createRetryGame(practiceSource));
+});
 elements.next.addEventListener("click", advance);
 elements.autoNext.addEventListener("change", () => {
   if (!elements.autoNext.checked) cancelAdvance();

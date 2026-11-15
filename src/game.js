@@ -610,9 +610,15 @@ export function createGame(mode, count, random = Math.random) {
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
+  return newRound(mode, shuffle(mode === "lake" ? LAKES : mode === "nature" ? NATURE_RESERVES : mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count));
+}
+
+function newRound(mode, questions, isPractice = false) {
   return {
     mode,
-    questions: shuffle(mode === "lake" ? LAKES : mode === "nature" ? NATURE_RESERVES : mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
+    questions,
+    isPractice,
+    history: [],
     index: 0,
     score: 0,
     answered: false,
@@ -620,6 +626,38 @@ export function createGame(mode, count, random = Math.random) {
     options: [],
     finished: false,
   };
+}
+
+export function createRetryGame(completedGame, random = Math.random) {
+  if (!completedGame?.finished) throw new Error("A finished round is required");
+  const missed = new Set(completedGame.history.filter(({ correct }) => !correct).map(({ questionCode }) => questionCode));
+  const questions = completedGame.questions.filter(({ code }) => missed.has(code));
+  if (!questions.length) throw new Error("No mistakes to retry");
+  return newRound(completedGame.mode, shuffle(questions, random), true);
+}
+
+export function questionText(mode, target) {
+  if (mode === "nature") return `Wo liegt das Naturschutzgebiet »${target.name}«?`;
+  if (mode === "sight" || mode === "mountain") return `Finde ${target.name} auf der Karte.`;
+  if (mode === "river") return `Wo fließt ${target.name}?`;
+  if (mode === "seat") return `Wo ist der Sitz der Regierung von ${target.name}?`;
+  return `Wo liegt ${target.name}?`;
+}
+
+export function getMistakeReview(game) {
+  if (!game?.finished) return [];
+  const items = game.mode === "seat" ? [...REGIONS, ...OTHER_CITIES]
+    : game.mode === "lake" ? LAKES : game.mode === "nature" ? NATURE_RESERVES : game.mode === "city" ? CITIES
+    : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS;
+  return game.history.filter(({ correct }) => !correct).map(({ questionCode, selectedCode }) => {
+    const target = game.questions.find(({ code }) => code === questionCode);
+    const selected = items.find(({ code }) => code === selectedCode);
+    return {
+      question: questionText(game.mode, target),
+      selectedAnswer: game.mode === "seat" ? selected.seat : selected.name,
+      correctAnswer: game.mode === "seat" ? target.seat : target.name,
+    };
+  });
 }
 
 export function currentQuestion(game) {
@@ -647,6 +685,7 @@ export function answer(game, selectedCode) {
   const correct = target.code === selectedCode;
   game.answered = true;
   game.selectedCode = selectedCode;
+  game.history.push({ questionCode: target.code, selectedCode, correct });
   if (correct) game.score += 1;
   return correct;
 }
