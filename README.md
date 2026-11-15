@@ -12,7 +12,7 @@ Im Modus **Lernen** können Regierungsbezirke, Flüsse, Gebirge und Sehenswürdi
 
 ## Oberfläche und Bildschirmgrößen
 
-Ab 1.100 Pixeln stehen Einstellungen, Quizfrage und Ortsinformationen in einer Seitenleiste neben der Karte. Die Karte nutzt die gesamte Breite ihres Bereichs und passt ihre Höhe an das Fenster an. Die Seitenleiste lässt sich unabhängig scrollen; ausgewählte Ortsinformationen werden automatisch in ihren sichtbaren Bereich gebracht. Auf kleineren Bildschirmen sind die Bereiche untereinander angeordnet. Beim Quizstart werden dort die **Einstellungen** eingeklappt; sie lassen sich jederzeit wieder öffnen. Frage und Fortschritt bleiben beim Scrollen sichtbar, außer bei sehr geringer Bildschirmhöhe. Informationen zu allen Kartenthemen erscheinen unter der Karte und lassen sich über **×** schließen. Die **Kartenhilfe** enthält Hinweise zur Maus- und Touchbedienung.
+Ab 1.100 Pixeln stehen Einstellungen, Quizfrage und Ortsinformationen in einer Seitenleiste neben der Karte. Die Karte nutzt die gesamte Breite ihres Bereichs und passt ihre Höhe an das Fenster an. Die Seitenleiste lässt sich unabhängig scrollen; ausgewählte Ortsinformationen werden automatisch in ihren sichtbaren Bereich gebracht. Auf kleineren Bildschirmen sind die Bereiche untereinander angeordnet. Beim Quizstart werden dort die **Einstellungen** eingeklappt; sie lassen sich jederzeit wieder öffnen. Frage und Fortschritt bleiben beim Scrollen sichtbar, außer bei sehr geringer Bildschirmhöhe. Informationen zu allen Kartenthemen erscheinen unter der Karte, werden beim Auswählen automatisch in den sichtbaren Bereich gescrollt und lassen sich über **×** schließen. Die **Kartenhilfe** enthält Hinweise zur Maus- und Touchbedienung.
 
 ## Karte vergrößern und verschieben
 

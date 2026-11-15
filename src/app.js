@@ -68,7 +68,25 @@ function setFeedback(message, tone = "") {
 
 function revealInfo(card) {
   requestAnimationFrame(() => {
-    if (!window.matchMedia("(min-width: 1100px)").matches) return;
+    if (!card.getClientRects().length) return;
+    if (!window.matchMedia("(min-width: 1100px)").matches) {
+      const viewport = window.visualViewport;
+      const viewportTop = viewport?.offsetTop ?? 0;
+      const viewportBottom = viewportTop + (viewport?.height ?? window.innerHeight);
+      const questionBar = document.querySelector(".questionBar");
+      const stickyHeight = getComputedStyle(questionBar).position === "sticky"
+        ? questionBar.getBoundingClientRect().height : 0;
+      const top = viewportTop + stickyHeight + 12;
+      const bottom = viewportBottom - 12;
+      const detail = card.getBoundingClientRect();
+      const delta = detail.height > bottom - top || detail.top < top
+        ? detail.top - top : Math.max(0, detail.bottom - bottom);
+      if (Math.abs(delta) > 1) window.scrollBy({
+        top: delta,
+        behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "instant" : "smooth",
+      });
+      return;
+    }
     const sidebar = document.querySelector(".sidebar");
     const panel = sidebar.getBoundingClientRect();
     const detail = card.getBoundingClientRect();
@@ -80,7 +98,7 @@ function revealInfo(card) {
 
 const workspace = document.querySelector(".workspace");
 function updateWorkspaceTop() {
-  workspace.style.setProperty("--workspace-top", `${Math.max(16, workspace.getBoundingClientRect().top)}px`);
+  workspace.style.setProperty("--workspace-top", `${Math.max(16, workspace.getBoundingClientRect().top + window.scrollY)}px`);
 }
 new ResizeObserver(updateWorkspaceTop).observe(document.querySelector(".topbar"));
 window.addEventListener("resize", updateWorkspaceTop);
@@ -178,6 +196,7 @@ elements.sightInfoImage.addEventListener("error", () => {
 });
 elements.sightInfoImage.addEventListener("load", () => {
   elements.sightInfoImage.hidden = false;
+  revealInfo(elements.sightInfo);
 });
 
 function updateCountOptions() {
