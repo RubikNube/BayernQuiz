@@ -17,24 +17,111 @@
         </div>
       </header>
 
+      <div id="topicLaunch" class="topicLaunch">
+        <div class="topicLaunch__summary" aria-live="polite">
+          <strong id="launchTopic">Lernen</strong>
+          <span id="launchDetails">Ohne Wertung</span>
+        </div>
+        <button id="launchTopicButton" type="button" aria-describedby="launchTopic launchDetails">Karte erkunden</button>
+      </div>
+
+      <fieldset id="modeCards" class="modeCards">
+        <legend id="modeCardsTitle">Was möchtest du entdecken?</legend>
+        <div class="modeGrid">
+          <label class="modeCard">
+            <input type="radio" name="mode" value="learn" aria-labelledby="mode-learn-title" aria-describedby="mode-learn-description mode-learn-best" checked />
+            <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-learn.svg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-learn-title" class="modeCard__title">Lernen</strong>
+              <span id="mode-learn-description" class="modeCard__description">Erkunde alle Themen frei auf der Karte.</span>
+              <span id="mode-learn-best" class="modeCard__best" data-mode-best="learn">Ohne Wertung</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="map" aria-labelledby="mode-map-title" aria-describedby="mode-map-description mode-map-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-regions.svg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-map-title" class="modeCard__title">Regierungsbezirk finden</strong>
+              <span id="mode-map-description" class="modeCard__description">Finde Bayerns sieben Regierungsbezirke.</span>
+              <span id="mode-map-best" class="modeCard__best" data-mode-best="map">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="seat" aria-labelledby="mode-seat-title" aria-describedby="mode-seat-description mode-seat-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--coat" src="assets/cities/ansbach.png" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-seat-title" class="modeCard__title">Regierungssitz wählen</strong>
+              <span id="mode-seat-description" class="modeCard__description">Ordne jedem Bezirk seinen Regierungssitz zu.</span>
+              <span id="mode-seat-best" class="modeCard__best" data-mode-best="seat">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="city" aria-labelledby="mode-city-title" aria-describedby="mode-city-description mode-city-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--coat" src="assets/cities/muenchen.png" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-city-title" class="modeCard__title">Städte finden</strong>
+              <span id="mode-city-description" class="modeCard__description">Entdecke die Lage von 25 kreisfreien Städten.</span>
+              <span id="mode-city-best" class="modeCard__best" data-mode-best="city">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="lake" aria-labelledby="mode-lake-title" aria-describedby="mode-lake-description mode-lake-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--photo" src="assets/lakes/chiemsee.jpg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-lake-title" class="modeCard__title">Seen finden</strong>
+              <span id="mode-lake-description" class="modeCard__description">Finde 20 Seen und lerne sie näher kennen.</span>
+              <span id="mode-lake-best" class="modeCard__best" data-mode-best="lake">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="river" aria-labelledby="mode-river-title" aria-describedby="mode-river-description mode-river-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-rivers.svg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-river-title" class="modeCard__title">Flüsse finden</strong>
+              <span id="mode-river-description" class="modeCard__description">Erkenne 32 Flüsse an ihrem Verlauf.</span>
+              <span id="mode-river-best" class="modeCard__best" data-mode-best="river">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="mountain" aria-labelledby="mode-mountain-title" aria-describedby="mode-mountain-description mode-mountain-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-mountains.svg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-mountain-title" class="modeCard__title">Gebirge finden</strong>
+              <span id="mode-mountain-description" class="modeCard__description">Finde 15 Gebirge und ihre markanten Gipfel.</span>
+              <span id="mode-mountain-best" class="modeCard__best" data-mode-best="mountain">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="sight" aria-labelledby="mode-sight-title" aria-describedby="mode-sight-description mode-sight-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--photo" src="assets/sights/neuschwanstein.jpg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-sight-title" class="modeCard__title">Sehenswürdigkeiten finden</strong>
+              <span id="mode-sight-description" class="modeCard__description">Entdecke 20 Bauwerke und Naturziele.</span>
+              <span id="mode-sight-best" class="modeCard__best" data-mode-best="sight">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="nature" aria-labelledby="mode-nature-title" aria-describedby="mode-nature-description mode-nature-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--photo" src="assets/nature-reserves/murnauer-moos.jpg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-nature-title" class="modeCard__title">Naturschutzgebiete finden</strong>
+              <span id="mode-nature-description" class="modeCard__description">Lerne 20 ausgewählte Schutzgebiete kennen.</span>
+              <span id="mode-nature-best" class="modeCard__best" data-mode-best="nature">Dein Rekord: noch keiner · 7 Fragen</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
       <div class="workspace">
         <div class="sidebar">
           <details id="settings" class="prompt settings" open>
             <summary>Einstellungen</summary>
+            <div id="topicSwitcher" class="topicSwitcher hidden">
+              <span class="topicSwitcher__label">Thema</span>
+              <strong id="currentTopic">Lernen</strong>
+              <button id="changeTopic" type="button" class="secondary" aria-haspopup="dialog" aria-controls="topicDialog">Thema wechseln</button>
+            </div>
             <div class="controls">
-              <label for="mode">Modus
-                <select id="mode">
-                  <option value="learn">Lernen</option>
-                  <option value="map">Regierungsbezirk finden</option>
-                  <option value="seat">Regierungssitz wählen</option>
-                  <option value="city">Städte finden</option>
-                  <option value="lake">Seen finden</option>
-                  <option value="river">Flüsse finden</option>
-                  <option value="mountain">Gebirge finden</option>
-                  <option value="sight">Sehenswürdigkeiten finden</option>
-                  <option value="nature">Naturschutzgebiete finden</option>
-                </select>
-              </label>
               <label id="countLabel" for="count">Fragen
                 <select id="count">
                   <option value="3">3</option>
@@ -187,6 +274,12 @@
         <span>Naturschutzgebiete: <a href="https://www.lfu.bayern.de/natur/schutzgebiete/schutzgebietslisten/index.htm" target="_blank" rel="noopener noreferrer">LfU Bayern</a>. Orientierungspunkte nach <a href="https://de.wikipedia.org/wiki/Liste_der_Naturschutzgebiete_in_Bayern" target="_blank" rel="noopener noreferrer">Wikipedia</a>, <a href="https://creativecommons.org/licenses/by-sa/4.0/deed.de" target="_blank" rel="noopener noreferrer">CC BY-SA 4.0</a>. Fotos: <a href="assets/nature-reserves/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
       </footer>
     </main>
+    <dialog id="topicDialog" class="topicDialog" aria-labelledby="modeCardsTitle">
+      <div class="topicDialog__actions">
+        <button id="closeTopics" type="button" class="secondary">Schließen</button>
+      </div>
+      <div id="topicDialogContent"></div>
+    </dialog>
     <dialog id="resetRecordsDialog" class="resetRecordsDialog" aria-labelledby="resetRecordsTitle" aria-describedby="resetRecordsDescription">
       <form id="resetRecordsForm">
         <h2 id="resetRecordsTitle">Rekorde zurücksetzen?</h2>

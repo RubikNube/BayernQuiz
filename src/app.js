@@ -1,4 +1,4 @@
-import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createGame, createRetryGame, currentQuestion, getMistakeReview, questionText, makeSeatOptions, nextQuestion } from "./game.js";
+import { REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, getAllowedQuestionCounts, answer, createGame, createRetryGame, currentQuestion, getMistakeReview, questionText, makeSeatOptions, nextQuestion } from "./game.js";
 import { createMapZoom } from "./map-zoom.js";
 import { createHighscores, highscoreMessage } from "./highscores.js";
 
@@ -23,7 +23,17 @@ const elements = {
   sightInfoLocation: document.querySelector("#sightInfoLocation"),
   sightInfoFact: document.querySelector("#sightInfoFact"),
   sightInfoWikipedia: document.querySelector("#sightInfoWikipedia"),
-  mode: document.querySelector("#mode"),
+  modeCards: document.querySelector("#modeCards"),
+  topicLaunch: document.querySelector("#topicLaunch"),
+  launchTopic: document.querySelector("#launchTopic"),
+  launchDetails: document.querySelector("#launchDetails"),
+  launchTopicButton: document.querySelector("#launchTopicButton"),
+  topicSwitcher: document.querySelector("#topicSwitcher"),
+  currentTopic: document.querySelector("#currentTopic"),
+  changeTopic: document.querySelector("#changeTopic"),
+  topicDialog: document.querySelector("#topicDialog"),
+  topicDialogContent: document.querySelector("#topicDialogContent"),
+  closeTopics: document.querySelector("#closeTopics"),
   learnTopics: document.querySelector("#learnTopics"),
   count: document.querySelector("#count"),
   countLabel: document.querySelector("#countLabel"),
@@ -81,6 +91,8 @@ const elements = {
 };
 
 const highscores = createHighscores();
+const modeInputs = [...elements.modeCards.querySelectorAll('input[name="mode"]')];
+let selectedMode = modeInputs.find((input) => input.checked).value;
 let roundRecord = null;
 let resetTarget = null;
 let game = null;
@@ -140,7 +152,10 @@ const workspace = document.querySelector(".workspace");
 function updateWorkspaceTop() {
   workspace.style.setProperty("--workspace-top", `${Math.max(16, workspace.getBoundingClientRect().top + window.scrollY)}px`);
 }
-new ResizeObserver(updateWorkspaceTop).observe(document.querySelector(".topbar"));
+const workspaceObserver = new ResizeObserver(updateWorkspaceTop);
+workspaceObserver.observe(document.querySelector(".topbar"));
+workspaceObserver.observe(elements.modeCards);
+workspaceObserver.observe(elements.topicLaunch);
 window.addEventListener("resize", updateWorkspaceTop);
 updateWorkspaceTop();
 
@@ -313,7 +328,7 @@ elements.lakeInfoImage.addEventListener("load", () => {
 });
 
 function updateCountOptions() {
-  const mode = elements.mode.value;
+  const mode = selectedMode;
   for (const option of elements.count.options) {
     const allowed = Number(option.value) <= (mode === "lake" ? LAKES.length : mode === "nature" ? NATURE_RESERVES.length : mode === "city" ? CITIES.length : mode === "sight" ? SIGHTS.length : mode === "river" ? RIVERS.length : mode === "mountain" ? MOUNTAINS.length : REGIONS.length);
     option.hidden = !allowed;
@@ -323,16 +338,16 @@ function updateCountOptions() {
 }
 
 function updateMapMode() {
-  const isRiver = elements.mode.value === "river";
-  const isMountain = elements.mode.value === "mountain";
-  const isSight = elements.mode.value === "sight";
-  const isCity = elements.mode.value === "city";
-  const isLake = elements.mode.value === "lake";
-  const isNature = elements.mode.value === "nature";
+  const isRiver = selectedMode === "river";
+  const isMountain = selectedMode === "mountain";
+  const isSight = selectedMode === "sight";
+  const isCity = selectedMode === "city";
+  const isLake = selectedMode === "lake";
+  const isNature = selectedMode === "nature";
   const isMapQuiz = isRiver || isMountain || isSight || isCity || isNature || isLake;
   const svg = elements.mapHost.querySelector("#bayernMap");
   if (!svg) return;
-  const learning = elements.mode.value === "learn";
+  const learning = selectedMode === "learn";
   const showRegions = !learning || learnTopics.regions.checked;
   const showRivers = isRiver || (learning && learnTopics.rivers.checked);
   const showMountains = isMountain || (learning && learnTopics.mountains.checked);
@@ -468,10 +483,24 @@ function renderReview() {
 }
 
 function render() {
-  const mode = elements.mode.value;
+  const mode = selectedMode;
   const isLearn = mode === "learn";
+  elements.currentTopic.textContent = document.querySelector(`#mode-${mode}-title`).textContent;
   updateCountOptions();
+  elements.launchTopic.textContent = elements.currentTopic.textContent;
+  elements.launchDetails.textContent = isLearn ? "Ohne Wertung" : `${elements.count.value} Fragen`;
+  elements.launchTopicButton.textContent = isLearn ? "Karte erkunden" : "Quiz starten";
   updateMapMode();
+  for (const bestLabel of elements.modeCards.querySelectorAll("[data-mode-best]")) {
+    const cardMode = bestLabel.dataset.modeBest;
+    if (cardMode === "learn") continue;
+    const requestedCount = Number(elements.count.value);
+    const count = getAllowedQuestionCounts(cardMode).includes(requestedCount) ? requestedCount : 7;
+    const best = highscores.getBest(cardMode, count);
+    bestLabel.textContent = best === null
+      ? `Dein Rekord: noch keiner · ${count} Fragen`
+      : `Dein Rekord: ${best}/${count}`;
+  }
   elements.highscores.classList.toggle("hidden", isLearn);
   const best = highscores.getBest(mode, Number(elements.count.value));
   elements.personalBest.textContent = best === null ? "Dein Rekord: noch keiner" : `Dein Rekord: ${best}/${elements.count.value}`;
@@ -592,6 +621,14 @@ function resetMode() {
   render();
 }
 
+function compactTopicSelection() {
+  if (elements.topicDialogContent.contains(elements.modeCards)) return;
+  elements.topicDialogContent.append(elements.modeCards);
+  elements.topicLaunch.classList.add("hidden");
+  elements.topicSwitcher.classList.remove("hidden");
+  updateWorkspaceTop();
+}
+
 function startGame(practiceGame = null) {
   elements.resetRecordsStatus.textContent = "";
   hideNatureInfo();
@@ -601,39 +638,41 @@ function startGame(practiceGame = null) {
   hideRiverInfo();
   hideMountainInfo();
   hideSightInfo();
-  if (elements.mode.value === "river" && elements.mapHost.querySelectorAll(".river").length !== RIVERS.length) {
+  if (selectedMode === "river" && elements.mapHost.querySelectorAll(".river").length !== RIVERS.length) {
     setFeedback("Die Flusskarte konnte nicht geladen werden.", "bad");
     return;
   }
-  if (elements.mode.value === "mountain" && elements.mapHost.querySelectorAll(".mountain").length !== MOUNTAINS.length) {
+  if (selectedMode === "mountain" && elements.mapHost.querySelectorAll(".mountain").length !== MOUNTAINS.length) {
     setFeedback("Die Gebirgskarte konnte nicht geladen werden.", "bad");
     return;
   }
-  if (elements.mode.value === "sight" && elements.mapHost.querySelectorAll(".sight").length !== SIGHTS.length) {
+  if (selectedMode === "sight" && elements.mapHost.querySelectorAll(".sight").length !== SIGHTS.length) {
     setFeedback("Die Sehenswürdigkeitenkarte konnte nicht geladen werden.", "bad");
     return;
   }
-  if (elements.mode.value === "city" && elements.mapHost.querySelectorAll(".city").length !== CITIES.length) {
+  if (selectedMode === "city" && elements.mapHost.querySelectorAll(".city").length !== CITIES.length) {
     setFeedback("Die Städtekarte konnte nicht geladen werden.", "bad");
     return;
   }
-  if (elements.mode.value === "nature" && elements.mapHost.querySelectorAll(".nature").length !== NATURE_RESERVES.length) {
+  if (selectedMode === "nature" && elements.mapHost.querySelectorAll(".nature").length !== NATURE_RESERVES.length) {
     setFeedback("Die Naturschutzgebietskarte konnte nicht geladen werden.", "bad");
     return;
   }
-  if (elements.mode.value === "lake" && elements.mapHost.querySelectorAll(".lake").length !== LAKES.length) {
+  if (selectedMode === "lake" && elements.mapHost.querySelectorAll(".lake").length !== LAKES.length) {
     setFeedback("Die Seenkarte konnte nicht geladen werden.", "bad");
     return;
   }
-  game = practiceGame ?? createGame(elements.mode.value, Number(elements.count.value));
+  game = practiceGame ?? createGame(selectedMode, Number(elements.count.value));
   if (!practiceGame) practiceSource = null;
   roundRecord = null;
+  compactTopicSelection();
   elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
   mapZoom?.reset();
   if (game.mode === "seat") makeSeatOptions(game);
   setFeedback(game.mode === "lake" ? "Wähle den gesuchten See auf der Karte." : game.mode === "nature" ? "Wähle das gesuchte Naturschutzgebiet auf der Karte." : game.mode === "city" ? "Wähle die gesuchte Stadt auf der Karte." : game.mode === "sight" ? "Wähle die gesuchte Sehenswürdigkeit auf der Karte." : game.mode === "mountain" ? "Wähle das gesuchte Gebirge auf der Karte." : game.mode === "river" ? "Wähle den gesuchten Fluss auf der Karte." : game.mode === "map" ? "Wähle den gesuchten Bezirk auf der Karte." : "Wähle den richtigen Regierungssitz.");
   render();
   elements.question.focus();
+  elements.question.scrollIntoView({ block: "nearest" });
 }
 
 function advance() {
@@ -685,7 +724,7 @@ function updateResetDescription() {
 
 elements.resetRecords.addEventListener("click", () => {
   if ((game && !game.finished) || !highscores.hasRecords) return;
-  resetTarget = { mode: elements.mode.value, count: Number(elements.count.value), label: elements.mode.selectedOptions[0].textContent };
+  resetTarget = { mode: selectedMode, count: Number(elements.count.value), label: document.querySelector(`#mode-${selectedMode}-title`).textContent };
   const hasSelectedRecord = highscores.getBest(resetTarget.mode, resetTarget.count) !== null;
   elements.resetSelectedLabel.textContent = `Diesen Rekord: ${resetTarget.label}, ${resetTarget.count} Fragen`;
   elements.resetSelectedRecord.disabled = !hasSelectedRecord;
@@ -722,7 +761,37 @@ elements.resetRecordsForm.addEventListener("submit", (event) => {
   elements.resetRecordsDialog.close();
 });
 
-elements.mode.addEventListener("change", resetMode);
+elements.launchTopicButton.addEventListener("click", () => {
+  if (selectedMode !== "learn") {
+    startGame();
+    return;
+  }
+  compactTopicSelection();
+  elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
+  elements.question.focus();
+  elements.question.scrollIntoView({ block: "nearest" });
+});
+
+elements.changeTopic.addEventListener("click", () => {
+  elements.topicDialog.showModal();
+  modeInputs.find((input) => input.checked).focus();
+});
+elements.closeTopics.addEventListener("click", () => elements.topicDialog.close());
+elements.topicDialog.addEventListener("close", () => {
+  if (!elements.topicDialog.open) elements.changeTopic.focus({ preventScroll: true });
+});
+
+for (const input of modeInputs) {
+  input.addEventListener("click", () => {
+    if (elements.topicDialog.open && selectedMode === input.value) elements.topicDialog.close();
+  });
+  input.addEventListener("change", () => {
+    if (!input.checked || selectedMode === input.value) return;
+    selectedMode = input.value;
+    resetMode();
+    if (elements.topicDialog.open) elements.topicDialog.close();
+  });
+}
 for (const checkbox of Object.values(learnTopics)) checkbox.addEventListener("change", () => {
   hideNatureInfo();
   hideLakeInfo();
@@ -759,11 +828,11 @@ function handleSeatOptionClick(event) {
 elements.options.addEventListener("click", handleSeatOptionClick);
 
 function chooseRegion(path) {
-  if (!path || elements.mode.value === "lake" || elements.mode.value === "nature" || elements.mode.value === "river" || elements.mode.value === "mountain" || elements.mode.value === "sight" || elements.mode.value === "city") return;
-  if (elements.mode.value === "learn" && !learnTopics.regions.checked) return;
+  if (!path || selectedMode === "lake" || selectedMode === "nature" || selectedMode === "river" || selectedMode === "mountain" || selectedMode === "sight" || selectedMode === "city") return;
+  if (selectedMode === "learn" && !learnTopics.regions.checked) return;
   const region = REGIONS.find((item) => item.code === path.id);
   if (!region) return;
-  if (elements.mode.value === "learn") {
+  if (selectedMode === "learn") {
     resetMap();
     highlight(region.code, "selected");
     showMapToast(`${region.name} – Regierungssitz: ${region.seat}.`, "", region.wikipediaTitle ?? region.name);
@@ -773,7 +842,7 @@ function chooseRegion(path) {
 }
 
 function chooseRiver(node) {
-  if (elements.mode.value !== "river" && !(elements.mode.value === "learn" && learnTopics.rivers.checked)) return;
+  if (selectedMode !== "river" && !(selectedMode === "learn" && learnTopics.rivers.checked)) return;
   const river = RIVERS.find((item) => item.code === node?.dataset.river);
   if (!river) return;
   if (!game || game.finished) {
@@ -786,7 +855,7 @@ function chooseRiver(node) {
 }
 
 function chooseMountain(node) {
-  if (elements.mode.value !== "mountain" && !(elements.mode.value === "learn" && learnTopics.mountains.checked)) return;
+  if (selectedMode !== "mountain" && !(selectedMode === "learn" && learnTopics.mountains.checked)) return;
   const mountain = MOUNTAINS.find((item) => item.code === node?.dataset.mountain);
   if (!mountain) return;
   if (!game || game.finished) {
@@ -807,7 +876,7 @@ function highlightNature(code, className) {
 }
 
 function chooseNature(node) {
-  if (elements.mode.value !== "nature" && !(elements.mode.value === "learn" && learnTopics.nature.checked)) return;
+  if (selectedMode !== "nature" && !(selectedMode === "learn" && learnTopics.nature.checked)) return;
   const reserve = NATURE_RESERVES.find((item) => item.code === node?.dataset.nature);
   if (!reserve) return;
   if (!game || game.finished) {
@@ -826,7 +895,7 @@ function highlightLake(code, className) {
 }
 
 function chooseLake(node) {
-  if (elements.mode.value !== "lake" && !(elements.mode.value === "learn" && learnTopics.lakes.checked)) return;
+  if (selectedMode !== "lake" && !(selectedMode === "learn" && learnTopics.lakes.checked)) return;
   const lake = LAKES.find((item) => item.code === node?.dataset.lake);
   if (!lake) return;
   if (!game || game.finished) {
@@ -895,7 +964,7 @@ function showCityInfo(city) {
 }
 
 function chooseCity(node) {
-  if (elements.mode.value !== "city" && !(elements.mode.value === "learn" && learnTopics.cities.checked)) return;
+  if (selectedMode !== "city" && !(selectedMode === "learn" && learnTopics.cities.checked)) return;
   const city = CITIES.find((item) => item.code === node?.dataset.city);
   if (!city) return;
   if (!game || game.finished) {
@@ -910,7 +979,7 @@ function chooseCity(node) {
 }
 
 function chooseSight(node) {
-  if (elements.mode.value !== "sight" && !(elements.mode.value === "learn" && learnTopics.sights.checked)) return;
+  if (selectedMode !== "sight" && !(selectedMode === "learn" && learnTopics.sights.checked)) return;
   const sight = SIGHTS.find((item) => item.code === node?.dataset.sight);
   if (!sight) return;
   if (!game || game.finished) {
@@ -925,7 +994,7 @@ function chooseSight(node) {
 }
 
 elements.mapHost.addEventListener("click", (event) => {
-  const learning = elements.mode.value === "learn";
+  const learning = selectedMode === "learn";
   const lake = event.target.closest(".lake");
   if (lake) {
     chooseLake(lakeAt(event, lake));
@@ -965,7 +1034,7 @@ elements.mapHost.addEventListener("click", (event) => {
 });
 elements.mapHost.addEventListener("keydown", (event) => {
   if (event.key !== "Enter" && event.key !== " ") return;
-  const learning = elements.mode.value === "learn";
+  const learning = selectedMode === "learn";
   const lake = event.target.closest(".lake");
   if (lake) {
     event.preventDefault();

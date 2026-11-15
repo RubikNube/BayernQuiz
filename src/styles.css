@@ -42,6 +42,36 @@ h1 { margin: 0; font-size: clamp(1.8rem, 5vw, 2.6rem); }
 .mistakeReview p { margin: 4px 0; }
 .mistakeReview .reviewCorrect, #reviewSuccess { color: #7becbb; }
 .prompt, .result { background: var(--panel); border-radius: 12px; padding: 16px; }
+.topicLaunch { position: sticky; top: 0; z-index: 21; display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 16px; border: 1px solid #314266; border-radius: 12px; background: var(--panel); box-shadow: 0 4px 12px #0003; }
+.topicLaunch__summary { display: grid; gap: 4px; min-width: 0; overflow-wrap: anywhere; }
+.topicLaunch__summary span { color: var(--muted); font-size: .9rem; }
+.topicLaunch button { flex-shrink: 0; }
+@media (max-width: 400px) { .topicLaunch { flex-wrap: wrap; } .topicLaunch button { width: 100%; } }
+.topicSwitcher { display: grid; gap: 8px; margin-bottom: 16px; }
+.topicSwitcher__label { color: var(--muted); }
+.topicSwitcher button { justify-self: start; }
+.topicDialog { width: min(1120px, calc(100% - 32px)); max-height: calc(100dvh - 32px); overflow: auto; padding: 20px; border: 1px solid #526489; border-radius: 12px; color: var(--text); background: var(--bg); }
+.topicDialog::backdrop { background: #000a; }
+.topicDialog__actions { display: flex; justify-content: flex-end; margin-bottom: 12px; }
+.topicDialog .modeCards { padding: 4px; }
+@media (max-width: 600px) { .topicDialog { padding: 12px; } }
+.modeCards { min-width: 0; margin: 0; padding: 0; border: 0; }
+.modeCards legend { margin-bottom: 12px; padding: 0; font-size: 1.15rem; font-weight: 700; }
+.modeGrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.modeCard { display: flex; align-items: center; gap: 12px; position: relative; min-width: 0; padding: 14px; border: 2px solid #314266; border-radius: 12px; background: var(--panel); cursor: pointer; }
+.modeCard:hover { border-color: #8090ad; }
+.modeCard:has(input:checked) { border-color: var(--accent); background: #182b45; }
+.modeCard:has(input:focus-visible) { outline: 3px solid #ffcf66; outline-offset: 3px; }
+.modeCard input { flex: none; width: 18px; height: 18px; margin: 0; accent-color: var(--accent); }
+.modeCard__thumbnail { flex: none; width: 72px; height: 80px; border-radius: 8px; object-fit: cover; background: #182641; }
+.modeCard__thumbnail--coat { object-fit: contain; padding: 8px; background: #f7f8fc; }
+.modeCard__thumbnail--illustration { object-fit: contain; }
+.modeCard__content { display: grid; gap: 5px; min-width: 0; overflow-wrap: anywhere; }
+.modeCard__title { font-size: 1rem; }
+.modeCard__description { color: var(--muted); font-size: .85rem; line-height: 1.4; }
+.modeCard__best { color: #9dd4ff; font-size: .8rem; }
+@media (max-width: 1099px) { .modeGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 600px) { .modeGrid { grid-template-columns: minmax(0, 1fr); } }
 .controls, .actions, .options { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; }
 .controls label { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; min-height: 44px; max-width: 100%; color: var(--muted); }
 .controls .check { cursor: pointer; }
@@ -135,18 +165,17 @@ a { color: #9dd4ff; }
 .hidden { display: none !important; }
 @media (min-width: 1100px) {
   .workspace { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; align-items: start; }
-  .mapWrap { display: flex; flex-direction: column; height: max(320px, calc(100dvh - var(--workspace-top, 114px) - 16px)); }
+  .mapWrap { display: flex; flex-direction: column; height: max(400px, calc(100dvh - var(--workspace-top, 114px) - 16px)); }
   .mapHost { width: 100%; flex: 1; min-height: 0; }
   #bayernMap { height: 100%; aspect-ratio: auto; }
   .mapToolbar, .mapHelp, .mapLegend { flex: none; }
-  .sidebar { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 16px; max-height: calc(100dvh - var(--workspace-top, 114px) - 16px); overflow-y: auto; scrollbar-gutter: stable; scrollbar-color: #526489 var(--panel); }
+  .sidebar { display: flex; flex-direction: column; gap: 12px; position: sticky; top: 16px; max-height: max(400px, calc(100dvh - var(--workspace-top, 114px) - 16px)); overflow-y: auto; scrollbar-gutter: stable; scrollbar-color: #526489 var(--panel); }
   .sidebar > * { flex: none; }
   .sidebar > * { order: 0; }
   .quizActive .questionBar { position: static; box-shadow: none; }
   .controls { align-items: stretch; }
   .controls label { width: 100%; }
   .controls label select { flex: 1; }
-  .controls label[for="mode"] { flex-direction: column; align-items: stretch; }
   .learnTopics { gap: 0 12px; }
 }
 @media (max-width: 700px) {
