@@ -4,7 +4,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#0b1220" />
-    <title>BayernQuiz – Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten kennenlernen</title>
+    <title>BayernQuiz – Regierungsbezirke, Städte, Flüsse, Gebirge und Sehenswürdigkeiten kennenlernen</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -12,7 +12,7 @@
       <header class="topbar">
         <div>
           <h1>BayernQuiz</h1>
-          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten.</p>
+          <p class="subtitle">Entdecke Bayerns Regierungsbezirke, Städte, Flüsse, Gebirge und Sehenswürdigkeiten.</p>
         </div>
       </header>
 
@@ -26,6 +26,7 @@
                   <option value="learn">Lernen</option>
                   <option value="map">Regierungsbezirk finden</option>
                   <option value="seat">Regierungssitz wählen</option>
+                  <option value="city">Städte finden</option>
                   <option value="river">Flüsse finden</option>
                   <option value="mountain">Gebirge finden</option>
                   <option value="sight">Sehenswürdigkeiten finden</option>
@@ -51,6 +52,7 @@
             <fieldset id="learnTopics" class="learnTopics hidden">
               <legend>Themen in Lernen</legend>
               <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
+              <label><input type="checkbox" data-learn-topic="cities" checked /> Städte</label>
               <label><input type="checkbox" data-learn-topic="rivers" checked /> Flüsse</label>
               <label><input type="checkbox" data-learn-topic="mountains" checked /> Gebirge</label>
               <label><input type="checkbox" data-learn-topic="sights" checked /> Sehenswürdigkeiten</label>
@@ -137,8 +139,10 @@
         Kartendaten: <a href="https://geoportal.bayern.de/geoportalbayern/details-suche?1=&amp;resId=baa244c2-42d2-43b2-932e-af30b4cd80cb">Bayerische Vermessungsverwaltung – www.geodaten.bayern.de</a>,
         <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>.
         <span>Regierungssitze: <a href="https://www.stmi.bayern.de/staat-und-verfassung/staatsgebiet/">Bayerisches Staatsministerium des Innern</a>.</span>
+        <span>Stadtkoordinaten: <a href="https://www.geonames.org/">GeoNames</a>, <a href="https://creativecommons.org/licenses/by/4.0/deed.de">CC BY 4.0</a>.</span>
         <span>Flussläufe: <a href="https://geodatenonline.bayern.de/geodatenonline/seiten/wfs_atkis">Bayerische Vermessungsverwaltung, ATKIS Basis-DLM</a>, CC BY 4.0. Flusslängen: <a href="https://www.lfu.bayern.de/wasser/gewaesserverzeichnisse/doc/tab_gew_name_100_laeng.pdf">Bayerisches Landesamt für Umwelt</a>.</span>
         <span>Gebirgslagen: <a href="https://www.lfu.bayern.de/natur/naturraeume/index.htm">Bayerisches Landesamt für Umwelt</a>; vereinfachte Darstellung.</span>
+        <span>Stadtwappen: <a href="assets/cities/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
         <span>Sehenswürdigkeiten: <a href="assets/sights/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen</a>.</span>
       </footer>
     </main>

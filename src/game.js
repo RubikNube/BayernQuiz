@@ -307,6 +307,37 @@ export const OTHER_CITIES = Object.freeze([
   { code: "kaufbeuren", seat: "Kaufbeuren", regionCode: "schwaben" },
 ]);
 
+// All 25 kreisfreie Städte: https://www.bayernportal.de/dokumente/behoerde/0154617984105
+// WGS84 coordinates: GeoNames cities15000 extract (2026-11-15), CC BY 4.0.
+// Government seats reuse scripts/seat-locations.json. See README for sources.
+export const CITIES = Object.freeze([
+  { code: "ingolstadt", name: "Ingolstadt", regionCode: "oberbayern", lat: 48.76508, lon: 11.42372, wikipediaTitle: "Ingolstadt", sourceUrl: "https://www.geonames.org/2895992/" },
+  { code: "muenchen", name: "München", regionCode: "oberbayern", lat: 48.137433, lon: 11.575491, wikipediaTitle: "München" },
+  { code: "rosenheim", name: "Rosenheim", regionCode: "oberbayern", lat: 47.85637, lon: 12.12247, wikipediaTitle: "Rosenheim", sourceUrl: "https://www.geonames.org/2844988/" },
+  { code: "landshut", name: "Landshut", regionCode: "niederbayern", lat: 48.529612, lon: 12.161791, wikipediaTitle: "Landshut" },
+  { code: "passau", name: "Passau", regionCode: "niederbayern", lat: 48.5665, lon: 13.43122, wikipediaTitle: "Passau", sourceUrl: "https://www.geonames.org/2855328/" },
+  { code: "straubing", name: "Straubing", regionCode: "niederbayern", lat: 48.88126, lon: 12.57385, wikipediaTitle: "Straubing", sourceUrl: "https://www.geonames.org/2826099/" },
+  { code: "amberg", name: "Amberg", regionCode: "oberpfalz", lat: 49.44287, lon: 11.86267, wikipediaTitle: "Amberg", sourceUrl: "https://www.geonames.org/2956656/" },
+  { code: "regensburg", name: "Regensburg", regionCode: "oberpfalz", lat: 49.01513, lon: 12.10161, wikipediaTitle: "Regensburg" },
+  { code: "weiden", name: "Weiden in der Oberpfalz", regionCode: "oberpfalz", lat: 49.67682, lon: 12.15613, wikipediaTitle: "Weiden in der Oberpfalz", sourceUrl: "https://www.geonames.org/2813040/" },
+  { code: "bamberg", name: "Bamberg", regionCode: "oberfranken", lat: 49.89873, lon: 10.90067, wikipediaTitle: "Bamberg", sourceUrl: "https://www.geonames.org/2952984/" },
+  { code: "bayreuth", name: "Bayreuth", regionCode: "oberfranken", lat: 49.947823, lon: 11.578935, wikipediaTitle: "Bayreuth" },
+  { code: "coburg", name: "Coburg", regionCode: "oberfranken", lat: 50.25937, lon: 10.96384, wikipediaTitle: "Coburg", sourceUrl: "https://www.geonames.org/2939951/" },
+  { code: "hof", name: "Hof", regionCode: "oberfranken", lat: 50.31297, lon: 11.91261, wikipediaTitle: "Hof (Saale)", sourceUrl: "https://www.geonames.org/2902768/" },
+  { code: "ansbach", name: "Ansbach", regionCode: "mittelfranken", lat: 49.304808, lon: 10.593098, wikipediaTitle: "Ansbach" },
+  { code: "erlangen", name: "Erlangen", regionCode: "mittelfranken", lat: 49.59099, lon: 11.00783, wikipediaTitle: "Erlangen", sourceUrl: "https://www.geonames.org/2929567/" },
+  { code: "fuerth", name: "Fürth", regionCode: "mittelfranken", lat: 49.47593, lon: 10.98856, wikipediaTitle: "Fürth", sourceUrl: "https://www.geonames.org/2923544/" },
+  { code: "nuernberg", name: "Nürnberg", regionCode: "mittelfranken", lat: 49.45421, lon: 11.07752, wikipediaTitle: "Nürnberg", sourceUrl: "https://www.geonames.org/2861650/" },
+  { code: "schwabach", name: "Schwabach", regionCode: "mittelfranken", lat: 49.33047, lon: 11.02346, wikipediaTitle: "Schwabach", sourceUrl: "https://www.geonames.org/2835537/" },
+  { code: "aschaffenburg", name: "Aschaffenburg", regionCode: "unterfranken", lat: 49.97704, lon: 9.15214, wikipediaTitle: "Aschaffenburg", sourceUrl: "https://www.geonames.org/2955272/" },
+  { code: "schweinfurt", name: "Schweinfurt", regionCode: "unterfranken", lat: 50.04937, lon: 10.22175, wikipediaTitle: "Schweinfurt", sourceUrl: "https://www.geonames.org/2834498/" },
+  { code: "wuerzburg", name: "Würzburg", regionCode: "unterfranken", lat: 49.793912, lon: 9.951214, wikipediaTitle: "Würzburg" },
+  { code: "augsburg", name: "Augsburg", regionCode: "schwaben", lat: 48.371538, lon: 10.898514, wikipediaTitle: "Augsburg" },
+  { code: "kaufbeuren", name: "Kaufbeuren", regionCode: "schwaben", lat: 47.88238, lon: 10.62192, wikipediaTitle: "Kaufbeuren", sourceUrl: "https://www.geonames.org/2892080/" },
+  { code: "kempten", name: "Kempten (Allgäu)", regionCode: "schwaben", lat: 47.72674, lon: 10.31389, wikipediaTitle: "Kempten (Allgäu)", sourceUrl: "https://www.geonames.org/2891621/" },
+  { code: "memmingen", name: "Memmingen", regionCode: "schwaben", lat: 47.98372, lon: 10.18527, wikipediaTitle: "Memmingen", sourceUrl: "https://www.geonames.org/2871992/" },
+]);
+
 export function shuffle(items, random = Math.random) {
   const result = [...items];
   for (let i = result.length - 1; i > 0; i -= 1) {
@@ -317,15 +348,15 @@ export function shuffle(items, random = Math.random) {
 }
 
 export function createGame(mode, count, random = Math.random) {
-  if (!["map", "seat", "river", "mountain", "sight"].includes(mode)) throw new Error("Unknown mode");
-  const allowedCounts = mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
+  if (!["map", "seat", "river", "mountain", "sight", "city"].includes(mode)) throw new Error("Unknown mode");
+  const allowedCounts = mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
     : mode === "sight" ? [3, 5, 7, 10, 15, 20] : mode === "mountain" ? [3, 5, 7, 10, 15] : [3, 5, 7];
   if (!allowedCounts.includes(count)) {
     throw new Error("Invalid question count");
   }
   return {
     mode,
-    questions: shuffle(mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
+    questions: shuffle(mode === "city" ? CITIES : mode === "sight" ? SIGHTS : mode === "river" ? RIVERS : mode === "mountain" ? MOUNTAINS : REGIONS, random).slice(0, count),
     index: 0,
     score: 0,
     answered: false,
@@ -355,7 +386,7 @@ export function answer(game, selectedCode) {
   if (!target) return null;
   const valid = game.mode === "seat"
     ? game.options.some((option) => option.code === selectedCode)
-    : (game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
+    : (game.mode === "city" ? CITIES : game.mode === "sight" ? SIGHTS : game.mode === "river" ? RIVERS : game.mode === "mountain" ? MOUNTAINS : REGIONS).some((item) => item.code === selectedCode);
   if (!valid) return null;
   const correct = target.code === selectedCode;
   game.answered = true;

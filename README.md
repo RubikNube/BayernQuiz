@@ -1,6 +1,8 @@
 # BayernQuiz
 
-Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
+Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Städte, Flüsse, Gebirge und Sehenswürdigkeiten Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Städtequiz, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
+
+Im Modus **Städte finden** werden die 25 kreisfreien Städte Bayerns auf der Karte gesucht. Vor dem Start und nach Spielende zeigt ein Klick auf einen gelben Punkt ein kleines Stadtwappen, den Stadtnamen, den Regierungsbezirk und einen Wikipedia-Link. Eine Runde enthält 3, 5, 7, 10, 15, 20 oder 25 unterschiedliche Fragen (Standard: 7). Bei einer falschen Antwort werden die gewählte Stadt rot und die gesuchte Stadt grün markiert. Nach jeder Antwort erscheinen Informationen zur gewählten Stadt und **Weiter** ist verfügbar. **Automatisch weiter** wechselt nach einer richtigen Antwort nach 1,6 Sekunden zur nächsten Frage. Die Marker sind mit Tab und Enter/Leertaste bedienbar; bei nahe beieinanderliegenden Städten helfen die Zoomfunktionen.
 
 Im Modus **Flüsse finden** lassen sich vor dem Start und nach dem Spiel die 32 Flüsse auf der Karte anklicken: Name und ungefähre Länge in Bayern erscheinen in einem Infokasten. Im Quiz wird der gesuchte Fluss auf der Karte gewählt. Es stehen 3, 5, 7, 10, 15, 20, 25 oder 30 Fragen zur Auswahl. Richtige Antworten können automatisch zur nächsten Frage führen; nach jeder Antwort ist auch **Weiter** verfügbar.
 
@@ -8,7 +10,7 @@ Im Modus **Gebirge finden** lassen sich vor dem Start und nach dem Spiel 15 Gebi
 
 Im Modus **Sehenswürdigkeiten finden** können 20 Bauwerke und Naturziele aus allen sieben Regierungsbezirken erkundet werden. Ein Klick auf einen violetten Kartenpunkt zeigt ein lokal gespeichertes Foto, Lage, einen kurzen Informationstext und einen deutschen Wikipedia-Link. **Start** beginnt das Kartenquiz mit 3, 5, 7, 10, 15 oder 20 unterschiedlichen Fragen (Standard: 7). Nach jeder Antwort erscheint die Information zum gewählten Ort. Bei einer falschen Antwort wird der gewählte Punkt rot und der richtige grün markiert. **Weiter** ist nach jeder Antwort möglich; **Automatisch weiter** wechselt nach einer richtigen Antwort nach fünf Sekunden. Nach Spielende können alle Orte wieder erkundet werden. Die Infokarte lässt sich schließen; auf großen Bildschirmen erscheint sie neben der Karte, auf kleineren darunter. Kartenpunkte sind auch mit Tab und Enter/Leertaste bedienbar.
 
-Im Modus **Lernen** können Regierungsbezirke, Flüsse, Gebirge und Sehenswürdigkeiten über Checkboxen einzeln ein- und ausgeblendet werden. Alle vier Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen.
+Im Modus **Lernen** können Regierungsbezirke, Städte, Flüsse, Gebirge und Sehenswürdigkeiten über Checkboxen einzeln ein- und ausgeblendet werden. Alle fünf Themen sind standardmäßig aktiv; die Auswahl wird im Browser gespeichert. Ein Klick auf ein Kartenelement zeigt die zugehörigen Informationen. Wenn Städte eingeblendet sind, ersetzen ihre gelben Marker die schwarzen Regierungssitz-Punkte.
 
 ## Oberfläche und Bildschirmgrößen
 
@@ -47,6 +49,18 @@ Die 30 längsten Flüsse und zusätzlich Rednitz und Regnitz sowie ihre Längen 
 
 Die 15 Gebirgslinien sind vereinfachte, von Hand gesetzte Mittellinien in der bayerischen Landesfläche. Sie orientieren sich an der [naturräumlichen Gliederung des LfU](https://www.lfu.bayern.de/natur/naturraeume/index.htm) und zeigen ungefähre Lagen, keine amtlichen Grenzen. Die Infokarte nennt jeweils einen markanten Gipfel, nicht die Höhe des gesamten Gebirges. Die Gipfelhöhen stammen von regionalen Quellen: [Oberstdorf (Hochfrottspitze)](https://www.oberstdorf.de/alpininfo/allgaeuer-alpen/geographie/), [Ammergauer Alpen Tourismus (Kreuzspitze)](https://www.ammergauer-alpen.de/tour/bergtour-kreuzspitze), [Deutscher Alpenverein (Zugspitze)](https://www.alpenverein.de/artikel/wandern-in-bayern_4eb0e66d-96da-415e-b954-c32f9561d8ec), [Deutscher Alpenverein (Benediktenwand)](https://www.alpenverein.de/artikel/huettentipp-tutzinger-huette-bayerische-voralpen_0aebcec8-b551-48f6-9760-8efa8c710c64), [Chiemgau Tourismus (Sonntagshorn)](https://www.chiemsee-chiemgau.info/sonntagshorn-1961-m), [Berchtesgaden Tourismus (Watzmann)](https://www.berchtesgaden.de/ramsau), [Rhön Tourismus (Kreuzberg)](https://www.rhoen.de/media/www.rhoen.de/org/med_2067/44942_rhoen_flyer-kreuzberg_12-2018_03_final_druckfreigabe.pdf), [LfU (Geiersberg)](https://www.lfu.bayern.de/natur/natura2000_managementplaene/6020_6946/doc/6022_371/texte/de6022371_t_fg_nfin.pdf), [Steigerwald Tourismus (Schwanberg)](https://www.steigerwaldtourismus.com/steigerwald/regionen/rund-um-den-schwanberg), [Haßberge Tourismus (Bramberg)](https://www.hassberge-tourismus.de/detail/id%3D69c671aeb2293959b3bd93d4), [Naturpark Frankenwald (Döbraberg)](https://www.naturpark-frankenwald.de/detail/id%3D6087fb1b0d7ea872058c96c8), [Fichtelgebirge Tourismus (Schneeberg)](https://www.fichtelgebirge.bayern/fileadmin/user_upload/PDF_Intern/Blaetter_PDF_Kataloge/8_WEBANSICHT_Wanderhighlights_2023.pdf), [LBV (Poppberg)](https://www.lbv.de/naturschutz/lebensraeume-schuetzen/gew%C3%A4sser/quellschutz/kalktuffquellen/projektgebiet/), [Landkreis Tirschenreuth (Entenbühl)](https://www.kreis-tir.de/fileadmin/user_upload/Landkreisbuch/index.html) und [Bayerischer Wald Tourismus (Großer Arber)](https://www.bayerischer-wald.de/attraktion/grosser-arber-dc2c76be82).
 
+### Städte
+
+Die Auswahl entspricht den [25 kreisfreien Städten im BayernPortal](https://www.bayernportal.de/dokumente/behoerde/0154617984105) (abgeglichen am 15. November 2026). Namen, Regierungsbezirke, Wikipedia-Titel und WGS84-Koordinaten stehen in `CITIES` in `src/game.js`. Die sieben Regierungssitze verwenden dieselben Koordinaten wie `scripts/seat-locations.json`. Die übrigen Koordinaten stammen aus dem [GeoNames-Datenexport cities15000](https://download.geonames.org/export/dump/cities15000.zip), abgerufen am 15. November 2026; die zugehörigen GeoNames-Einträge sind pro Stadt verlinkt. Quelle: **GeoNames – www.geonames.org**, [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/deed.de). Die Punkte zeigen ungefähre Stadtlagen, keine Stadtgrenzen.
+
+`python3 scripts/generate-cities.py src/regions.svg` projiziert den gemeinsamen Datenbestand ohne Netzwerkzugriff auf die Karte. Node.js wird zum Einlesen der Daten benötigt. Das Skript vor `generate-sights.py` ausführen, damit Sehenswürdigkeiten in Lernen über den Stadtmarkern liegen und auswählbar bleiben.
+
+Die Stadtinformationen zeigen in Quiz und Lernen ein kleines Wappen. Die verkleinerten PNG-Dateien sind lokal unter `assets/cities/` gebündelt; im Browser werden keine Wikimedia-APIs aufgerufen. Die Wappen stammen aus den Stadt-Infoboxen der deutschen Wikipedia und Wikimedia Commons. Originaldateien, Urheber und Lizenzen sind in [`assets/cities/ATTRIBUTION.md`](assets/cities/ATTRIBUTION.md) und `assets/cities/metadata.json` dokumentiert. Aktualisieren mit:
+
+```sh
+python3 scripts/fetch-city-coats.py --refresh
+```
+
 ### Sehenswürdigkeiten und Fotos
 
 Die kuratierte Auswahl enthält Schloss Linderhof, Schloss Herrenchiemsee, Königssee, Zugspitze, Befreiungshalle, Kloster Weltenburg, Veste Oberhaus, Walhalla, Steinerne Brücke, Burg Falkenberg, Bamberger Dom, Markgräfliches Opernhaus, Veste Coburg, Nürnberger Kaiserburg, Plönlein, Würzburger Residenz, Schloss Mespelbrunn, Schloss Johannisburg, Schloss Neuschwanstein und Lindauer Hafeneinfahrt. Die deutschen Kurztexte und offiziellen Betreiber- beziehungsweise Tourismusquellen stehen zusammen mit den WGS84-Koordinaten in `SIGHTS` in `src/game.js`.
@@ -67,6 +81,7 @@ Zur Aktualisierung der Karte die WFS-GetFeature-Antwort für `vergr:BezirkeFlaec
 python3 scripts/generate-map.py /pfad/zur/antwort.gml src/regions.svg
 python3 scripts/generate-rivers.py src/regions.svg
 python3 scripts/generate-mountains.py src/regions.svg
+python3 scripts/generate-cities.py src/regions.svg
 python3 scripts/generate-sights.py src/regions.svg
 ```
 
