@@ -86,6 +86,30 @@ test("all 32 river records have distinct identifiers, lengths, and map paths", (
   }
 });
 
+test("river Wikipedia titles identify the mapped waterways", () => {
+  for (const river of RIVERS) {
+    assert.equal(typeof river.wikipediaTitle, "string", `${river.code} needs an explicit article title`);
+    assert.ok(river.wikipediaTitle.trim(), `${river.code} needs a nonempty article title`);
+  }
+  const titles = Object.fromEntries(RIVERS.map(({ code, wikipediaTitle }) => [code, wikipediaTitle]));
+  const ambiguousTitles = {
+    wertach: "Wertach (Fluss)",
+    paar: "Paar (Donau)",
+    pegnitz: "Pegnitz (Fluss)",
+    rott: "Rott (Inn, Neuhaus am Inn)",
+    regen: "Regen (Fluss)",
+    schwarzach: "Schwarzach (Naab)",
+    ilm: "Ilm (Abens)",
+    isen: "Isen (Fluss)",
+    wiesent: "Wiesent (Regnitz)",
+    "vils-naab": "Vils (Naab)",
+    "vils-donau": "Vils (Donau)",
+  };
+  for (const [code, title] of Object.entries(ambiguousTitles)) {
+    assert.equal(titles[code], title, `${code} must link to its river article`);
+  }
+});
+
 test("river rounds use distinct questions, score once, and finish at the chosen count", () => {
   for (const count of [3, 5, 7, 10, 15, 20, 25, 30]) {
     const game = createGame("river", count, () => 0.5);
