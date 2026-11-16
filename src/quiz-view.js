@@ -28,7 +28,6 @@ export function createQuizView({ highscores, mistakes }) {
     options: document.querySelector("#options"),
     personalBest: document.querySelector("#personalBest"),
     practiceLabel: document.querySelector("#practiceLabel"),
-    practiceSaved: document.querySelector("#practiceSaved"),
     progress: document.querySelector("#quizProgress"),
     progressLabel: document.querySelector("#progressLabel"),
     question: document.querySelector("#question"),
@@ -117,8 +116,6 @@ export function createQuizView({ highscores, mistakes }) {
     elements.newRound.disabled = isCorrection && !mistakes.count;
     elements.restart.disabled = isCorrection && !mistakes.count;
     elements.launchTopicButton.textContent = isCorrection ? "Fehler korrigieren" : isLearn ? "Karte erkunden" : "Quiz starten";
-    elements.practiceSaved.classList.toggle("hidden", !mistakes.count);
-    elements.practiceSaved.textContent = `${isCorrection ? "Weiter üben" : "Fehler korrigieren"} (${mistakes.count})`;
     elements.newRound.textContent = isCorrection ? "Neue Übungsrunde" : "Neue Runde";
     elements.correctionProgress.textContent = game?.answered ? game.correctionMessage ?? "" : "";
     elements.correctionSummary.textContent = isCorrection && game?.finished

@@ -19,7 +19,6 @@ export function createQuizController() {
     newRound: document.querySelector("#newRound"),
     next: document.querySelector("#next"),
     options: document.querySelector("#options"),
-    practiceSaved: document.querySelector("#practiceSaved"),
     question: document.querySelector("#question"),
     resetRecordsStatus: document.querySelector("#resetRecordsStatus"),
     restart: document.querySelector("#restart"),
@@ -271,15 +270,6 @@ export function createQuizController() {
     if (!game?.finished || !getMistakeReview(game).length) return;
     practiceSource = game;
     startGame(createRetryGame(practiceSource));
-  });
-  events.on(elements.practiceSaved, "click", () => {
-    if (!mistakes.count) return;
-    if (selectedMode === "mix") mixCount = Number(elements.count.value);
-    else if (selectedMode !== "correction") otherCount = Number(elements.count.value);
-    modeInputs.find(input => input.value === "correction").checked = true;
-    selectedMode = "correction";
-    resetMode();
-    startGame();
   });
   events.on(elements.next, "click", advance);
   events.on(elements.autoNext, "change", () => {

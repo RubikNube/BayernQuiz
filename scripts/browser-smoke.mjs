@@ -54,7 +54,7 @@ assert.match(await evaluate('document.querySelector("#correctionSummary").textCo
 assert.equal(await evaluate('localStorage.getItem("bayernQuizHighscores")'),null);
 // Mobile layout; the second round clears the saved questions.
 await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
-await click('#practiceSaved');
+await click('#newRound');
 await answerCorrect();assert.match(await evaluate('document.querySelector("#correctionProgress").textContent'),/Fehler korrigiert/);
 for(let i=0;i<7;i++){await click('#next');await answerCorrect();}await click('#next');
 assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizMistakes).entries.length'),0);
