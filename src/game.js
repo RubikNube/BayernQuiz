@@ -604,16 +604,35 @@ export const MAP_TOPICS = Object.freeze({
 });
 
 export const TOPIC_LABELS = Object.freeze({
+  seat: "Regierungssitze",
   map: "Regierungsbezirke", city: "Städte", lake: "Seen", river: "Flüsse",
   mountain: "Gebirge", sight: "Sehenswürdigkeiten", nature: "Naturschutzgebiete",
 });
 
 export function questionTopic(game, target = currentQuestion(game)) {
-  return game?.mode === "mix" ? target?.topic : game?.mode;
+  return game?.mode === "mix" || game?.mode === "correction" ? target?.topic : game?.mode;
 }
 
 function questionKey(game, target) {
-  return game.mode === "mix" ? target.key : target.code;
+  return game.mode === "mix" || game.mode === "correction" ? target.key : target.code;
+}
+
+export function resolveQuestion(topic, code) {
+  const items = topic === "seat" ? REGIONS : MAP_TOPICS[topic];
+  return Array.isArray(items) ? items.find(item => item.code === code) ?? null : null;
+}
+
+export function createCorrectionGame(references, random = Math.random) {
+  if (!Array.isArray(references) || !references.length || references.length > 10) throw new Error("Expected 1 to 10 saved questions");
+  const seen = new Set();
+  const questions = references.map(({ topic, code }) => {
+    const target = resolveQuestion(topic, code);
+    const key = `${topic}:${code}`;
+    if (!target || seen.has(key)) throw new Error("Invalid or duplicate saved question");
+    seen.add(key);
+    return { ...target, topic, key };
+  });
+  return newRound("correction", shuffle(questions, random), true);
 }
 
 function createMixedQuestions(count, random) {
@@ -683,8 +702,8 @@ export function getMistakeReview(game) {
     const selected = items.find(({ code }) => code === selectedCode);
     return {
       question: questionText(topic, target),
-      selectedAnswer: game.mode === "seat" ? selected.seat : selected.name,
-      correctAnswer: game.mode === "seat" ? target.seat : target.name,
+      selectedAnswer: topic === "seat" ? selected.seat : selected.name,
+      correctAnswer: topic === "seat" ? target.seat : target.name,
     };
   });
 }
@@ -695,7 +714,7 @@ export function currentQuestion(game) {
 
 export function makeSeatOptions(game, random = Math.random) {
   const target = currentQuestion(game);
-  if (!target || game.mode !== "seat") return [];
+  if (!target || questionTopic(game, target) !== "seat") return [];
   const otherSeat = shuffle(REGIONS.filter((region) => region.code !== target.code), random)[0];
   const localCity = shuffle(OTHER_CITIES.filter((city) => city.regionCode === target.code), random)[0];
   const otherCity = shuffle(OTHER_CITIES.filter((city) => city.regionCode !== target.code), random)[0];
@@ -716,7 +735,7 @@ export function answer(game, selectedCode) {
   game.answered = true;
   game.selectedCode = selectedCode;
   game.history.push({ questionCode: target.code, selectedCode, correct,
-    ...(game.mode === "mix" ? { topic, questionKey: target.key } : {}),
+    ...(game.mode === "mix" || game.mode === "correction" ? { topic, questionKey: target.key } : {}),
   });
   if (correct) game.score += 1;
   return correct;

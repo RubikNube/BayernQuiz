@@ -1,8 +1,15 @@
-import { MAP_TOPICS, TOPIC_LABELS, questionTopic, REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, getAllowedQuestionCounts, answer, createGame, createRetryGame, currentQuestion, getMistakeReview, makeSeatOptions, nextQuestion } from "./game.js";
+import { MAP_TOPICS, TOPIC_LABELS, questionTopic, REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, getAllowedQuestionCounts, answer, createCorrectionGame, createGame, createRetryGame, currentQuestion, getMistakeReview, makeSeatOptions, nextQuestion } from "./game.js";
 import { createMapZoom } from "./map-zoom.js";
 import { createHighscores, highscoreMessage } from "./highscores.js";
+import { createMistakes } from "./mistakes.js";
 
 const elements = {
+  mistakeHelp: document.querySelector("#mistakeHelp"),
+  mistakeStorage: document.querySelector("#mistakeStorage"),
+  correctionProgress: document.querySelector("#correctionProgress"),
+  correctionSummary: document.querySelector("#correctionSummary"),
+  practiceSaved: document.querySelector("#practiceSaved"),
+
   lakeInfo: document.querySelector("#lakeInfo"),
   lakeInfoImage: document.querySelector("#lakeInfoImage"),
   lakeInfoName: document.querySelector("#lakeInfoName"),
@@ -96,6 +103,7 @@ const elements = {
 };
 
 const highscores = createHighscores();
+const mistakes = createMistakes();
 const modeInputs = [...elements.modeCards.querySelectorAll('input[name="mode"]')];
 let selectedMode = modeInputs.find((input) => input.checked).value;
 let roundRecord = null;
@@ -108,7 +116,7 @@ let mixCount = 10;
 let otherCount = 7;
 
 function activeTopic() {
-  if (selectedMode !== "mix") return selectedMode;
+  if (!["mix", "correction"].includes(selectedMode)) return selectedMode;
   return questionTopic(game, game ? currentQuestion(game) ?? game.questions.at(-1) : null) ?? "map";
 }
 
@@ -403,7 +411,7 @@ function updateCountOptions() {
     option.hidden = !allowed;
     option.disabled = !allowed;
   }
-  if (mode !== "learn" && elements.count.selectedOptions[0]?.disabled) elements.count.value = mode === "mix" ? "10" : "7";
+  if (!["learn", "correction"].includes(mode) && elements.count.selectedOptions[0]?.disabled) elements.count.value = mode === "mix" ? "10" : "7";
 }
 
 function updateMapMode() {
@@ -418,6 +426,7 @@ function updateMapMode() {
   const svg = elements.mapHost.querySelector("#bayernMap");
   if (!svg) return;
   const learning = topic === "learn";
+  const hideSeats = selectedMode === "mix" || (selectedMode === "correction" && topic !== "seat");
   const showRegions = !learning || learnTopics.regions.checked;
   const showRivers = isRiver || (learning && learnTopics.rivers.checked);
   const showMountains = isMountain || (learning && learnTopics.mountains.checked);
@@ -441,9 +450,9 @@ function updateMapMode() {
   svg.classList.toggle("mountain-mode", isMountain || (learning && showMountains));
   svg.querySelector("#riversLayer")?.classList.toggle("hidden", !showRivers);
   svg.querySelector("#mountainsLayer")?.classList.toggle("hidden", !showMountains);
-  svg.querySelector(".seat-locations")?.classList.toggle("hidden", isMapQuiz || selectedMode === "mix" || showCities || (learning && !showRegions));
+  svg.querySelector(".seat-locations")?.classList.toggle("hidden", isMapQuiz || hideSeats || showCities || (learning && !showRegions));
   svg.querySelectorAll(".region, .seat-dot").forEach((node) => {
-    node.setAttribute("tabindex", isMapQuiz || (learning && !showRegions) || (node.classList.contains("seat-dot") && (showCities || selectedMode === "mix")) ? "-1" : "0");
+    node.setAttribute("tabindex", isMapQuiz || (learning && !showRegions) || (node.classList.contains("seat-dot") && (showCities || hideSeats)) ? "-1" : "0");
   });
   svg.querySelectorAll(".river").forEach((node) => {
     node.setAttribute("tabindex", isRiver || (learning && showRivers) ? "0" : "-1");
@@ -452,7 +461,7 @@ function updateMapMode() {
     node.setAttribute("tabindex", isMountain || (learning && showMountains) ? "0" : "-1");
   });
   elements.mapHost.setAttribute("aria-label", learning ? "Bayernkarte mit ausgewählten Lernthemen" : isLake ? "Bayernkarte mit Seen" : isNature ? "Bayernkarte mit Naturschutzgebieten" : isCity ? "Bayernkarte mit Städten" : isSight ? "Bayernkarte mit Sehenswürdigkeiten" : isRiver ? "Bayernkarte mit Flüssen" : isMountain ? "Bayernkarte mit Gebirgen" : "Bayernkarte mit Regierungsbezirken");
-  elements.mapHost.parentElement.querySelector(".mapLegend")?.classList.toggle("hidden", isMapQuiz || selectedMode === "mix" || showCities || (learning && !showRegions));
+  elements.mapHost.parentElement.querySelector(".mapLegend")?.classList.toggle("hidden", isMapQuiz || hideSeats || showCities || (learning && !showRegions));
 }
 
 function nearestRouteAt(clientX, clientY, fallback, groupSelector, lineSelector) {
@@ -506,7 +515,7 @@ function highlightMountain(code, className) {
 
 function renderOptions() {
   elements.options.replaceChildren();
-  if (!game || game.mode !== "seat" || game.finished) {
+  if (!game || activeTopic() !== "seat" || game.finished) {
     elements.options.classList.add("hidden");
     return;
   }
@@ -546,20 +555,36 @@ function renderReview() {
   }
   elements.reviewTitle.classList.toggle("hidden", !mistakes.length);
   elements.mistakeReview.classList.toggle("hidden", !mistakes.length);
-  elements.retryMistakes.classList.toggle("hidden", !mistakes.length);
+  elements.retryMistakes.classList.toggle("hidden", !mistakes.length || game.mode === "correction");
   elements.retryMistakes.textContent = `Fehler wiederholen (${mistakes.length})`;
   elements.reviewSuccess.classList.toggle("hidden", Boolean(mistakes.length));
-  elements.reviewSuccess.textContent = game.isPractice ? "Alle Fehler geschafft!" : "Alles richtig!";
+  elements.reviewSuccess.textContent = game.mode === "correction" ? "In dieser Runde alles richtig!" : game.isPractice ? "Alle Fehler geschafft!" : "Alles richtig!";
 }
 
 function render() {
   const mode = activeTopic();
   const isLearn = mode === "learn";
+  const isCorrection = selectedMode === "correction";
   elements.currentTopic.textContent = document.querySelector(`#mode-${selectedMode}-title`).textContent;
   updateCountOptions();
   elements.launchTopic.textContent = elements.currentTopic.textContent;
-  elements.launchDetails.textContent = isLearn ? "Ohne Wertung" : `${elements.count.value} Fragen`;
-  elements.launchTopicButton.textContent = isLearn ? "Karte erkunden" : "Quiz starten";
+  elements.launchDetails.textContent = isCorrection ? `${mistakes.count} offene Fragen · Ohne Rekordwertung` : isLearn ? "Ohne Wertung" : `${elements.count.value} Fragen`;
+  document.querySelector("#mode-correction-best").textContent = `${mistakes.count} offene Fragen`;
+  elements.mistakeHelp.classList.toggle("hidden", !isCorrection);
+  elements.mistakeStorage.textContent = mistakes.persistent
+    ? "Fehler werden nur in diesem Browser gespeichert."
+    : "Fehler und Korrekturen bleiben für diese Sitzung erhalten; dauerhaftes Speichern ist nicht verfügbar.";
+  elements.launchTopicButton.disabled = isCorrection && !mistakes.count;
+  elements.start.disabled = isCorrection && !mistakes.count;
+  elements.newRound.disabled = isCorrection && !mistakes.count;
+  elements.restart.disabled = isCorrection && !mistakes.count;
+  elements.launchTopicButton.textContent = isCorrection ? "Fehler korrigieren" : isLearn ? "Karte erkunden" : "Quiz starten";
+  elements.practiceSaved.classList.toggle("hidden", !mistakes.count);
+  elements.practiceSaved.textContent = `${isCorrection ? "Weiter üben" : "Fehler korrigieren"} (${mistakes.count})`;
+  elements.newRound.textContent = isCorrection ? "Neue Übungsrunde" : "Neue Runde";
+  elements.correctionProgress.textContent = game?.answered ? game.correctionMessage ?? "" : "";
+  elements.correctionSummary.textContent = isCorrection && game?.finished
+    ? `${game.clearedCount ?? 0} Fragen korrigiert. ${mistakes.count ? `${mistakes.count} offene Fragen verbleiben.` : "Alle gespeicherten Fehler korrigiert!"}` : "";
   updateMapMode();
   for (const bestLabel of elements.modeCards.querySelectorAll("[data-mode-best]")) {
     const cardMode = bestLabel.dataset.modeBest;
@@ -571,7 +596,7 @@ function render() {
       ? `Dein Rekord: noch keiner · ${count} Fragen`
       : `Dein Rekord: ${best}/${count}`;
   }
-  elements.highscores.classList.toggle("hidden", isLearn);
+  elements.highscores.classList.toggle("hidden", isLearn || isCorrection);
   const best = highscores.getBest(selectedMode, Number(elements.count.value));
   elements.personalBest.textContent = best === null ? "Dein Rekord: noch keiner" : `Dein Rekord: ${best}/${elements.count.value}`;
   elements.highscoreStorage.textContent = highscores.persistent
@@ -580,7 +605,7 @@ function render() {
   const roundActive = Boolean(game && !game.finished);
   elements.resetRecords.disabled = roundActive || !highscores.hasRecords;
   elements.resetRecordsHint.classList.toggle("hidden", !roundActive);
-  elements.countLabel.classList.toggle("hidden", isLearn);
+  elements.countLabel.classList.toggle("hidden", isLearn || isCorrection);
   elements.learnTopics.classList.toggle("hidden", !isLearn);
   elements.autoLabel.classList.toggle("hidden", isLearn);
   elements.stats.classList.toggle("hidden", isLearn);
@@ -588,20 +613,21 @@ function render() {
   elements.start.classList.toggle("hidden", isLearn || Boolean(game));
   elements.restart.classList.toggle("hidden", isLearn || !game || game.finished);
   elements.restart.textContent = game?.isPractice ? "Übung neu starten" : "Neustart";
+  elements.practiceLabel.textContent = isCorrection ? "Fehler korrigieren · Übungsrunde – ohne Rekordwertung" : "Fehler üben · Übungsrunde – ohne Rekordwertung";
   elements.practiceLabel.classList.toggle("hidden", !game?.isPractice);
   elements.next.classList.toggle("hidden", !game || game.finished || !game.answered);
   elements.next.disabled = !game?.answered;
   elements.result.classList.toggle("hidden", !game?.finished);
-  elements.totalRounds.textContent = String(game?.questions.length ?? Number(elements.count.value));
+  elements.totalRounds.textContent = String(game?.questions.length ?? (isCorrection ? Math.min(10, mistakes.count) : Number(elements.count.value)));
   elements.round.textContent = game ? String(Math.min(game.index + 1, game.questions.length)) : "–";
   const answered = game?.history.length ?? 0;
-  const total = game?.questions.length ?? Number(elements.count.value);
+  const total = game?.questions.length ?? (isCorrection ? Math.min(10, mistakes.count) : Number(elements.count.value));
   elements.progress.max = total;
   elements.progress.value = answered;
   elements.progressLabel.textContent = `${answered} von ${total} Fragen beantwortet`;
   elements.progress.hidden = isLearn;
   elements.progressLabel.hidden = isLearn;
-  elements.questionTopic.textContent = selectedMode === "mix" && game && !game.finished ? TOPIC_LABELS[mode] : "";
+  elements.questionTopic.textContent = ["mix", "correction"].includes(selectedMode) && game && !game.finished ? TOPIC_LABELS[mode] : "";
   elements.correctionActions.classList.toggle("hidden", !game?.answered || game.finished || game.selectedCode === currentQuestion(game)?.code || mode === "seat");
   elements.next.textContent = game && game.index === game.questions.length - 1 ? "Ergebnis ansehen" : "Weiter";
   elements.score.textContent = String(game?.score ?? 0);
@@ -616,6 +642,12 @@ function render() {
     return;
   }
   if (!game) {
+    if (isCorrection) {
+      elements.question.textContent = mistakes.count ? `${mistakes.count} offene Fragen aus deinen bisherigen Quizantworten.` : "Keine offenen Fehler. Spiele ein Quiz, um schwierige Fragen hier zu sammeln.";
+      elements.options.classList.add("hidden");
+      setFeedback(mistakes.count ? "Drücke Start, um deine Fehler zu korrigieren." : "");
+      return;
+    }
     if (selectedMode === "mix") {
       elements.question.textContent = "Sieben Kartenthemen, eine Runde: Finde Orte, Gewässer und Regionen in ganz Bayern.";
       elements.options.classList.add("hidden");
@@ -727,20 +759,25 @@ function startGame(practiceGame = null) {
   hideRiverInfo();
   hideMountainInfo();
   hideSightInfo();
-  const requiredTopics = selectedMode === "mix" ? Object.keys(MAP_TOPICS)
-    : [selectedMode === "seat" ? "map" : selectedMode];
+  if (selectedMode === "correction" && !mistakes.count) return;
+  const candidate = selectedMode === "correction" ? createCorrectionGame(mistakes.selectQuestions())
+    : practiceGame ?? createGame(selectedMode, Number(elements.count.value));
+  const requiredTopics = [...new Set(candidate.questions.map(target => {
+    const topic = questionTopic(candidate, target);
+    return topic === "seat" ? "map" : topic;
+  }))];
   if (requiredTopics.some(topic => elements.mapHost.querySelectorAll(topic === "map" ? ".region" : `.${topic}`).length !== MAP_TOPICS[topic].length)) {
     setFeedback("Die benötigten Kartenebenen konnten nicht geladen werden. Bitte lade die Seite neu.", "bad");
     return;
   }
-  game = practiceGame ?? createGame(selectedMode, Number(elements.count.value));
+  game = candidate;
   if (!practiceGame) practiceSource = null;
   roundRecord = null;
   compactTopicSelection();
   elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
   mapZoom?.reset();
-  if (game.mode === "seat") makeSeatOptions(game);
-  setFeedback(game.mode === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
+  if (activeTopic() === "seat") makeSeatOptions(game);
+  setFeedback(activeTopic() === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
   render();
   elements.question.focus({ preventScroll: true });
   if (window.matchMedia("(min-width: 1100px)").matches) elements.question.scrollIntoView({ block: "nearest" });
@@ -757,10 +794,10 @@ function advance() {
   hideSightInfo();
   const previousTopic = activeTopic();
   if (!game || !nextQuestion(game)) return;
-  if (!game.finished && game.mode === "mix" && activeTopic() !== previousTopic) mapZoom?.reset();
+  if (!game.finished && ["mix", "correction"].includes(game.mode) && activeTopic() !== previousTopic) mapZoom?.reset();
   if (game.finished) roundRecord = game.isPractice ? null : highscores.recordCompletedRound(game);
-  if (!game.finished && game.mode === "seat") makeSeatOptions(game);
-  setFeedback(game.finished ? "" : game.mode === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
+  if (!game.finished && activeTopic() === "seat") makeSeatOptions(game);
+  setFeedback(game.finished ? "" : activeTopic() === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
   render();
   if (game.finished) elements.resultTitle.focus();
   else {
@@ -773,6 +810,10 @@ function submit(code) {
   if (!game) return;
   const correct = answer(game, code);
   if (correct === null) return;
+  const progress = mistakes.recordAnswer(game);
+  game.correctionMessage = progress ? progress.cleared ? "Fehler korrigiert!"
+    : correct ? "1 von 2 richtig" : "Noch einmal üben · 0 von 2 richtig" : "";
+  if (progress?.cleared) game.clearedCount = (game.clearedCount ?? 0) + 1;
   const topic = activeTopic();
   const target = currentQuestion(game);
   const selected = (topic === "seat" ? game.options : MAP_TOPICS[topic]).find(item => item.code === code);
@@ -864,7 +905,7 @@ for (const input of modeInputs) {
   input.addEventListener("change", () => {
     if (!input.checked || selectedMode === input.value) return;
     if (selectedMode === "mix") mixCount = Number(elements.count.value);
-    else otherCount = Number(elements.count.value);
+    else if (selectedMode !== "correction") otherCount = Number(elements.count.value);
     selectedMode = input.value;
     elements.count.value = String(selectedMode === "mix" ? mixCount : otherCount);
     resetMode();
@@ -891,12 +932,21 @@ elements.count.addEventListener("change", () => {
 elements.start.addEventListener("click", () => startGame());
 elements.newRound.addEventListener("click", () => startGame());
 elements.restart.addEventListener("click", () => {
-  startGame(game?.isPractice ? createRetryGame(practiceSource) : null);
+  startGame(selectedMode !== "correction" && game?.isPractice ? createRetryGame(practiceSource) : null);
 });
 elements.retryMistakes.addEventListener("click", () => {
   if (!game?.finished || !getMistakeReview(game).length) return;
   practiceSource = game;
   startGame(createRetryGame(practiceSource));
+});
+elements.practiceSaved.addEventListener("click", () => {
+  if (!mistakes.count) return;
+  if (selectedMode === "mix") mixCount = Number(elements.count.value);
+  else if (selectedMode !== "correction") otherCount = Number(elements.count.value);
+  modeInputs.find(input => input.value === "correction").checked = true;
+  selectedMode = "correction";
+  resetMode();
+  startGame();
 });
 elements.next.addEventListener("click", advance);
 elements.autoNext.addEventListener("change", () => {
@@ -904,7 +954,7 @@ elements.autoNext.addEventListener("change", () => {
 });
 function handleSeatOptionClick(event) {
   const button = event.target.closest("button[data-code]");
-  if (button && game?.mode === "seat") submit(button.dataset.code);
+  if (button && activeTopic() === "seat") submit(button.dataset.code);
 }
 elements.options.addEventListener("click", handleSeatOptionClick);
 

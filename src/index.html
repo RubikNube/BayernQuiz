@@ -123,6 +123,15 @@
               <span id="mode-nature-best" class="modeCard__best" data-mode-best="nature">Dein Rekord: noch keiner · 7 Fragen</span>
             </span>
           </label>
+          <label class="modeCard">
+            <input type="radio" name="mode" value="correction" aria-labelledby="mode-correction-title" aria-describedby="mode-correction-description mode-correction-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--illustration" src="topic-learn.svg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-correction-title" class="modeCard__title">Fehler korrigieren</strong>
+              <span id="mode-correction-description" class="modeCard__description">Übe gespeicherte Fehler aus allen Quizthemen.</span>
+              <span id="mode-correction-best" class="modeCard__best">0 offene Fragen</span>
+            </span>
+          </label>
         </div>
       </fieldset>
 
@@ -161,6 +170,10 @@
               <p id="resetRecordsStatus" role="status"></p>
             </div>
 
+            <div id="mistakeHelp" class="hidden">
+              <p>Beantworte jede Frage in zwei Runden hintereinander richtig, um sie abzuschließen. Pro Runde übst du bis zu zehn Fragen.</p>
+            </div>
+            <p id="mistakeStorage" class="highscoreStorage"></p>
             <fieldset id="learnTopics" class="learnTopics hidden">
               <legend>Themen in Lernen</legend>
               <label><input type="checkbox" data-learn-topic="regions" checked /> Regierungsbezirke</label>
@@ -184,6 +197,7 @@
             </div>
             <progress id="quizProgress" value="0" max="7" aria-labelledby="progressLabel"></progress>
             <span id="progressLabel" class="progressLabel">0 von 7 Fragen beantwortet</span>
+            <p id="correctionProgress" class="practiceLabel" role="status"></p>
             <p id="feedback" class="feedback" role="status" aria-live="polite"></p>
             <div id="correctionActions" class="correctionActions hidden">
               <button type="button" class="secondary" data-compare="selected">Deine Auswahl ansehen</button>
@@ -254,11 +268,13 @@
             <h2 id="resultTitle" tabindex="-1">Quiz beendet</h2>
             <p>Du hast <strong id="finalScore">0</strong> von <strong id="finalTotal">7</strong> Fragen richtig beantwortet.</p>
             <p id="highscoreResult"></p>
+            <p id="correctionSummary"></p>
             <h3 id="reviewTitle">Deine Fehler</h3>
             <ol id="mistakeReview" class="mistakeReview"></ol>
             <p id="reviewSuccess" class="hidden"></p>
             <div class="actions">
               <button id="retryMistakes" type="button" class="hidden">Fehler wiederholen</button>
+              <button id="practiceSaved" type="button" class="secondary hidden">Fehler korrigieren</button>
               <button id="newRound" type="button" class="secondary">Neue Runde</button>
             </div>
           </section>
