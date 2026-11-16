@@ -17,7 +17,7 @@ export function createLayout(getState) {
       const sticky = getComputedStyle(questionBar).position === "sticky";
       // Keep answer options visible for seat questions, and the prompt on short screens.
       const target = !sticky ? questionBar
-        : topic === "seat" ? elements.quizControls : elements.mapHost.closest(".mapWrap");
+        : ["seat", "photo"].includes(topic) ? elements.quizControls : elements.mapHost.closest(".mapWrap");
       const top = (window.visualViewport?.offsetTop ?? 0)
         + (sticky ? questionBar.getBoundingClientRect().height : 0) + 12;
       const delta = target.getBoundingClientRect().top - top;

@@ -272,3 +272,44 @@ a { color: #9dd4ff; }
   body.quizActive { overflow-anchor: none; }
   .quizActive .questionBar { max-height: 48dvh; overflow-y: auto; }
 }
+
+.photoQuestion { display: grid; gap: 10px; margin-bottom: 16px; }
+.photoQuestion img { display: block; width: 100%; height: auto; max-height: 360px; object-fit: contain; border-radius: 10px; background: #17223b; }
+.photoQuestion p:empty { display: none; }
+.photoQuestion a { font-size: .8rem; }
+/* Keep the photo, answers, and revealed location in one reading column. */
+.photoMode .workspace { display: flex; flex-direction: column; }
+.photoMode .sidebar { display: contents; }
+.photoMode .quizControls { width: min(100%, 640px); align-self: center; }
+.photoMode .mapWrap { width: 100%; height: auto; }
+.photoMode .mapHost { max-width: 640px; }
+
+.photoMode .infoPanel { order: 2; }
+.photoMode .result { order: 3; }
+.photoMode #bayernMap { height: auto; aspect-ratio: 1; }
+
+.photoMode .questionBar { width: min(100%, 640px); align-self: center; }
+
+@media (min-width: 1100px) {
+  .photoMode .workspace {
+    display: grid;
+    grid-template-columns: 320px minmax(0, 1fr);
+    grid-template-areas:
+      "settings question"
+      "settings quiz"
+      "settings map"
+      "settings info"
+      "settings result";
+    align-content: start;
+  }
+  .photoMode .settings { grid-area: settings; position: sticky; top: 16px; }
+  .photoMode .questionBar { grid-area: question; position: static; }
+  .photoMode .quizControls { grid-area: quiz; }
+  .photoMode .mapWrap { grid-area: map; }
+  .photoMode .infoPanel { grid-area: info; }
+  .photoMode .result { grid-area: result; }
+  .photoMode .questionBar, .photoMode .quizControls,
+  .photoMode .mapWrap, .photoMode .infoPanel, .photoMode .result {
+    width: 100%; max-width: 640px; justify-self: center;
+  }
+}

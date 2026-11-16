@@ -1,5 +1,5 @@
 import { createEvents } from "./events.js";
-import { MAP_TOPICS, questionTopic, REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createCorrectionGame, createGame, createRetryGame, currentQuestion, getMistakeReview, makeSeatOptions, nextQuestion } from "./game.js";
+import { MAP_TOPICS, questionTopic, REGIONS, RIVERS, MOUNTAINS, SIGHTS, CITIES, NATURE_RESERVES, LAKES, answer, createCorrectionGame, createGame, createRetryGame, currentQuestion, getMistakeReview, makeSeatOptions, makePhotoOptions, nextQuestion } from "./game.js";
 import { createHighscores } from "./highscores.js";
 import { createMistakes } from "./mistakes.js";
 import { createLayout } from "./layout.js";
@@ -45,14 +45,15 @@ export function createQuizController() {
     return success;
   } });
   const { modeInputs, learnTopics, updateCountOptions, compactTopicSelection } = settings;
-  const map = createMapView({ getState: snapshot, onSelect: ({ topic, code }) => ({ map: chooseRegion, river: chooseRiver, mountain: chooseMountain, lake: chooseLake, nature: chooseNature, city: chooseCity, sight: chooseSight })[topic](code) });
+  const map = createMapView({ getState: mapSnapshot, onSelect: ({ topic, code }) => ({ map: chooseRegion, river: chooseRiver, mountain: chooseMountain, lake: chooseLake, nature: chooseNature, city: chooseCity, sight: chooseSight })[topic](code) });
   const { resetMap, highlight, highlightRiver, highlightMountain, highlightSight, highlightNature, highlightLake, highlightCity } = map;
   const view = createQuizView({ highscores, mistakes });
   const { setFeedback } = view;
-  function snapshot() { return { game, topic: activeTopic(), selectedMode, roundRecord, mixCount, learnTopics }; }
+  function snapshot() { return { game, topic: activeTopic(), selectedMode, roundRecord, mixCount, photoCount, learnTopics }; }
+  function mapSnapshot() { return { ...snapshot(), topic: activeTopic() === "photo" ? "sight" : activeTopic() }; }
   function render() {
     updateCountOptions(selectedMode);
-    map.updateMapMode(snapshot());
+    map.updateMapMode(mapSnapshot());
     resetMap();
     view.render(snapshot());
     if (!game || game.finished) return;
@@ -71,7 +72,7 @@ export function createQuizController() {
       highlightMountain(target.code, "correct");
       if (game.selectedCode !== target.code) highlightMountain(game.selectedCode, "wrong");
     }
-    if (game.answered && mode === "sight") {
+    if (game.answered && (mode === "sight" || mode === "photo")) {
       highlightSight(target.code, "correct");
       if (game.selectedCode !== target.code) highlightSight(game.selectedCode, "wrong");
     }
@@ -97,6 +98,7 @@ export function createQuizController() {
 
   let advanceTimer = null;
   let mixCount = 10;
+  let photoCount = 10;
   let otherCount = 7;
 
   function activeTopic() {
@@ -106,7 +108,7 @@ export function createQuizController() {
 
   function compareAnswer(selected) {
     if (!game?.answered || game.finished) return;
-    const topic = activeTopic();
+    const topic = activeTopic() === "photo" ? "sight" : activeTopic();
     const target = selected ? MAP_TOPICS[topic].find(item => item.code === game.selectedCode) : currentQuestion(game);
     showTargetInfo(topic, target);
     map.reveal(topic, target.code);
@@ -150,7 +152,7 @@ export function createQuizController() {
       : practiceGame ?? createGame(selectedMode, Number(elements.count.value));
     const requiredTopics = [...new Set(candidate.questions.map(target => {
       const topic = questionTopic(candidate, target);
-      return topic === "seat" ? "map" : topic;
+      return topic === "seat" ? "map" : topic === "photo" ? "sight" : topic;
     }))];
     if (requiredTopics.some(topic => elements.mapHost.querySelectorAll(topic === "map" ? ".region" : `.${topic}`).length !== MAP_TOPICS[topic].length)) {
       setFeedback("Die benötigten Kartenebenen konnten nicht geladen werden. Bitte lade die Seite neu.", "bad");
@@ -163,7 +165,8 @@ export function createQuizController() {
     elements.settings.open = window.matchMedia("(min-width: 1100px)").matches;
     map.resetZoom();
     if (activeTopic() === "seat") makeSeatOptions(game);
-    setFeedback(activeTopic() === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
+    if (activeTopic() === "photo") makePhotoOptions(game);
+    setFeedback(activeTopic() === "photo" ? "Wähle den Namen zur Aufnahme." : activeTopic() === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
     render();
     elements.question.focus({ preventScroll: true });
     if (window.matchMedia("(min-width: 1100px)").matches) elements.question.scrollIntoView({ block: "nearest" });
@@ -183,7 +186,8 @@ export function createQuizController() {
     if (!game.finished && ["mix", "correction"].includes(game.mode) && activeTopic() !== previousTopic) map.resetZoom();
     if (game.finished) roundRecord = game.isPractice ? null : highscores.recordCompletedRound(game);
     if (!game.finished && activeTopic() === "seat") makeSeatOptions(game);
-    setFeedback(game.finished ? "" : activeTopic() === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
+    if (!game.finished && activeTopic() === "photo") makePhotoOptions(game);
+    setFeedback(game.finished ? "" : activeTopic() === "photo" ? "Wähle den Namen zur Aufnahme." : activeTopic() === "seat" ? "Wähle den richtigen Regierungssitz." : "Wähle die gesuchte Antwort auf der Karte.");
     render();
     if (game.finished) elements.resultTitle.focus();
     else {
@@ -193,7 +197,7 @@ export function createQuizController() {
   }
 
   function submit(code) {
-    if (!game) return;
+    if (!game || (activeTopic() === "photo" && !view.photoReady())) return;
     const correct = answer(game, code);
     if (correct === null) return;
     const progress = mistakes.recordAnswer(game);
@@ -202,15 +206,15 @@ export function createQuizController() {
     if (progress?.cleared) game.clearedCount = (game.clearedCount ?? 0) + 1;
     const topic = activeTopic();
     const target = currentQuestion(game);
-    const selected = (topic === "seat" ? game.options : MAP_TOPICS[topic]).find(item => item.code === code);
+    const selected = (["seat", "photo"].includes(topic) ? game.options : MAP_TOPICS[topic]).find(item => item.code === code);
     setFeedback(correct ? "✓ Richtig!" : `Deine Antwort: ${topic === "seat" ? selected.seat : selected.name}. Richtige Antwort: ${topic === "seat" ? target.seat : target.name}.`, correct ? "good" : "bad");
     render();
     if (topic !== "seat") {
-      showTargetInfo(topic, target);
-      if (!correct) map.reveal(topic, target.code);
+      showTargetInfo(topic === "photo" ? "sight" : topic, target);
+      if (!correct || topic === "photo") map.reveal(topic === "photo" ? "sight" : topic, target.code);
     }
     if (correct && elements.autoNext.checked) {
-      advanceTimer = window.setTimeout(advance, ["sight", "nature", "lake"].includes(topic) ? 5000 : 1600);
+      advanceTimer = window.setTimeout(advance, ["photo", "sight", "nature", "lake"].includes(topic) ? 5000 : 1600);
     }
   }
 
@@ -237,9 +241,10 @@ export function createQuizController() {
     events.on(input, "change", () => {
       if (!input.checked || selectedMode === input.value) return;
       if (selectedMode === "mix") mixCount = Number(elements.count.value);
+      else if (selectedMode === "photo") photoCount = Number(elements.count.value);
       else if (selectedMode !== "correction") otherCount = Number(elements.count.value);
       selectedMode = input.value;
-      elements.count.value = String(selectedMode === "mix" ? mixCount : otherCount);
+      elements.count.value = String(selectedMode === "mix" ? mixCount : selectedMode === "photo" ? photoCount : otherCount);
       resetMode();
       if (elements.topicDialog.open) elements.topicDialog.close();
     });
@@ -257,6 +262,7 @@ export function createQuizController() {
   });
   events.on(elements.count, "change", () => {
     if (selectedMode === "mix") mixCount = Number(elements.count.value);
+    else if (selectedMode === "photo") photoCount = Number(elements.count.value);
     else otherCount = Number(elements.count.value);
     elements.resetRecordsStatus.textContent = "";
     if (!game || game.finished) render();
@@ -277,12 +283,12 @@ export function createQuizController() {
   });
   function handleSeatOptionClick(event) {
     const button = event.target.closest("button[data-code]");
-    if (button && activeTopic() === "seat") submit(button.dataset.code);
+    if (button && ["seat", "photo"].includes(activeTopic())) submit(button.dataset.code);
   }
   events.on(elements.options, "click", handleSeatOptionClick);
 
   function chooseRegion(code) {
-    if (!code || activeTopic() === "lake" || activeTopic() === "nature" || activeTopic() === "river" || activeTopic() === "mountain" || activeTopic() === "sight" || activeTopic() === "city") return;
+    if (!code || activeTopic() === "photo" || activeTopic() === "lake" || activeTopic() === "nature" || activeTopic() === "river" || activeTopic() === "mountain" || activeTopic() === "sight" || activeTopic() === "city") return;
     if (activeTopic() === "learn" && !learnTopics.regions.checked) return;
     const region = REGIONS.find((item) => item.code === code);
     if (!region) return;
@@ -372,7 +378,7 @@ export function createQuizController() {
   }
 
   function chooseSight(code) {
-    if (activeTopic() !== "sight" && !(activeTopic() === "learn" && learnTopics.sights.checked)) return;
+    if (activeTopic() !== "sight" && !(activeTopic() === "photo" && (game?.answered || game?.finished)) && !(activeTopic() === "learn" && learnTopics.sights.checked)) return;
     const sight = SIGHTS.find((item) => item.code === code);
     if (!sight) return;
     if (!game || game.finished) {
@@ -388,6 +394,6 @@ export function createQuizController() {
 
   resetMode();
   map.loadMap();
-  return { startGame, advance, submit, destroy() { events.destroy(); cancelAdvance(); layout.destroy(); map.destroy(); info.destroy(); settings.destroy(); } };
+  return { startGame, advance, submit, destroy() { events.destroy(); cancelAdvance(); layout.destroy(); map.destroy(); info.destroy(); settings.destroy(); view.destroy(); } };
 
 }

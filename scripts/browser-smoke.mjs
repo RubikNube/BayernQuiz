@@ -95,6 +95,71 @@ await mode('mix'); await click('#start');
 await evaluate('document.querySelector("#autoNext").checked=false');
 for (let i=0; i<10; i++) { await answerCorrect(); await click('#next'); }
 assert.equal(await evaluate('document.querySelector("#finalScore").textContent'), '10');
+// Photo rounds: anonymous prompt, image failures, scoring, retries, and separate counts.
+async function photoReady() {
+ await wait(`document.querySelector('#photoFrame img')?.naturalWidth > 0 && !document.querySelector('#options button').disabled`);
+}
+async function photoAnswer(correct=true) {
+ await photoReady();
+ return evaluate(`(()=>{const code=document.querySelector('#photoFrame img').getAttribute('src').split('/').pop().replace('.jpg','');const button=[...document.querySelectorAll('#options button')].find(b=>(b.dataset.code===code)===${correct});button.click();return code;})()`);
+}
+await cdp('Emulation.setDeviceMetricsOverride',{width:1366,height:900,deviceScaleFactor:1,mobile:false});
+await mode('photo');
+assert.equal(await evaluate('document.querySelector("#count").value'), '10');
+assert.equal(await evaluate('document.querySelector(".mapWrap").getClientRects().length'), 0);
+await evaluate(`document.querySelector('#count').value='3';document.querySelector('#count').dispatchEvent(new Event('change'));document.querySelector('#autoNext').checked=false`);
+await click('#start');await photoReady();
+assert.equal(await evaluate(`(()=>{const settings=document.querySelector('#settings').getBoundingClientRect();const question=document.querySelector('.questionBar').getBoundingClientRect();const controls=document.querySelector('#quizControls').getBoundingClientRect();return question.left >= settings.right && Math.abs(question.top-settings.top)<2 && controls.top >= question.bottom && controls.top-question.bottom<32;})()`),true);
+assert.equal(await evaluate('document.querySelectorAll("#options button").length'),4);
+assert.equal(await evaluate('document.querySelector("#question strong")'),null);
+assert.match(await evaluate('document.querySelector("#photoFrame img").alt'),/^Foto einer/);
+// Simulate an image request failure, then retry the same target without scoring.
+await evaluate(`document.querySelector('#photoFrame img').dispatchEvent(new Event('error'))`);
+assert.equal(await evaluate('[...document.querySelectorAll("#options button")].every(b=>b.disabled)'),true);
+assert.equal(await evaluate('document.querySelector("#score").textContent'),'0');
+await click('#retryPhoto');await photoReady();
+await evaluate(`(()=>{const code=document.querySelector('#photoFrame img').getAttribute('src').split('/').pop().replace('.jpg','');[...document.querySelectorAll('#options button')].find(b=>b.dataset.code!==code).focus();})()`);
+const photoMiss=await evaluate(`document.querySelector('#photoFrame img').getAttribute('src').split('/').pop().replace('.jpg','')`);
+await cdp('Input.dispatchKeyEvent',{type:'keyDown',key:'Enter',code:'Enter',text:'\r',windowsVirtualKeyCode:13});
+await cdp('Input.dispatchKeyEvent',{type:'keyUp',key:'Enter',code:'Enter',windowsVirtualKeyCode:13});
+assert.ok(await evaluate('document.querySelector(".mapWrap").getClientRects().length > 0'));
+assert.ok(await evaluate('document.querySelector("#sightInfo").getClientRects().length > 0'));
+assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizMistakes).entries.some(e=>e.topic==="photo")'),true);
+await click('#next');await photoAnswer();await click('#next');await photoAnswer();
+assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizHighscores).records["photo:3"] ?? null'),null);
+await click('#next');
+assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizHighscores).records["photo:3"]'),2);
+await click('#retryMistakes');await photoAnswer();await click('#next');
+assert.equal(await evaluate('document.querySelector("#finalTotal").textContent'),'1');
+assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizHighscores).records["photo:3"]'),2);
+await mode('map');await mode('photo');
+assert.equal(await evaluate('document.querySelector("#count").value'),'3');
+// Restart and mode switch must ignore an old image event and a pending five-second timer.
+await click('#start');await photoReady();
+await evaluate('window.oldPhoto=document.querySelector("#photoFrame img");document.querySelector("#autoNext").checked=true');
+await photoAnswer();await click('#restart');await photoReady();
+await evaluate('window.oldPhoto.dispatchEvent(new Event("error"))');
+assert.equal(await evaluate('document.querySelector("#retryPhoto").hidden'),true);
+await new Promise(r=>setTimeout(r,5200));
+assert.equal(await evaluate('document.querySelector("#score").textContent'),'0');
+await photoAnswer();await mode('map');
+await new Promise(r=>setTimeout(r,5200));
+assert.equal(await evaluate('document.querySelector("#round").textContent'),'–');
+// Saved corrections switch between a sight's map and photo questions, including on mobile.
+await evaluate(`localStorage.bayernQuizMistakes=JSON.stringify({version:1,entries:[{topic:'photo',code:${JSON.stringify(photoMiss)},streak:0},{topic:'sight',code:${JSON.stringify(photoMiss)},streak:0}]})`);
+await cdp('Page.reload');await ready();
+await cdp('Emulation.setDeviceMetricsOverride',{width:390,height:844,deviceScaleFactor:1,mobile:true});
+await mode('correction');await click('#start');
+await evaluate('document.querySelector("#autoNext").checked=false');
+for(let i=0;i<2;i++) {
+ const label=await evaluate('document.querySelector("#questionTopic").textContent');
+ if(label==='Bilderquiz') {await photoAnswer();assert.equal(await evaluate('document.documentElement.scrollWidth <= innerWidth'),true);}
+ else await answerCorrect();
+ await click('#next');
+}
+assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizMistakes).entries.every(e=>e.streak===1)'),true);
+await evaluate('localStorage.removeItem("bayernQuizMistakes")');
+await cdp('Page.reload');await ready();
 await mode('learn');
 await click('[data-learn-topic="lakes"]');
 assert.equal(await evaluate('JSON.parse(localStorage.bayernQuizLearnTopics).lakes'), false);
@@ -104,7 +169,8 @@ await wait('navigator.serviceWorker.controller !== null');
 await cdp('Network.enable');await cdp('Network.emulateNetworkConditions',{offline:true,latency:0,downloadThroughput:0,uploadThroughput:0});
 await cdp('Page.reload');await ready();await mode('correction');
 assert.equal(await evaluate('document.querySelector("#start").disabled'),true);
+await mode('photo');await click('#start');await evaluate('document.querySelector("#autoNext").checked=false');await photoAnswer();
 await cdp('Network.emulateNetworkConditions',{offline:false,latency:0,downloadThroughput:-1,uploadThroughput:-1});
 assert.deepEqual(errors,[]);
-console.log('PASS: normal/mixed rounds, duplicate answers, timers, reset dialog, image failure/focus, preferences;  empty state, normal-answer persistence, reload, eight-topic practice, two-round clearing, desktop/mobile, records exclusion, offline reload, no browser exceptions.');
+console.log('PASS: normal/mixed rounds, duplicate answers, timers, reset dialog, image failure/focus, preferences;  empty state, normal-answer persistence, reload, eight-topic practice, two-round clearing, desktop/mobile, records exclusion, offline reload; photo options, keyboard answers, image retry/stale events, practice, records, timers and offline photos; no browser exceptions.');
 ws.close();

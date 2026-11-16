@@ -604,7 +604,7 @@ export const MAP_TOPICS = Object.freeze({
 });
 
 export const TOPIC_LABELS = Object.freeze({
-  seat: "Regierungssitze",
+  seat: "Regierungssitze", photo: "Bilderquiz",
   map: "Regierungsbezirke", city: "Städte", lake: "Seen", river: "Flüsse",
   mountain: "Gebirge", sight: "Sehenswürdigkeiten", nature: "Naturschutzgebiete",
 });
@@ -618,7 +618,7 @@ function questionKey(game, target) {
 }
 
 export function resolveQuestion(topic, code) {
-  const items = topic === "seat" ? REGIONS : MAP_TOPICS[topic];
+  const items = topic === "seat" ? REGIONS : topic === "photo" ? SIGHTS : MAP_TOPICS[topic];
   return Array.isArray(items) ? items.find(item => item.code === code) ?? null : null;
 }
 
@@ -646,6 +646,7 @@ function createMixedQuestions(count, random) {
 }
 
 export function getAllowedQuestionCounts(mode) {
+  if (mode === "photo") return [3, 5, 7, 10, 15, 20];
   if (mode === "mix") return [7, 10, 15, 20];
   if (!["map", "seat", "river", "mountain", "sight", "city", "nature", "lake"].includes(mode)) return [];
   return mode === "city" ? [3, 5, 7, 10, 15, 20, 25] : mode === "river" ? [3, 5, 7, 10, 15, 20, 25, 30]
@@ -659,7 +660,7 @@ export function createGame(mode, count, random = Math.random) {
     throw new Error("Invalid question count");
   }
   return newRound(mode, mode === "mix" ? createMixedQuestions(count, random)
-    : shuffle(mode === "seat" ? REGIONS : MAP_TOPICS[mode], random).slice(0, count));
+    : shuffle(mode === "seat" ? REGIONS : mode === "photo" ? SIGHTS : MAP_TOPICS[mode], random).slice(0, count));
 }
 
 function newRound(mode, questions, isPractice = false) {
@@ -686,6 +687,7 @@ export function createRetryGame(completedGame, random = Math.random) {
 }
 
 export function questionText(mode, target) {
+  if (mode === "photo") return "Welche Sehenswürdigkeit siehst du?";
   if (mode === "nature") return `Wo liegt das Naturschutzgebiet »${target.name}«?`;
   if (mode === "sight" || mode === "mountain") return `Finde ${target.name} auf der Karte.`;
   if (mode === "river") return `Wo fließt ${target.name}?`;
@@ -698,10 +700,10 @@ export function getMistakeReview(game) {
   return game.history.filter(({ correct }) => !correct).map(({ questionCode, questionKey: key, selectedCode }) => {
     const target = game.questions.find(item => questionKey(game, item) === (key ?? questionCode));
     const topic = questionTopic(game, target);
-    const items = topic === "seat" ? [...REGIONS, ...OTHER_CITIES] : MAP_TOPICS[topic];
+    const items = topic === "seat" ? [...REGIONS, ...OTHER_CITIES] : topic === "photo" ? SIGHTS : MAP_TOPICS[topic];
     const selected = items.find(({ code }) => code === selectedCode);
     return {
-      question: questionText(topic, target),
+      question: topic === "photo" ? `Bilderquiz: ${target.name}` : questionText(topic, target),
       selectedAnswer: topic === "seat" ? selected.seat : selected.name,
       correctAnswer: topic === "seat" ? target.seat : target.name,
     };
@@ -722,12 +724,20 @@ export function makeSeatOptions(game, random = Math.random) {
   return game.options;
 }
 
+export function makePhotoOptions(game, random = Math.random) {
+  const target = currentQuestion(game);
+  if (!target || questionTopic(game, target) !== "photo") return [];
+  if (game.options.length) return game.options;
+  game.options = shuffle([target, ...shuffle(SIGHTS.filter(item => item.code !== target.code), random).slice(0, 3)], random);
+  return game.options;
+}
+
 export function answer(game, selectedCode) {
   if (game.finished || game.answered) return null;
   const target = currentQuestion(game);
   if (!target) return null;
   const topic = questionTopic(game, target);
-  const valid = topic === "seat"
+  const valid = topic === "seat" || topic === "photo"
     ? game.options.some((option) => option.code === selectedCode)
     : MAP_TOPICS[topic].some((item) => item.code === selectedCode);
   if (!valid) return null;

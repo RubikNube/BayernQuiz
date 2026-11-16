@@ -2,6 +2,14 @@
 
 Ein deutschsprachiges Lernspiel über die sieben Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete Bayerns. Es bietet ein Kartenquiz, ein Quiz zu den Sitzen der Bezirksregierungen, ein Städtequiz, ein Seenquiz, ein Flussquiz, ein Gebirgsquiz, ein Sehenswürdigkeiten-Quiz, ein Naturschutzgebiete-Quiz und einen Lernmodus. Spielablauf und Gestaltung basieren auf [UsaQuiz](https://github.com/RubikNube/UsaQuiz).
 
+## Bilderquiz
+
+**Bilderquiz** zeigt Fotos der 20 Sehenswürdigkeiten Bayerns. Zu jedem Foto stehen vier unterschiedliche Namen zur Auswahl. Runden enthalten 3, 5, 7, 10, 15 oder 20 Fragen (Standard: 10); die Auswahl wird während der Sitzung unabhängig von anderen Modi gemerkt. Kein Ziel wiederholt sich innerhalb einer Runde.
+
+Vor der Antwort bleiben Name, Informationen und Karte verborgen. Nach der Antwort werden die richtige und gegebenenfalls die falsche Auswahl markiert; die Karte zeigt den gesuchten Ort mit seiner Infokarte. Richtige Antworten können nach fünf Sekunden automatisch weitergehen; falsche Antworten warten auf **Weiter**. Kann ein Foto nicht geladen werden, bleiben Antworten gesperrt und **Bild erneut laden** bietet einen weiteren Versuch ohne Punktverlust.
+
+Rekorde werden getrennt nach Fragenanzahl gespeichert. **Fehler wiederholen** und **Fehler korrigieren** behalten das Fotoformat bei. Gespeicherte Foto- und Kartenfehler derselben Sehenswürdigkeit bleiben getrennt; zwei richtige Antworten löschen einen gespeicherten Fehler. Übungsrunden erhalten keine Rekordwertung. Vorhandene Fotos, Bildnachweise und Offline-Cache werden wiederverwendet.
+
 ## Bayern-Mix
 
 **Bayern-Mix** kombiniert alle sieben Kartenthemen: Regierungsbezirke, Städte, Seen, Flüsse, Gebirge, Sehenswürdigkeiten und Naturschutzgebiete. Der Regierungssitz-Modus bleibt ein eigenes Multiple-Choice-Quiz. Eine gemischte Runde enthält 7, 10, 15 oder 20 Fragen (Standard: 10); ihre Fragenanzahl wird während der Sitzung unabhängig von den anderen Modi gemerkt.

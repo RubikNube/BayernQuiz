@@ -1,3 +1,4 @@
+import { createPhotoQuestion } from "./photo-question.js";
 import { TOPIC_LABELS, currentQuestion, getMistakeReview, getAllowedQuestionCounts } from "./game.js";
 import { highscoreMessage } from "./highscores.js";
 export function createQuizView({ highscores, mistakes }) {
@@ -48,6 +49,7 @@ export function createQuizView({ highscores, mistakes }) {
     stats: document.querySelector("#stats"),
     totalRounds: document.querySelector("#totalRounds"),
   };
+  const photo = createPhotoQuestion();
   function setFeedback(message, tone = "") {
     elements.feedback.textContent = message;
     elements.feedback.className = `feedback ${tone}`;
@@ -55,7 +57,7 @@ export function createQuizView({ highscores, mistakes }) {
 
   function renderOptions(game, mode) {
     elements.options.replaceChildren();
-    if (!game || mode !== "seat" || game.finished) {
+    if (!game || !["seat", "photo"].includes(mode) || game.finished) {
       elements.options.classList.add("hidden");
       return;
     }
@@ -65,7 +67,8 @@ export function createQuizView({ highscores, mistakes }) {
       button.type = "button";
       button.className = "option";
       button.dataset.code = region.code;
-      button.textContent = region.seat;
+      button.textContent = mode === "photo" ? region.name : region.seat;
+      if (mode === "photo") button.disabled = !photo.ready;
       if (game.answered) {
         button.disabled = true;
         if (region.code === target.code) button.classList.add("correct");
@@ -100,7 +103,12 @@ export function createQuizView({ highscores, mistakes }) {
     elements.reviewSuccess.textContent = game.mode === "correction" ? "In dieser Runde alles richtig!" : game.isPractice ? "Alle Fehler geschafft!" : "Alles richtig!";
   }
 
-  function render({ game, topic: mode, selectedMode, roundRecord, mixCount, learnTopics }) {
+  function render({ game, topic: mode, selectedMode, roundRecord, mixCount, photoCount, learnTopics }) {
+    photo.render(game, mode);
+    const isPhoto = mode === "photo";
+    document.body.classList.toggle("photoMode", isPhoto);
+    document.querySelector(".mapWrap").classList.toggle("hidden", isPhoto && (!game || (!game.finished && !game.answered)));
+    document.querySelector("#infoPanel").classList.toggle("hidden", isPhoto && (!game || (!game.finished && !game.answered)));
     const isLearn = mode === "learn";
     const isCorrection = selectedMode === "correction";
     elements.currentTopic.textContent = document.querySelector(`#mode-${selectedMode}-title`).textContent;
@@ -123,7 +131,7 @@ export function createQuizView({ highscores, mistakes }) {
     for (const bestLabel of elements.modeCards.querySelectorAll("[data-mode-best]")) {
       const cardMode = bestLabel.dataset.modeBest;
       if (cardMode === "learn") continue;
-      const requestedCount = cardMode === "mix" ? mixCount : Number(elements.count.value);
+      const requestedCount = cardMode === "mix" ? mixCount : cardMode === "photo" ? photoCount : Number(elements.count.value);
       const count = getAllowedQuestionCounts(cardMode).includes(requestedCount) ? requestedCount : 7;
       const best = highscores.getBest(cardMode, count);
       bestLabel.textContent = best === null
@@ -187,7 +195,9 @@ export function createQuizView({ highscores, mistakes }) {
         setFeedback("Drücke Start für deinen Bayern-Mix.");
         return;
       }
-      elements.question.textContent = mode === "lake"
+      elements.question.textContent = mode === "photo"
+        ? "Erkenne die Sehenswürdigkeit auf dem Foto und wähle einen von vier Namen. Drücke Start."
+        : mode === "lake"
         ? "Wähle einen See, um ein Foto und Informationen zu sehen, oder drücke Start."
         : mode === "nature"
         ? "Wähle ein Naturschutzgebiet, um mehr darüber zu erfahren, oder drücke Start."
@@ -220,11 +230,16 @@ export function createQuizView({ highscores, mistakes }) {
     }
 
     const target = currentQuestion(game);
+    if (mode === "photo") {
+      elements.question.textContent = "Welche Sehenswürdigkeit siehst du?";
+      renderOptions(game, mode);
+      return;
+    }
     const name = document.createElement("strong");
     name.className = "question__target";
     name.textContent = target.name;
     elements.question.replaceChildren(document.createTextNode(mode === "seat" ? "Wähle den Regierungssitz von:" : "Finde auf der Karte:"), name);
     renderOptions(game, mode);
   }
-  return { render, setFeedback };
+  return { render, setFeedback, photoReady: () => photo.ready, destroy: () => photo.destroy() };
 }

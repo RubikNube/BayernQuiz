@@ -32,7 +32,7 @@ export function createSettingsView({ updateWorkspaceTop, getState, highscores, o
       option.hidden = !allowed;
       option.disabled = !allowed;
     }
-    if (!["learn", "correction"].includes(mode) && elements.count.selectedOptions[0]?.disabled) elements.count.value = mode === "mix" ? "10" : "7";
+    if (!["learn", "correction"].includes(mode) && elements.count.selectedOptions[0]?.disabled) elements.count.value = ["mix", "photo"].includes(mode) ? "10" : "7";
   }
   function compactTopicSelection() {
     if (elements.topicDialogContent.contains(elements.modeCards)) return;

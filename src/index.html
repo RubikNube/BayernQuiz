@@ -115,6 +115,15 @@
             </span>
           </label>
           <label class="modeCard">
+            <input type="radio" name="mode" value="photo" aria-labelledby="mode-photo-title" aria-describedby="mode-photo-description mode-photo-best" />
+            <img class="modeCard__thumbnail modeCard__thumbnail--photo" src="assets/sights/neuschwanstein.jpg" alt="" width="96" height="96" />
+            <span class="modeCard__content">
+              <strong id="mode-photo-title" class="modeCard__title">Bilderquiz</strong>
+              <span id="mode-photo-description" class="modeCard__description">Erkenne Bayerns Sehenswürdigkeiten auf Fotos.</span>
+              <span id="mode-photo-best" class="modeCard__best" data-mode-best="photo">Dein Rekord: noch keiner · 10 Fragen</span>
+            </span>
+          </label>
+          <label class="modeCard">
             <input type="radio" name="mode" value="nature" aria-labelledby="mode-nature-title" aria-describedby="mode-nature-description mode-nature-best" />
             <img class="modeCard__thumbnail modeCard__thumbnail--photo" src="assets/nature-reserves/murnauer-moos.jpg" alt="" width="96" height="96" />
             <span class="modeCard__content">
@@ -209,6 +218,12 @@
           </section>
 
           <section id="quizControls" class="prompt quizControls" aria-label="Quizantwort und Aktionen">
+            <div id="photoQuestion" class="photoQuestion hidden">
+              <div id="photoFrame"></div>
+              <p id="photoStatus" role="status"></p>
+              <button id="retryPhoto" type="button" class="secondary" hidden>Bild erneut laden</button>
+              <a href="assets/sights/ATTRIBUTION.md" target="_blank" rel="noopener noreferrer">Bildnachweise und Lizenzen ↗</a>
+            </div>
             <div id="options" class="options hidden" aria-label="Antwortmöglichkeiten"></div>
 
             <div class="actions">
