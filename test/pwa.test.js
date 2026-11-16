@@ -36,7 +36,8 @@ test("precache contains the entire bundle and changes only when its inputs chang
   const first = await buildOfflineWorker(directory);
   const second = await buildOfflineWorker(directory);
   assert.deepEqual(second, first);
-  for (const path of ["index.html", "regions.svg", "game.js", "pwa.js", "manifest.webmanifest", "LICENSE",
+  for (const path of ["index.html", "regions.svg", "game.js", "pwa.js", "app.js", "quiz-controller.js", "quiz-view.js", "map-view.js",
+    "settings-view.js", "info-cards.js", "layout.js", "events.js", "manifest.webmanifest", "LICENSE",
     "assets/lakes/chiemsee.jpg", "assets/cities/ATTRIBUTION.md", "assets/nature-reserves/metadata.json"]) {
     assert.ok(first.paths.includes(path), path);
   }

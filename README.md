@@ -231,3 +231,33 @@ python3 scripts/generate-nature-reserves.py src/regions.svg
 ## Lizenz
 
 Der Anwendungscode steht unter GPLv3 oder einer späteren Version. Siehe [LICENSE](LICENSE). Die Kartendaten stehen unter CC BY 4.0 mit der oben genannten Quellenangabe. Für Fotos gelten die jeweils in den Bildnachweisen aufgeführten Lizenzen.
+
+## Aufbau der Oberfläche
+
+`src/app.js` startet den `quiz-controller.js`. Dieser besitzt den Spielzustand,
+Rundenwechsel, Antwortwertung und den Timer für automatisches Weitergehen und
+verbindet die Ansichten über Rückrufe. `game.js`, `highscores.js` und
+`mistakes.js` bleiben für Spielregeln und Speicherung zuständig.
+
+- `quiz-view.js` rendert Fragen, Fortschritt, Antworten und Ergebnisse anhand
+  eines übergebenen Zustands, ohne Antworten zu werten oder Rekorde zu speichern.
+- `map-view.js` lädt die Karte, verwaltet Ebenen, Markierungen und Zoom und meldet
+  Maus- und Tastaturauswahlen als `{ topic, code }` an den Controller.
+- `info-cards.js` verwaltet Informationen, Bilder und Fokus beim Schließen.
+- `settings-view.js` verwaltet Themenauswahl, Lernpräferenzen und den Rekorddialog.
+- `layout.js` übernimmt Scrollen und responsive Positionierung.
+- `events.js` bündelt Listener pro Komponente; `destroy()` entfernt sie wieder.
+
+Ansichten importieren den Controller nicht. Der Controller entscheidet, ob eine
+Kartenauswahl als Antwort oder zum Erkunden dient. Neue Module unter `src/`
+werden automatisch in den Build und den Offline-Cache aufgenommen.
+
+Zusätzlich zu `npm test` prüft `node scripts/browser-smoke.mjs` die Oberfläche
+in Chromium, einschließlich gemischter Runden, Fehlerkorrektur, Timer-Abbruch,
+Rekorden, Tastaturauswahl und Offline-Neuladen. Dafür zunächst `npm run build`
+ausführen und `dist` mit `npm run serve:dist` bereitstellen. Chromium mit einem
+**separaten Testprofil** und `--remote-debugging-port=9222` starten. Das Skript
+löscht die Quizdaten im Testbrowser. `APP_URL` (Standard
+`http://localhost:8000/`) und `CHROME_DEBUG_URL` (Standard
+`http://127.0.0.1:9222`) können angepasst werden. Das Skript benötigt Node.js mit
+integriertem `WebSocket` und verwendet keine zusätzlichen Testpakete.
